@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0745E43D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Api.Tests", "SFA.DAS.EmployerDemand.Api.Tests\SFA.DAS.EmployerDemand.Api.Tests.csproj", "{35541E20-A298-4984-8BFF-2DF4CC215969}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Domain", "SFA.DAS.EmployerDemand.Domain\SFA.DAS.EmployerDemand.Domain.csproj", "{7F53EA9E-A543-4D53-95AC-5C651D885710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{35541E20-A298-4984-8BFF-2DF4CC215969}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35541E20-A298-4984-8BFF-2DF4CC215969}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35541E20-A298-4984-8BFF-2DF4CC215969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F53EA9E-A543-4D53-95AC-5C651D885710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F53EA9E-A543-4D53-95AC-5C651D885710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F53EA9E-A543-4D53-95AC-5C651D885710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F53EA9E-A543-4D53-95AC-5C651D885710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
