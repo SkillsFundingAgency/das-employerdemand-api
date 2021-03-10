@@ -6,7 +6,7 @@ trigger:
 
 variables:
 - name: SolutionBaseName
-  value: __SolutionBaseName__
+  value: SFA.DAS.EmployerDemand
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
@@ -33,4 +33,3 @@ stages:
     parameters:
       SolutionBaseName: $(SolutionBaseName)
       BuildConfiguration: $(BuildConfiguration)
-    
