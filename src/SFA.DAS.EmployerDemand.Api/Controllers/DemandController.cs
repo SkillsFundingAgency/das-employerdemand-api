@@ -3,7 +3,8 @@
 namespace SFA.DAS.EmployerDemand.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]/")]
+    [ApiVersion("1.0")]
+    [Route("api/[controller]/")]
     public class DemandController : ControllerBase
     {
         [HttpGet]
