@@ -47,7 +47,7 @@
         "sharedBackEndSubnetResourceId": {
             "type": "string"
         },
-        "backendAccessRestrictions": {
+        "backEndAccessRestrictions": {
             "type": "array",
             "defaultValue": []
         }
@@ -188,7 +188,7 @@
                         "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('backendAccessRestrictions')]"
+                        "value": "[parameters('backEndAccessRestrictions')]"
                     }
                 }
             },
