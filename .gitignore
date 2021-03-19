@@ -352,3 +352,5 @@ MigrationBackup/
 src/.idea/.idea.SFA.DAS.EmployerDemand/.idea/
 
 src/SFA.DAS.EmployerDemand.Api/appsettings.Development.json
+
+src/SFA.DAS.EmployerDemand.Database/.DS_Store
