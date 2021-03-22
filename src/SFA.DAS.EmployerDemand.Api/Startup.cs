@@ -19,6 +19,7 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerDemand.Api.AppStart;
 using SFA.DAS.EmployerDemand.Api.Infrastructure;
+using SFA.DAS.EmployerDemand.Data;
 using SFA.DAS.EmployerDemand.Domain.Configuration;
 
 namespace SFA.DAS.EmployerDemand.Api
@@ -59,9 +60,7 @@ namespace SFA.DAS.EmployerDemand.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-            services.Configure<EmployerDemandConfiguration>(_configuration.GetSection("EmployerDemandConfiguration"));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerDemandConfiguration>>().Value);
+            services.AddConfigurationOptions(_configuration);
 
             var employerDemandConfiguration = _configuration
                 .GetSection("EmployerDemandConfiguration")
@@ -83,11 +82,13 @@ namespace SFA.DAS.EmployerDemand.Api
 
             if (_configuration["Environment"] != "DEV")
             {
-                services.AddHealthChecks(); //todo .AddDbContextCheck<EmployerDemandDataContext>();
+                services
+                    .AddHealthChecks()
+                    .AddDbContextCheck<EmployerDemandDataContext>();
             }
 
-            //todo services.AddMediatR(typeof(todo).Assembly);
-            services.AddServiceRegistration(_configuration["Environment"] == "DEV");
+            //services.AddMediatR(typeof(todo).Assembly);
+            services.AddServiceRegistration();
             services.AddMediatRValidation();
             services.AddDatabaseRegistration(employerDemandConfiguration, _configuration["Environment"]);
 

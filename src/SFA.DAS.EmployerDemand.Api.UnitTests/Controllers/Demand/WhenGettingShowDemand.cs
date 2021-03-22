@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerDemand.Api.Tests.Controllers.Demand
+namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
 {
     public class WhenGettingShowDemand
     {

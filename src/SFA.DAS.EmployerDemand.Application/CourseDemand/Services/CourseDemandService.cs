@@ -3,7 +3,7 @@ using SFA.DAS.EmployerDemand.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
 {
-    public class CourseDemandService
+    public class CourseDemandService : ICourseDemandService
     {
         private readonly ICourseDemandRepository _repository;
 
