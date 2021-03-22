@@ -39,3 +39,9 @@ jobs:
           azure/**
         TargetFolder: $(build.artifactstagingdirectory)/publish
         OverWrite: true
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifact - Api
+      inputs:
+        targetPath: $(build.artifactstagingdirectory)/publish
+        artifactName: api
