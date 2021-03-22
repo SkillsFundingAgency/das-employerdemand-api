@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -63,6 +64,10 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                     }
                 });
                 return Created("",result);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.ValidationResult.ErrorMessage);
             }
             catch (Exception e)
             {

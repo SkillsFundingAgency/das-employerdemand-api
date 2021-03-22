@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -13,6 +14,7 @@ using SFA.DAS.EmployerDemand.Api.ApiModels;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
 using SFA.DAS.Testing.AutoFixture;
+using ValidationResult = SFA.DAS.EmployerDemand.Domain.Validation.ValidationResult;
 
 namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
 {
@@ -48,6 +50,31 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
             actual.Value.Should().Be(returnId);
 
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_Validation_Exception_Bad_Request_Returned(
+            string errorKey,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            var validationResult = new ValidationResult{ValidationDictionary = { {errorKey,"Some error"}}};
+            mediator
+                .Setup(mediator => mediator.Send(
+                    It.IsAny<CreateCourseDemandCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .Throws(new ValidationException(validationResult.DataAnnotationResult, null, null));
+            
+            //Act
+            var actual = await controller.CreateDemand(request) as ObjectResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            actual.Value.ToString().Should().Contain(errorKey);
+            
         }
 
         [Test, MoqAutoData]
