@@ -39,9 +39,3 @@ jobs:
           azure/**
         TargetFolder: $(build.artifactstagingdirectory)/publish
         OverWrite: true
-
-    - task: PublishPipelineArtifact@1
-      displayName: Publish Artifact drop
-      inputs:
-        targetPath: $(build.artifactstagingdirectory)/publish
-        artifactName: drop
