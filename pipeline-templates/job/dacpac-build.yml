@@ -21,7 +21,7 @@ jobs:
         src\**\*.dacpac
       targetFolder: $(build.artifactstagingdirectory)/publish      
 
-  - task: PublishBuildArtifacts@1
+  - task: PublishPipelineArtifact@1
     displayName: Publish Artifact - EmployerDemandDacpac
     inputs:
       artifactName: EmployerDemand
