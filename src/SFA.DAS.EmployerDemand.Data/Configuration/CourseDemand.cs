@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.Lat).HasColumnName("Lat").HasColumnType("float").IsRequired();
             builder.Property(x => x.Long).HasColumnName("Long").HasColumnType("float").IsRequired();
             builder.Property(x => x.EmailVerified).HasColumnName("EmailVerified").HasColumnType("bit").IsRequired();
-            builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired();
+            builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired().ValueGeneratedOnAdd();
             
             builder.HasIndex(x => x.Id).IsUnique();
         }
