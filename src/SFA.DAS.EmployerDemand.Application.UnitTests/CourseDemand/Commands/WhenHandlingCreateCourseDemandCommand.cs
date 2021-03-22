@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
@@ -17,9 +18,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             [Frozen] Mock<ICourseDemandService> service,
             CreateCourseDemandCommandHandler handler)
         {
-            await handler.Handle(command, CancellationToken.None);
+            var actual = await handler.Handle(command, CancellationToken.None);
             
             service.Verify(x=>x.CreateDemand(command.CourseDemand));
+            actual.Should().Be(command.CourseDemand.Id);
         }
     }
 }

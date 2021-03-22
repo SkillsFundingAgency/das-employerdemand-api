@@ -1,0 +1,71 @@
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Api.Controllers;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.Testing.AutoFixture;
+
+namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
+{
+    public class WhenPostingCreateDemand
+    {
+        [Test, MoqAutoData]
+        public async Task Then_The_Command_Is_Sent_To_Mediator(
+            Guid returnId,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
+                    c.CourseDemand.Id.Equals(request.Id)
+                    && c.CourseDemand.OrganisationName.Equals(request.OrganisationName)
+                    && c.CourseDemand.ContactEmailAddress.Equals(request.ContactEmailAddress)
+                    && c.CourseDemand.NumberOfApprentices.Equals(request.NumberOfApprentices)
+                    && c.CourseDemand.Course.Id.Equals(request.Course.Id)
+                    && c.CourseDemand.Course.Title.Equals(request.Course.Title)
+                    && c.CourseDemand.Course.Level.Equals(request.Course.Level)
+                    && c.CourseDemand.Location.Name.Equals(request.Location.Name)
+                    && c.CourseDemand.Location.Lat == request.Location.LocationPoint.GeoPoint.First()
+                    && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()
+                    ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(returnId);
+            
+            //Act
+            var actual = await controller.CreateDemand(request) as CreatedResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
+            actual.Value.Should().Be(returnId);
+
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_An_Error_Then_An_InternalServer_Error_Is_Returned(
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            mediator.Setup(x => x.Send(It.IsAny<CreateCourseDemandCommand>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception());
+            
+            //Act
+            var actual = await controller.CreateDemand(request) as StatusCodeResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
+        }
+    }
+}

@@ -1,4 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Domain.Models;
+using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
+using Location = SFA.DAS.EmployerDemand.Domain.Models.Location;
 
 namespace SFA.DAS.EmployerDemand.Api.Controllers
 {
@@ -7,11 +18,58 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
     [Route("api/[controller]/")]
     public class DemandController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        private readonly ILogger<DemandController> _logger;
+
+        public DemandController (IMediator mediator, ILogger<DemandController> logger)
+        {
+            _mediator = mediator;
+            _logger = logger;
+        }
+        
         [HttpGet]
         [Route("show")]
         public IActionResult ShowDemand()
         {
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> CreateDemand(CourseDemandRequest request)
+        {
+            try
+            {
+                var result = await _mediator.Send(new CreateCourseDemandCommand
+                {
+                    CourseDemand = new CourseDemand
+                    {
+                        Id = request.Id,
+                        OrganisationName = request.OrganisationName,
+                        ContactEmailAddress = request.ContactEmailAddress,
+                        NumberOfApprentices = request.NumberOfApprentices,
+                        Course = new Course
+                        {
+                            Id = request.Course.Id,
+                            Title = request.Course.Title,
+                            Level = request.Course.Level
+                        },
+                        Location = new Location
+                        {
+                            Name = request.Location.Name,
+                            Lat = request.Location.LocationPoint.GeoPoint.First(),
+                            Lon = request.Location.LocationPoint.GeoPoint.Last()
+                        }
+                    }
+                });
+                return Created("",result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,"Unable to create course demand");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+            
         }
     }
 }
