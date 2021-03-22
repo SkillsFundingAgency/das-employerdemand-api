@@ -4,14 +4,11 @@ using System.IO;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
@@ -19,6 +16,7 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerDemand.Api.AppStart;
 using SFA.DAS.EmployerDemand.Api.Infrastructure;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
 using SFA.DAS.EmployerDemand.Data;
 using SFA.DAS.EmployerDemand.Domain.Configuration;
 
@@ -87,7 +85,7 @@ namespace SFA.DAS.EmployerDemand.Api
                     .AddDbContextCheck<EmployerDemandDataContext>();
             }
 
-            //services.AddMediatR(typeof(todo).Assembly);
+            services.AddMediatR(typeof(CreateCourseDemandCommand).Assembly);
             services.AddServiceRegistration();
             services.AddMediatRValidation();
             services.AddDatabaseRegistration(employerDemandConfiguration, _configuration["Environment"]);

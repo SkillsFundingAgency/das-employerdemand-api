@@ -9,5 +9,9 @@
       <ProjectReference Include="..\SFA.DAS.EmployerDemand.Domain\SFA.DAS.EmployerDemand.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="8.0.2" />
+    </ItemGroup>
+
 
 </Project>

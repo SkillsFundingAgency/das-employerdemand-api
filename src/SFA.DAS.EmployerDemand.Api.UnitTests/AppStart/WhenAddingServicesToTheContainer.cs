@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.AppStart
             {
                 InitialData = new List<KeyValuePair<string, string>>
                 {
-                    //new KeyValuePair<string, string>("EmployerDemand:ConnectionString", "test"),
+                    //new KeyValuePair<string, string>("EmployerDemandConfiguration:ConnectionString", "test"),
                 }
             };
 
