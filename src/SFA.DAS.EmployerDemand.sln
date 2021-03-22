@@ -17,6 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Data.UnitTests", "SFA.DAS.EmployerDemand.Data.UnitTests\SFA.DAS.EmployerDemand.Data.UnitTests.csproj", "{D537A7CF-61B0-46FF-911E-3B72F2B691EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Application", "SFA.DAS.EmployerDemand.Application\SFA.DAS.EmployerDemand.Application.csproj", "{A4AF1168-D2C4-483B-8AE4-E2ED008BF096}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Application.UnitTests", "SFA.DAS.EmployerDemand.Application.UnitTests\SFA.DAS.EmployerDemand.Application.UnitTests.csproj", "{82405286-D798-43E7-80D4-2476CEBB7A5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerDemand.Domain.UnitTests", "SFA.DAS.EmployerDemand.Domain.UnitTests\SFA.DAS.EmployerDemand.Domain.UnitTests.csproj", "{DA57753B-DE2D-487C-A280-2A8DEA2665BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +53,18 @@ Global
 		{D537A7CF-61B0-46FF-911E-3B72F2B691EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D537A7CF-61B0-46FF-911E-3B72F2B691EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D537A7CF-61B0-46FF-911E-3B72F2B691EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AF1168-D2C4-483B-8AE4-E2ED008BF096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AF1168-D2C4-483B-8AE4-E2ED008BF096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AF1168-D2C4-483B-8AE4-E2ED008BF096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AF1168-D2C4-483B-8AE4-E2ED008BF096}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82405286-D798-43E7-80D4-2476CEBB7A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82405286-D798-43E7-80D4-2476CEBB7A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82405286-D798-43E7-80D4-2476CEBB7A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82405286-D798-43E7-80D4-2476CEBB7A5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA57753B-DE2D-487C-A280-2A8DEA2665BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA57753B-DE2D-487C-A280-2A8DEA2665BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA57753B-DE2D-487C-A280-2A8DEA2665BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA57753B-DE2D-487C-A280-2A8DEA2665BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +72,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{35541E20-A298-4984-8BFF-2DF4CC215969} = {0745E43D-1834-4C57-9032-67EF62A9B12D}
 		{D537A7CF-61B0-46FF-911E-3B72F2B691EF} = {0745E43D-1834-4C57-9032-67EF62A9B12D}
+		{82405286-D798-43E7-80D4-2476CEBB7A5C} = {0745E43D-1834-4C57-9032-67EF62A9B12D}
+		{DA57753B-DE2D-487C-A280-2A8DEA2665BA} = {0745E43D-1834-4C57-9032-67EF62A9B12D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D7F28990-086F-4C3C-9B96-D525E96A5156}

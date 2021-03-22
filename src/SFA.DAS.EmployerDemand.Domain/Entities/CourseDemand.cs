@@ -1,4 +1,5 @@
 using System;
+using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Domain.Entities
 {
@@ -16,5 +17,23 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public double Long { get; set; }
         public DateTime DateCreated { get; set; }
         public bool EmailVerified { get; set; }
+
+        public static implicit operator CourseDemand(Models.CourseDemand source)
+        {
+            return new CourseDemand
+            {
+                Id = source.Id,
+                ContactEmailAddress = source.ContactEmailAddress,
+                OrganisationName = source.OrganisationName,
+                NumberOfApprentices = source.NumberOfApprentices,
+                EmailVerified = false,
+                Lat = source.Location.Lat,
+                Long = source.Location.Lon,
+                LocationName = source.Location.Name,
+                CourseId = source.Course.Id,
+                CourseTitle = source.Course.Title,
+                CourseLevel = source.Course.Level
+            };
+        }
     }
 }
