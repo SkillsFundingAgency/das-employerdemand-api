@@ -34,20 +34,6 @@ stages:
       SolutionBaseName: $(SolutionBaseName)
       BuildConfiguration: $(BuildConfiguration)
 
-  - task: DotNetCoreCLI@2
-    displayName: Test
-    inputs:
-      command: test
-      projects: '**/*.UnitTests.csproj'
-      arguments: '--configuration $(buildConfiguration) --no-build'
-  
-  - task: DotNetCoreCLI@2
-    displayName: 'Acceptance Tests'
-    inputs:
-      command: test
-      projects: '**/*.AcceptanceTests.csproj'
-      arguments: '--configuration $(buildConfiguration) --no-build'
-
   - job: 'DACPACBuild'
     pool:
       name: 'DAS - Continuous Integration'
