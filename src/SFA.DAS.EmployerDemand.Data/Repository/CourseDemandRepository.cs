@@ -2,10 +2,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Domain.Entities;
+using SFA.DAS.EmployerDemand.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerDemand.Data.Repository
 {
-    public class CourseDemandRepository
+    public class CourseDemandRepository : ICourseDemandRepository
     {
         private readonly ILogger<CourseDemandRepository> _logger;
         private readonly IEmployerDemandDataContext _dataContext;
