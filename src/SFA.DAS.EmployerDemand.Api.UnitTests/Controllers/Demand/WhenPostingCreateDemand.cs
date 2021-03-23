@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
-            actual.Value.Should().Be(returnId);
+            actual.Value.Should().BeEquivalentTo(new {Id=returnId});
 
         }
 
