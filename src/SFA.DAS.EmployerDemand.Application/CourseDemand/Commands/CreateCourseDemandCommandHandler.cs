@@ -7,7 +7,7 @@ using SFA.DAS.EmployerDemand.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
 {
-    public class CreateCourseDemandCommandHandler : IRequestHandler<CreateCourseDemandCommand, Guid>
+    public class CreateCourseDemandCommandHandler : IRequestHandler<CreateCourseDemandCommand, CreateCourseDemandCommandResponse>
     {
         private readonly ICourseDemandService _service;
         private readonly IValidator<CreateCourseDemandCommand> _validator;
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
             _service = service;
             _validator = validator;
         }
-        public async Task<Guid> Handle(CreateCourseDemandCommand request, CancellationToken cancellationToken)
+        public async Task<CreateCourseDemandCommandResponse> Handle(CreateCourseDemandCommand request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request);
 
@@ -26,9 +26,12 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
                 throw new ValidationException(validationResult.DataAnnotationResult,null, null);
             }
             
-            await _service.CreateDemand(request.CourseDemand);
-            
-            return request.CourseDemand.Id;
+            var result = await _service.CreateDemand(request.CourseDemand);
+            return new CreateCourseDemandCommandResponse
+            {
+                Id = request.CourseDemand.Id,
+                IsCreated = result
+            };
         }
     }
 }

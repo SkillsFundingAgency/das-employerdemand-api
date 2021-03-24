@@ -16,17 +16,19 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             _logger = logger;
             _dataContext = dataContext;
         }
-        public async Task Insert(CourseDemand item)
+        public async Task<bool> Insert(CourseDemand item)
         {
             try
             {
                 await _dataContext.CourseDemands.AddAsync(item);
                 _dataContext.SaveChanges();
+                return true;
             }
             catch (DbUpdateException e)
             {
                 _logger.LogInformation(e, "Unable to add course demand item");
             }
+            return false;
         }
     }
 }

@@ -63,7 +63,12 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                         }
                     }
                 });
-                return Created("",new {Id=result});
+                if (result.IsCreated)
+                {
+                    return Created("",new {result.Id});    
+                }
+
+                return Accepted("", new {result.Id});
             }
             catch (ValidationException e)
             {

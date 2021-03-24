@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
 {
     public interface ICourseDemandService
     {
-        Task CreateDemand(Domain.Models.CourseDemand courseDemand);
+        Task<bool> CreateDemand(Models.CourseDemand courseDemand);
     }
 }

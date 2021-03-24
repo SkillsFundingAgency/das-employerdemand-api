@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Services;
@@ -12,13 +13,12 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
     {
         [Test, MoqAutoData]
         public async Task Then_The_Repository_Is_Called(
+            bool returnValue,
             Domain.Models.CourseDemand courseDemand, 
             [Frozen] Mock<ICourseDemandRepository> repository,
             CourseDemandService service)
         {
-            await service.CreateDemand(courseDemand);
-            
-            repository.Verify(x=>x.Insert(It.Is<Domain.Entities.CourseDemand>(
+            repository.Setup(x=>x.Insert(It.Is<Domain.Entities.CourseDemand>(
                 c=>c.EmailVerified == false
                    && c.Id.Equals(courseDemand.Id)
                    && c.Lat.Equals(courseDemand.Location.Lat)
@@ -30,7 +30,11 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
                    && c.OrganisationName.Equals(courseDemand.OrganisationName)
                    && c.ContactEmailAddress.Equals(courseDemand.ContactEmailAddress)
                    && c.NumberOfApprentices.Equals(courseDemand.NumberOfApprentices)
-                )));
+            ))).ReturnsAsync(returnValue);
+            
+            var actual = await service.CreateDemand(courseDemand);
+
+            actual.Should().Be(returnValue);
         }
     }
 }

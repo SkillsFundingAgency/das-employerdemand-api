@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
 {
     public interface ICourseDemandRepository
     {
-        Task Insert(CourseDemand item);
+        Task<bool> Insert(CourseDemand item);
     }
 }

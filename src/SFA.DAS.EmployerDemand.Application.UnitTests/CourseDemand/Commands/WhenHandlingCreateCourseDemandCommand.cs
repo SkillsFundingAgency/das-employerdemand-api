@@ -17,18 +17,21 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
     {
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Service_Called_If_Valid(
+            bool result,
             CreateCourseDemandCommand command,
             [Frozen] Mock<IValidator<CreateCourseDemandCommand>> validator,
             [Frozen] Mock<ICourseDemandService> service,
             CreateCourseDemandCommandHandler handler)
         {
             validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult());
+            service.Setup(x=>x.CreateDemand(command.CourseDemand)).ReturnsAsync(result);
             
             var actual = await handler.Handle(command, CancellationToken.None);
             
-            service.Verify(x=>x.CreateDemand(command.CourseDemand));
+            
             validator.Verify(x=>x.ValidateAsync(It.IsAny<CreateCourseDemandCommand>()), Times.Once);
-            actual.Should().Be(command.CourseDemand.Id);
+            actual.Id.Should().Be(command.CourseDemand.Id);
+            actual.IsCreated.Should().Be(result);
         }
 
         [Test, MoqAutoData]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -36,11 +37,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         public async Task Then_The_CourseDemand_Item_Is_Added()
         {
             //Act
-            await _courseDemandRepository.Insert(_courseDemandItem);
+            var actual = await _courseDemandRepository.Insert(_courseDemandItem);
             
             //Assert
             _employerDemandDataContext.Verify(x=>x.CourseDemands.AddAsync(_courseDemandItem, It.IsAny<CancellationToken>()), Times.Once);
             _employerDemandDataContext.Verify(x=>x.SaveChanges(), Times.Once);
+            actual.Should().BeTrue();
         }
 
         [Test]
@@ -50,10 +52,11 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             _employerDemandDataContext.Setup(x => x.SaveChanges()).Throws(new DbUpdateException());
             
             //Act
-            await _courseDemandRepository.Insert(_courseDemandItem);
+            var actual = await _courseDemandRepository.Insert(_courseDemandItem);
             
             //Assert
             _employerDemandDataContext.Verify(x=>x.SaveChanges(), Times.Once);
+            actual.Should().BeFalse();
         }
     }
 }

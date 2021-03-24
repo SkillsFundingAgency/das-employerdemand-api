@@ -21,13 +21,14 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
     public class WhenPostingCreateDemand
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Command_Is_Sent_To_Mediator(
-            Guid returnId,
+        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned(
+            CreateCourseDemandCommandResponse response,
             CourseDemandRequest request,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
         {
             //Arrange
+            response.IsCreated = true;
             mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
                     c.CourseDemand.Id.Equals(request.Id)
                     && c.CourseDemand.OrganisationName.Equals(request.OrganisationName)
@@ -40,7 +41,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                     && c.CourseDemand.Location.Lat == request.Location.LocationPoint.GeoPoint.First()
                     && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()
                     ), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(returnId);
+                .ReturnsAsync(response);
             
             //Act
             var actual = await controller.CreateDemand(request) as CreatedResult;
@@ -48,8 +49,31 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
-            actual.Value.Should().BeEquivalentTo(new {Id=returnId});
+            actual.Value.Should().BeEquivalentTo(new {response.Id});
 
+        }
+        
+        [Test, MoqAutoData]
+        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned_And_If_Not_Created_Accepted_Returned(
+            CreateCourseDemandCommandResponse response,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            response.IsCreated = false;
+            mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
+                    c.CourseDemand.Id.Equals(request.Id)
+                ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+            
+            //Act
+            var actual = await controller.CreateDemand(request) as AcceptedResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
+            actual.Value.Should().BeEquivalentTo(new {response.Id});
         }
 
         [Test, MoqAutoData]

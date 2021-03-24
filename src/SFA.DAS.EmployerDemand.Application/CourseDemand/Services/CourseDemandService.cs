@@ -11,9 +11,9 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         {
             _repository = repository;
         }
-        public async Task CreateDemand(Domain.Models.CourseDemand courseDemand)
+        public async Task<bool> CreateDemand(Domain.Models.CourseDemand courseDemand)
         {
-            await _repository.Insert(courseDemand);
+            return await _repository.Insert(courseDemand);
         }
     }
 }
