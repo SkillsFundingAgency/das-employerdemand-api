@@ -50,6 +50,28 @@
         "backEndAccessRestrictions": {
             "type": "array",
             "defaultValue": []
+        },
+        "sharedSqlServerName": {
+            "type": "string"
+        },
+        "elasticPoolName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "databaseSkuName": {
+            "type": "string",
+            "defaultValue": "S0"
+        },
+        "databaseTier": {
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "logAnalyticsSubscriptionId": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -57,16 +79,55 @@
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
+        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "configNames": "SFA.DAS.EmployerDemand.Api"
     },
-    "resources": [
-        {
+    "resources": [{
             "apiVersion": "2020-06-01",
             "name": "[variables('resourceGroupName')]",
             "type": "Microsoft.Resources/resourceGroups",
             "location": "[parameters('resourceGroupLocation')]",
             "tags": "[parameters('tags')]",
             "properties": {}
+        },
+        {
+            "apiVersion": "2020-06-01",
+            "name": "sql-database",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'sql-database.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "databaseName": {
+                        "value": "[variables('databaseName')]"
+                    },
+                    "sqlServerName": {
+                        "value": "[parameters('sharedSqlServerName')]"
+                    },
+                    "elasticPoolName": {
+                        "value": "[parameters('elasticPoolName')]"
+                    },
+                    "databaseSkuName": {
+                        "value": "[parameters('databaseSkuName')]"
+                    },
+                    "databaseTier": {
+                        "value": "[parameters('databaseTier')]"
+                    },
+                    "logAnalyticsSubscriptionId": {
+                        "value": "[parameters('logAnalyticsSubscriptionId')]"
+                    },
+                    "logAnalyticsResourceGroup": {
+                        "value": "[parameters('sharedManagementResourceGroup')]"
+                    },
+                    "logAnalyticsWorkspaceName": {
+                        "value": "[parameters('logAnalyticsWorkspaceName')]"
+                    }
+                }
+            }
         },
         {
             "apiVersion": "2020-06-01",
@@ -145,8 +206,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
                                 },
@@ -201,6 +261,10 @@
         "ResourceGroupName": {
             "type": "string",
             "value": "[variables('resourceGroupName')]"
+        },
+        "DatabaseName": {
+            "type": "string",
+            "value": "[variables('databaseName')]"
         },
         "ApiAppServiceName": {
             "type": "string",
