@@ -4,14 +4,11 @@ using System.IO;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
@@ -19,6 +16,8 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerDemand.Api.AppStart;
 using SFA.DAS.EmployerDemand.Api.Infrastructure;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Data;
 using SFA.DAS.EmployerDemand.Domain.Configuration;
 
 namespace SFA.DAS.EmployerDemand.Api
@@ -59,9 +58,7 @@ namespace SFA.DAS.EmployerDemand.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-            services.Configure<EmployerDemandConfiguration>(_configuration.GetSection("EmployerDemandConfiguration"));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerDemandConfiguration>>().Value);
+            services.AddConfigurationOptions(_configuration);
 
             var employerDemandConfiguration = _configuration
                 .GetSection("EmployerDemandConfiguration")
@@ -83,11 +80,13 @@ namespace SFA.DAS.EmployerDemand.Api
 
             if (_configuration["Environment"] != "DEV")
             {
-                services.AddHealthChecks(); //todo .AddDbContextCheck<EmployerDemandDataContext>();
+                services
+                    .AddHealthChecks()
+                    .AddDbContextCheck<EmployerDemandDataContext>();
             }
 
-            //todo services.AddMediatR(typeof(todo).Assembly);
-            services.AddServiceRegistration(_configuration["Environment"] == "DEV");
+            services.AddMediatR(typeof(CreateCourseDemandCommand).Assembly);
+            services.AddServiceRegistration();
             services.AddMediatRValidation();
             services.AddDatabaseRegistration(employerDemandConfiguration, _configuration["Environment"]);
 

@@ -33,3 +33,4 @@ stages:
     parameters:
       SolutionBaseName: $(SolutionBaseName)
       BuildConfiguration: $(BuildConfiguration)
+  - template: pipeline-templates/job/dacpac-build.yml

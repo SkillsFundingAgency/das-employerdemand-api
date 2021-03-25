@@ -7,6 +7,9 @@
   <ItemGroup>
       <Content Remove="nlog.Debug.config" />
       <Content Remove="nlog.Release.config" />
+      <Content Update="appsettings.Development.json">
+        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -62,6 +65,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerDemand.Application\SFA.DAS.EmployerDemand.Application.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerDemand.Data\SFA.DAS.EmployerDemand.Data.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerDemand.Domain\SFA.DAS.EmployerDemand.Domain.csproj" />
   </ItemGroup>
 
