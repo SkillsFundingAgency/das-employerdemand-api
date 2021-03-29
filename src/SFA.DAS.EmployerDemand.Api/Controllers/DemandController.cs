@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiModels;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
 using Location = SFA.DAS.EmployerDemand.Domain.Models.Location;
@@ -79,7 +80,21 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 _logger.LogError(e,"Unable to create course demand");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
-            
+        }
+
+        [HttpGet]
+        [Route("get-aggregated-demands")]
+        public async Task<IActionResult> GetAggregatedCourseDemandList()
+        {
+            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery());
+
+            var response = new GetAggregatedCourseDemandListResponse
+            {
+                AggregatedCourseDemandList = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
+                    (GetAggregatedCourseDemandSummaryResponse) summary)
+            };
+
+            return Ok(response);
         }
     }
 }
