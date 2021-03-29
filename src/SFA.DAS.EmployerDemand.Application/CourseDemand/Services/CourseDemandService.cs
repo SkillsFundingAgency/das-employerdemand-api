@@ -20,9 +20,9 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.Insert(courseDemand);
         }
 
-        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandSummaryList()
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList()
         {
-            var summaries = await _repository.GetAggregatedCourseDemandSummaryList();
+            var summaries = await _repository.GetAggregatedCourseDemandList();
 
             return summaries.Select(summary => (AggregatedCourseDemandSummary) summary);
         }

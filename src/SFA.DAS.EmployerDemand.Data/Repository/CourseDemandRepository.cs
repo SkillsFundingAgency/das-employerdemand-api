@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandSummaryList()
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList()
         {
             var result = _dataContext.CourseDemands
                 .GroupBy(demand => demand.CourseId)

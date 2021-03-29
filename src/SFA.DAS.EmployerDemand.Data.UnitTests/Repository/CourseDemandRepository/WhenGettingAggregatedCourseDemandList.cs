@@ -11,7 +11,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepository
 {
-    public class WhenGettingAggregatedCourseDemandSummaryList
+    public class WhenGettingAggregatedCourseDemandList
     {
         [Test, RecursiveMoqAutoData]
         public async Task Then_Gets_AggregatedCourseDemandList(
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
                 }).OrderBy(summary => summary.CourseTitle);
 
             //act
-            var result = await repository.GetAggregatedCourseDemandSummaryList();
+            var result = await repository.GetAggregatedCourseDemandList();
 
             //assert
             result.Should().BeEquivalentTo(expectedAggregatedEntities);

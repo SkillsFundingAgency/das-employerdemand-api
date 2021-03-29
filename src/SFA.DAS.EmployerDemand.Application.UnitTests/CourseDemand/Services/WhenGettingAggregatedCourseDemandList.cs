@@ -12,7 +12,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 {
-    public class WhenGettingAggregatedCourseDemandSummaryList
+    public class WhenGettingAggregatedCourseDemandList
     {
         [Test, MoqAutoData]
         public async Task Then_The_Repository_Is_Called(
@@ -21,10 +21,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             CourseDemandService service)
         {
             mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandSummaryList())
+                .Setup(repository => repository.GetAggregatedCourseDemandList())
                 .ReturnsAsync(listFromRepo);
 
-            var result = await service.GetAggregatedCourseDemandSummaryList();
+            var result = await service.GetAggregatedCourseDemandList();
 
             result.Should().BeEquivalentTo(listFromRepo.Select(summary => (AggregatedCourseDemandSummary)summary));
         }
