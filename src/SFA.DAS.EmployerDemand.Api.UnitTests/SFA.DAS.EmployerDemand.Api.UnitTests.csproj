@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Demand\" />
+    <Folder Include="ApiModels\" />
   </ItemGroup>
 
   <ItemGroup>
