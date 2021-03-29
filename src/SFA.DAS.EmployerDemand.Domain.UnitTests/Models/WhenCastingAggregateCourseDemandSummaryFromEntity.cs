@@ -7,7 +7,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
     public class WhenCastingAggregateCourseDemandSummaryFromEntity
     {
         [Test, AutoData]
-        public void Then_Maps_Fields(Domain.Entities.AggregatedCourseDemandSummary source)
+        public void Then_Maps_Fields(Entities.AggregatedCourseDemandSummary source)
         {
             var result = (Domain.Models.AggregatedCourseDemandSummary) source;
 
