@@ -84,10 +84,10 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
         }
 
         [HttpGet]
-        [Route("aggregated")]
-        public async Task<IActionResult> GetAggregatedCourseDemandList()
+        [Route("aggregated/providers/{ukprn}")]
+        public async Task<IActionResult> GetAggregatedCourseDemandList(GetAggregatedCourseDemandListForProviderRequest request)
         {
-            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery());
+            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery{Ukprn = request.Ukprn});
 
             var response = new GetAggregatedCourseDemandListResponse
             {

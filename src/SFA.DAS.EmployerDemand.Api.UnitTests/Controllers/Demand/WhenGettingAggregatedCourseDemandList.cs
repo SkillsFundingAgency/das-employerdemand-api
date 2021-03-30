@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerDemand.Api.ApiModels;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
@@ -19,17 +20,19 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
     {
         [Test, MoqAutoData]
         public async Task Then_Returns_List_From_Handler(
+            GetAggregatedCourseDemandListForProviderRequest apiRequest,
             GetAggregatedCourseDemandListResult resultFromMediator,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] DemandController controller)
         {
             mockMediator
                 .Setup(mediator => mediator.Send(
-                    It.IsAny<GetAggregatedCourseDemandListQuery>(),
+                    It.Is<GetAggregatedCourseDemandListQuery>(query => 
+                        query.Ukprn == apiRequest.Ukprn),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator);
 
-            var result = await controller.GetAggregatedCourseDemandList() as ObjectResult;
+            var result = await controller.GetAggregatedCourseDemandList(apiRequest) as ObjectResult;
 
             result.Should().NotBeNull();
             result!.StatusCode.Should().Be((int)HttpStatusCode.OK);

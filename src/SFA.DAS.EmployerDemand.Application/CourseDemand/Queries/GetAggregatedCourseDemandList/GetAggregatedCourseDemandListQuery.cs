@@ -4,5 +4,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedC
 {
     public class GetAggregatedCourseDemandListQuery : IRequest<GetAggregatedCourseDemandListResult>
     {
+        public int Ukprn { get; set; }
     }
 }
