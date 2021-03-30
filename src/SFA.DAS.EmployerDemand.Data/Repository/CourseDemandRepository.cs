@@ -37,10 +37,17 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList()
         {
             var result = _dataContext.CourseDemands
-                .GroupBy(demand => demand.CourseId)
+                .GroupBy(demand => new
+                {
+                    demand.CourseId, 
+                    demand.CourseTitle, 
+                    demand.CourseLevel
+                })
                 .Select(demands => new AggregatedCourseDemandSummary
                 {
-                    CourseId = demands.Key,
+                    CourseId = demands.Key.CourseId,
+                    CourseTitle = demands.Key.CourseTitle,
+                    CourseLevel = demands.Key.CourseLevel,
                     EmployersCount = demands.Select(demand => demand.ContactEmailAddress).Distinct().Count(),
                     ApprenticesCount = demands.Sum(demand => demand.NumberOfApprentices)
                 }).OrderBy(summary => summary.CourseTitle);
