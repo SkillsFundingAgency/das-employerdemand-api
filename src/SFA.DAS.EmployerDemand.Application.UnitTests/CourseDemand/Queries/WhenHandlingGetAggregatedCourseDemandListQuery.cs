@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
             GetAggregatedCourseDemandListQueryHandler handler)
         {
             mockDemandService
-                .Setup(service => service.GetAggregatedCourseDemandList())
+                .Setup(service => service.GetAggregatedCourseDemandList(query.Ukprn))
                 .ReturnsAsync(listFromService);
 
             var result = await handler.Handle(query, CancellationToken.None);

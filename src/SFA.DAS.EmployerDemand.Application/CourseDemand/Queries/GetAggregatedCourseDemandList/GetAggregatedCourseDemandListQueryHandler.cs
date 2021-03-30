@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedC
 
         public async Task<GetAggregatedCourseDemandListResult> Handle(GetAggregatedCourseDemandListQuery request, CancellationToken cancellationToken)
         {
-            var result = await _courseDemandService.GetAggregatedCourseDemandList();
+            var result = await _courseDemandService.GetAggregatedCourseDemandList(request.Ukprn);
 
             return new GetAggregatedCourseDemandListResult
             {

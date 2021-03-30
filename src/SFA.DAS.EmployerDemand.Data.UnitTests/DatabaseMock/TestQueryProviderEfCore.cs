@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock
         {
         }
 
-        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
         {
             var expectedResultType = typeof(TResult).GetGenericArguments()[0];
             var executionResult = typeof(IQueryProvider)
