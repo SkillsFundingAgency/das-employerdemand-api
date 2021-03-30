@@ -80,7 +80,8 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             command.CourseDemand.Course = new Course
             {
                 Level = 1,
-                Title = "test"
+                Title = "test",
+                Route = "test route"
             };
             command.CourseDemand.ContactEmailAddress = "test@test.com";
             
@@ -97,7 +98,8 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             command.CourseDemand.Course = new Course
             {
                 Id = 1,
-                Level = 1
+                Level = 1,
+                Route = "test route"
             };
             command.CourseDemand.ContactEmailAddress = "test@test.com";
             
@@ -114,7 +116,26 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             command.CourseDemand.Course = new Course
             {
                 Id = 1,
-                Title = "test"
+                Title = "test",
+                Route = "test route"
+            };
+            command.CourseDemand.ContactEmailAddress = "test@test.com";
+            
+            var actual = await validator.ValidateAsync(command);
+
+            actual.IsValid().Should().BeFalse();
+        }
+
+        [Test, AutoData]
+        public async Task Then_Invalid_If_No_Course_Route(
+            CreateCourseDemandCommand command,
+            CreateCourseDemandCommandValidator validator)
+        {
+            command.CourseDemand.Course = new Course
+            {
+                Id = 1,
+                Title = "test",
+                Level = 1
             };
             command.CourseDemand.ContactEmailAddress = "test@test.com";
             

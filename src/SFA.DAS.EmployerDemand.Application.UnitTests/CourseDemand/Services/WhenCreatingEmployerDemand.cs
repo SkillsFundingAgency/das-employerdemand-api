@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
                    && c.CourseId.Equals(courseDemand.Course.Id)
                    && c.CourseTitle.Equals(courseDemand.Course.Title)
                    && c.CourseLevel.Equals(courseDemand.Course.Level)
+                   && c.CourseRoute.Equals(courseDemand.Course.Route)
                    && c.OrganisationName.Equals(courseDemand.OrganisationName)
                    && c.ContactEmailAddress.Equals(courseDemand.ContactEmailAddress)
                    && c.NumberOfApprentices.Equals(courseDemand.NumberOfApprentices)

@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[CourseDemand]
     [CourseId] INT NOT NULL,
     [CourseTitle] VARCHAR(1000) NOT NULL,
     [CourseLevel] INT NOT NULL,
+    [CourseRoute] VARCHAR(500) NOT NULL,
     [LocationName] VARCHAR(1000) NOT NULL,
     [Lat] FLOAT NOT NULL DEFAULT 0,
     [Long] FLOAT NOT NULL DEFAULT 0,

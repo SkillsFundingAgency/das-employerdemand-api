@@ -55,7 +55,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                         {
                             Id = request.Course.Id,
                             Title = request.Course.Title,
-                            Level = request.Course.Level
+                            Level = request.Course.Level,
+                            Route = request.Course.Route
                         },
                         Location = new Location
                         {
