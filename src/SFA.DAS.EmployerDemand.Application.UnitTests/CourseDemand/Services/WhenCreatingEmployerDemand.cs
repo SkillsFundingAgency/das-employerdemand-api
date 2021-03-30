@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             CourseDemandService service)
         {
             repository.Setup(x=>x.Insert(It.Is<Domain.Entities.CourseDemand>(
-                c=>c.EmailVerified == false
+                c=>!c.EmailVerified
                    && c.Id.Equals(courseDemand.Id)
                    && c.Lat.Equals(courseDemand.Location.Lat)
                    && c.Long.Equals(courseDemand.Location.Lon)
