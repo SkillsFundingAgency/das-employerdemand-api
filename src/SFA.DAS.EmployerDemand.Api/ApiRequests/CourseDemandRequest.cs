@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerDemand.Api.ApiModels
+namespace SFA.DAS.EmployerDemand.Api.ApiRequests
 {
     public class CourseDemandRequest
     {
