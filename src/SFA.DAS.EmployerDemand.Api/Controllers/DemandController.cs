@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerDemand.Api.ApiModels;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
@@ -86,9 +85,9 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpGet]
         [Route("aggregated/providers/{ukprn}")]
-        public async Task<IActionResult> GetAggregatedCourseDemandList(GetAggregatedCourseDemandListForProviderRequest request)
+        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn)
         {
-            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery{Ukprn = request.Ukprn});
+            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery{Ukprn = ukprn});
 
             var response = new GetAggregatedCourseDemandListResponse
             {
