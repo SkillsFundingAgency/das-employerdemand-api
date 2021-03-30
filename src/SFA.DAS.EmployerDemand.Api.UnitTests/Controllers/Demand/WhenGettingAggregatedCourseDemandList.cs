@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.Testing.AutoFixture;

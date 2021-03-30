@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerDemand.Domain.Models;
 
-namespace SFA.DAS.EmployerDemand.Api.ApiModels
+namespace SFA.DAS.EmployerDemand.Api.ApiResponses
 {
     public class GetAggregatedCourseDemandSummaryResponse
     {

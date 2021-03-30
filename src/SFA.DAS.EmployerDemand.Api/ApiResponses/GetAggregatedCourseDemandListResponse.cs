@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerDemand.Api.ApiModels
+namespace SFA.DAS.EmployerDemand.Api.ApiResponses
 {
     public class GetAggregatedCourseDemandListResponse
     {

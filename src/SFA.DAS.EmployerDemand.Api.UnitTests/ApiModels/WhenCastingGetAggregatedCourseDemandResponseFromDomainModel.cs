@@ -1,7 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Api.ApiResponses;
 
 namespace SFA.DAS.EmployerDemand.Api.UnitTests.ApiModels
 {
