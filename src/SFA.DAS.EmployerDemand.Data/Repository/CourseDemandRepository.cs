@@ -41,13 +41,15 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 {
                     demand.CourseId, 
                     demand.CourseTitle, 
-                    demand.CourseLevel
+                    demand.CourseLevel,
+                    demand.CourseRoute
                 })
                 .Select(demands => new AggregatedCourseDemandSummary
                 {
                     CourseId = demands.Key.CourseId,
                     CourseTitle = demands.Key.CourseTitle,
                     CourseLevel = demands.Key.CourseLevel,
+                    CourseRoute = demands.Key.CourseRoute,
                     EmployersCount = demands.Select(demand => demand.ContactEmailAddress).Distinct().Count(),
                     ApprenticesCount = demands.Sum(demand => demand.NumberOfApprentices)
                 }).OrderBy(summary => summary.CourseTitle);

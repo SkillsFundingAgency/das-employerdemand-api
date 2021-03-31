@@ -24,12 +24,19 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             mockDbContext
                 .Setup(context => context.CourseDemands)
                 .ReturnsDbSet(entitiesFromDb);
-            var expectedAggregatedEntities = entitiesFromDb.GroupBy(demand => new { demand.CourseId, demand.CourseTitle, demand.CourseLevel })
+            var expectedAggregatedEntities = entitiesFromDb.GroupBy(demand => new
+                {
+                    demand.CourseId, 
+                    demand.CourseTitle, 
+                    demand.CourseLevel,
+                    demand.CourseRoute
+                })
                 .Select(demands => new AggregatedCourseDemandSummary
                 {
                     CourseId = demands.Key.CourseId,
                     CourseTitle = demands.Key.CourseTitle,
                     CourseLevel = demands.Key.CourseLevel,
+                    CourseRoute = demands.Key.CourseRoute,
                     EmployersCount = demands.Select(demand => demand.ContactEmailAddress).Distinct().Count(),
                     ApprenticesCount = demands.Sum(demand => demand.NumberOfApprentices)
                 }).OrderBy(summary => summary.CourseTitle);
