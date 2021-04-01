@@ -17,6 +17,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         [Test, MoqAutoData]
         public async Task Then_The_Repository_Is_Called(
             int ukprn,
+            int? courseId,
+            double? lat,
+            double? lon,
+            int? radius,
             List<Domain.Entities.AggregatedCourseDemandSummary> listFromRepo, 
             [Frozen] Mock<ICourseDemandRepository> mockRepository,
             CourseDemandService service)
@@ -25,7 +29,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
                 .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn))
                 .ReturnsAsync(listFromRepo);
 
-            var result = await service.GetAggregatedCourseDemandList(ukprn);
+            var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
 
             result.Should().BeEquivalentTo(listFromRepo.Select(summary => (AggregatedCourseDemandSummary)summary));
         }
