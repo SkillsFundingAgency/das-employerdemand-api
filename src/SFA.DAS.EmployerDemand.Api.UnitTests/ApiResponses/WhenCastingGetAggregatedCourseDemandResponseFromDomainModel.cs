@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.ApiResponses
         {
             var result = (GetAggregatedCourseDemandSummaryResponse)source;
 
-            result.Should().BeEquivalentTo(source);
+            result.Should().BeEquivalentTo(source, options => options.Excluding(c=>c.Id));
         }
     }
 }
