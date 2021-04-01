@@ -1,7 +1,10 @@
+using System;
+
 namespace SFA.DAS.EmployerDemand.Domain.Models
 {
     public class AggregatedCourseDemandSummary
     {
+        public Guid Id { get ; set ; }
         public int CourseId { get; set; }
         public string CourseTitle { get; set; }
         public int CourseLevel { get; set; }
@@ -9,10 +12,12 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         public int EmployersCount { get; set; }
         public int ApprenticesCount { get; set; }
 
+
         public static implicit operator AggregatedCourseDemandSummary(Entities.AggregatedCourseDemandSummary source)
         {
             return new AggregatedCourseDemandSummary
             {
+                Id = source.Id,
                 CourseId = source.CourseId,
                 CourseTitle = source.CourseTitle,
                 CourseLevel = source.CourseLevel,
