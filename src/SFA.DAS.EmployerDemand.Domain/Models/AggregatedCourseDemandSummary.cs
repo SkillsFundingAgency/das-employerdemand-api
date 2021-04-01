@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SFA.DAS.EmployerDemand.Domain.Models
 {
@@ -25,6 +28,25 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
                 EmployersCount = source.EmployersCount,
                 ApprenticesCount = source.ApprenticesCount
             };
+        }
+
+        public AggregatedCourseDemandSummary ()
+        {
+        }
+        
+        public AggregatedCourseDemandSummary (
+            int courseId,
+            string courseTitle,
+            int courseLevel,
+            string courseRoute,
+            IReadOnlyCollection<Entities.AggregatedCourseDemandSummary> list)
+        {
+            CourseId = courseId;
+            CourseLevel = courseLevel;
+            CourseRoute = courseRoute;
+            CourseTitle = courseTitle;
+            ApprenticesCount = list.Sum(c => c.ApprenticesCount);
+            EmployersCount = list.Count;
         }
     }
 }

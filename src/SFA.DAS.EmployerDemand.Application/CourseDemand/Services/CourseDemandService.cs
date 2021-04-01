@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
@@ -23,8 +24,21 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
         {
             var summaries = await _repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
-
-            return summaries.Select(summary => (AggregatedCourseDemandSummary) summary);
+            return summaries.GroupBy(item => new
+                {
+                    item.CourseId,
+                    item.CourseLevel,
+                    item.CourseTitle,
+                    item.CourseRoute
+                })
+                .Select(group =>
+                    new AggregatedCourseDemandSummary(
+                        group.Key.CourseId, 
+                        group.Key.CourseTitle, 
+                        group.Key.CourseLevel, 
+                        group.Key.CourseRoute, 
+                        group.ToList()));
+            
         }
     }
 }
