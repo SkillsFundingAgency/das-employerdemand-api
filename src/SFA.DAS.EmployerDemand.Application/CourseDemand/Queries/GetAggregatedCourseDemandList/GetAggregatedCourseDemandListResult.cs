@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedC
     public class GetAggregatedCourseDemandListResult
     {
         public IEnumerable<AggregatedCourseDemandSummary> AggregatedCourseDemandList { get; set; }
+        public int Total { get ; set ; }
     }
 }

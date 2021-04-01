@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
     {
         [Test, MoqAutoData]
         public async Task Then_Returns_List_From_Service(
+            int totalResultCount,
             GetAggregatedCourseDemandListQuery query,
             List<AggregatedCourseDemandSummary> listFromService,
             [Frozen] Mock<ICourseDemandService> mockDemandService,
@@ -25,10 +26,13 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
                 .Setup(service => service.GetAggregatedCourseDemandList(
                     query.Ukprn, query.CourseId, query.Lat, query.Lon, query.Radius))
                 .ReturnsAsync(listFromService);
+            mockDemandService
+                .Setup(service => service.GetAggregatedDemandTotal(query.Ukprn)).ReturnsAsync(totalResultCount);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
             result.AggregatedCourseDemandList.Should().BeEquivalentTo(listFromService);
+            result.Total.Should().Be(totalResultCount);
         }
     }
 }
