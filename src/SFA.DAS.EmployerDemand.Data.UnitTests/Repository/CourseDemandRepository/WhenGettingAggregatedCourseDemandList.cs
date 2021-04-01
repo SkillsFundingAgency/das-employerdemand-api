@@ -16,6 +16,10 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         [Test, RecursiveMoqAutoData]
         public async Task Then_Gets_AggregatedCourseDemandList(
             int ukprn,
+            int? courseId,
+            double? lat,
+            double? lon,
+            int? radius,
             List<CourseDemand> entitiesFromDb,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
@@ -42,7 +46,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
                 }).OrderBy(summary => summary.CourseTitle);
 
             //act
-            var result = await repository.GetAggregatedCourseDemandList(ukprn);
+            var result = await repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
 
             //assert
             result.Should().BeEquivalentTo(expectedAggregatedEntities);

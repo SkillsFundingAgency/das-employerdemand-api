@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             CourseDemandService service)
         {
             mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn))
+                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius))
                 .ReturnsAsync(listFromRepo);
 
             var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
