@@ -20,6 +20,10 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         [Test, MoqAutoData]
         public async Task Then_Returns_List_From_Handler(
             int ukprn,
+            int? courseId,
+            double? lat,
+            double? lon,
+            int radius,
             GetAggregatedCourseDemandListResult resultFromMediator,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] DemandController controller)
@@ -27,11 +31,15 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             mockMediator
                 .Setup(mediator => mediator.Send(
                     It.Is<GetAggregatedCourseDemandListQuery>(query => 
-                        query.Ukprn == ukprn),
+                        query.Ukprn == ukprn
+                        && query.CourseId == courseId
+                        && query.Lat.Equals(lat)
+                        && query.Lon.Equals(lon)
+                        && query.Radius == radius),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator);
 
-            var result = await controller.GetAggregatedCourseDemandList(ukprn) as ObjectResult;
+            var result = await controller.GetAggregatedCourseDemandList(ukprn,courseId, lat, lon, radius) as ObjectResult;
 
             result.Should().NotBeNull();
             result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
