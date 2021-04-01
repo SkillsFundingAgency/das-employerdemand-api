@@ -47,6 +47,8 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             model!.AggregatedCourseDemandList.Should().BeEquivalentTo(
                 resultFromMediator.AggregatedCourseDemandList.Select(summary =>
                     (GetAggregatedCourseDemandSummaryResponse) summary));
+            model.TotalFiltered.Should().Be(resultFromMediator.AggregatedCourseDemandList.Count());
+            model.Total.Should().Be(resultFromMediator.Total);
         }
     }
 }

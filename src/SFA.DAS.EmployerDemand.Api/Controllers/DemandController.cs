@@ -97,10 +97,13 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 CourseId = courseId
             });
 
+            var getAggregatedCourseDemandSummaryResponses = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
+                (GetAggregatedCourseDemandSummaryResponse) summary).ToList();
             var response = new GetAggregatedCourseDemandListResponse
             {
-                AggregatedCourseDemandList = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
-                    (GetAggregatedCourseDemandSummaryResponse) summary)
+                AggregatedCourseDemandList = getAggregatedCourseDemandSummaryResponses,
+                TotalFiltered = getAggregatedCourseDemandSummaryResponses.Count,
+                Total = resultFromMediator.Total
             };
 
             return Ok(response);
