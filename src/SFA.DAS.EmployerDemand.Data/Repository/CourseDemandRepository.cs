@@ -46,10 +46,17 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
             if (radius != null)
             {
-                result = result.Where(c => c.DistanceInMiles >= radius);
+                result = result.Where(c => c.DistanceInMiles <= radius);
             }
             
             return await result.ToListAsync();
+        }
+
+        public async Task<int> TotalCourseDemands(int ukprn)
+        {
+            var value = await _dataContext.CourseDemands.GroupBy(c => c.CourseId).CountAsync();
+            
+            return value;
         }
 
         private FormattableString ProviderCourseDemandQuery(double? lat, double? lon)
