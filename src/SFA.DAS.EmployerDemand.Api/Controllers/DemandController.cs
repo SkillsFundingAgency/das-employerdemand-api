@@ -86,14 +86,24 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpGet]
         [Route("aggregated/providers/{ukprn}")]
-        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn)
+        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn, [FromQuery]int? courseId, [FromQuery] double? lat, [FromQuery]double? lon, [FromQuery]int? radius)
         {
-            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery{Ukprn = ukprn});
+            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery
+            {
+                Ukprn = ukprn,
+                Lat = lat,
+                Lon = lon,
+                Radius = radius,
+                CourseId = courseId
+            });
 
+            var getAggregatedCourseDemandSummaryResponses = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
+                (GetAggregatedCourseDemandSummaryResponse) summary).ToList();
             var response = new GetAggregatedCourseDemandListResponse
             {
-                AggregatedCourseDemandList = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
-                    (GetAggregatedCourseDemandSummaryResponse) summary)
+                AggregatedCourseDemandList = getAggregatedCourseDemandSummaryResponses,
+                TotalFiltered = getAggregatedCourseDemandSummaryResponses.Count,
+                Total = resultFromMediator.Total
             };
 
             return Ok(response);

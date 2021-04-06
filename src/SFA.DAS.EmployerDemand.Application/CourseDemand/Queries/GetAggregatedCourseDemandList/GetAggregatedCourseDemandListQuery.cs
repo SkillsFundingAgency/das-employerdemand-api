@@ -5,5 +5,9 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedC
     public class GetAggregatedCourseDemandListQuery : IRequest<GetAggregatedCourseDemandListResult>
     {
         public int Ukprn { get; set; }
+        public int? CourseId { get ; set ; }
+        public double? Lat { get ; set ; }
+        public double? Lon { get ; set ; }
+        public int? Radius { get ; set ; }
     }
 }

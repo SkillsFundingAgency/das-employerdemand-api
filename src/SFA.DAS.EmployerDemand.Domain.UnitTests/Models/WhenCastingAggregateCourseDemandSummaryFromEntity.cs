@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
         {
             var result = (Domain.Models.AggregatedCourseDemandSummary) source;
 
-            result.Should().BeEquivalentTo(source);
+            result.Should().BeEquivalentTo(source, options=> options.Excluding(c=>c.DistanceInMiles));
         }
     }
 }
