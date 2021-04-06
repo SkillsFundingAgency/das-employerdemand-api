@@ -31,41 +31,8 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 
             var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
 
-            result.Should().BeEquivalentTo(listFromRepo.Select(summary => (AggregatedCourseDemandSummary)summary), options=>options
-                .Excluding(c=>c.Id)
-                .Excluding(c=>c.EmployersCount)
-            );
+            result.Should().BeEquivalentTo(listFromRepo, options => options.Excluding(c=>c.DistanceInMiles));
         }
 
-        [Test, MoqAutoData]
-        public async Task Then_The_Data_Is_Grouped_By_Course_Id(int ukprn,
-            int? courseId,
-            double? lat,
-            double? lon,
-            int? radius,
-            List<Domain.Entities.AggregatedCourseDemandSummary> listFromRepo, 
-            [Frozen] Mock<ICourseDemandRepository> mockRepository,
-            CourseDemandService service)
-        {
-            var repoList = new List<Domain.Entities.AggregatedCourseDemandSummary>();
-            repoList.AddRange(listFromRepo);
-            mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius))
-                .ReturnsAsync(repoList);
-
-            var result = (await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius)).ToList();
-
-            result.Should().BeEquivalentTo(listFromRepo.Select(summary => (AggregatedCourseDemandSummary)summary), options=>options
-                .Excluding(c=>c.Id)
-                .Excluding(c=>c.EmployersCount)
-                .Excluding(c=>c.ApprenticesCount)
-            );
-
-            foreach (var courseDemandSummary in result)
-            {
-                courseDemandSummary.EmployersCount.Should().Be(repoList.Where(c=>c.CourseId.Equals(courseDemandSummary.CourseId)).Select(x=>x.EmployersCount).FirstOrDefault());
-                courseDemandSummary.ApprenticesCount.Should().Be(repoList.Where(c=>c.CourseId.Equals(courseDemandSummary.CourseId)).Select(x=>x.ApprenticesCount).FirstOrDefault());
-            }
-        }
     }
 }

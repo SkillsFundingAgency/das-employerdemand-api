@@ -56,8 +56,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius)
         {
-            return $@"select
-                        c.Id,
+            return $@"select distinct
                         c.CourseId,
                         c.CourseTitle,
                         c.CourseLevel,
