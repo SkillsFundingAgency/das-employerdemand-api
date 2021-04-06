@@ -34,7 +34,9 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
                     item.CourseId,
                     item.CourseLevel,
                     item.CourseTitle,
-                    item.CourseRoute
+                    item.CourseRoute,
+                    item.EmployersCount,
+                    item.ApprenticesCount
                 })
                 .Select(group =>
                     new AggregatedCourseDemandSummary(
@@ -42,7 +44,8 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
                         group.Key.CourseTitle, 
                         group.Key.CourseLevel, 
                         group.Key.CourseRoute, 
-                        group.ToList()));
+                        group.Key.EmployersCount,
+                        group.Key.ApprenticesCount));
             
         }
     }

@@ -49,7 +49,6 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         {
             var repoList = new List<Domain.Entities.AggregatedCourseDemandSummary>();
             repoList.AddRange(listFromRepo);
-            repoList.AddRange(listFromRepo);
             mockRepository
                 .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius))
                 .ReturnsAsync(repoList);
@@ -64,8 +63,8 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 
             foreach (var courseDemandSummary in result)
             {
-                courseDemandSummary.EmployersCount.Should().Be(2);
-                courseDemandSummary.ApprenticesCount.Should().Be(repoList.Where(c=>c.CourseId.Equals(courseDemandSummary.CourseId)).Sum(x=>x.ApprenticesCount));
+                courseDemandSummary.EmployersCount.Should().Be(repoList.Where(c=>c.CourseId.Equals(courseDemandSummary.CourseId)).Select(x=>x.EmployersCount).FirstOrDefault());
+                courseDemandSummary.ApprenticesCount.Should().Be(repoList.Where(c=>c.CourseId.Equals(courseDemandSummary.CourseId)).Select(x=>x.ApprenticesCount).FirstOrDefault());
             }
         }
     }

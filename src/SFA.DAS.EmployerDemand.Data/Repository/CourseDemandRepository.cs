@@ -80,9 +80,10 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         from CourseDemand cd
                     inner join(
                         select
+                            Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.courseId = cd.CourseId
+                        from CourseDemand) as dist on dist.Id = cd.Id
                     Group by cd.CourseId, dist.DistanceInMiles ) derv on derv.CourseId = c.CourseId";
         }
     }
