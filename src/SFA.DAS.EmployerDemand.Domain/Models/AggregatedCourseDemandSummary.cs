@@ -39,14 +39,15 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
             string courseTitle,
             int courseLevel,
             string courseRoute,
-            IReadOnlyCollection<Entities.AggregatedCourseDemandSummary> list)
+            int employersCount,
+            int apprenticesCount)
         {
             CourseId = courseId;
             CourseLevel = courseLevel;
             CourseRoute = courseRoute;
             CourseTitle = courseTitle;
-            ApprenticesCount = list.Sum(c => c.ApprenticesCount);
-            EmployersCount = list.Count;
+            ApprenticesCount = apprenticesCount;
+            EmployersCount = employersCount;
         }
     }
 }
