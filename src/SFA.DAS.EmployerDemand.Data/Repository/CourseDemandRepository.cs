@@ -37,16 +37,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon)).AsQueryable();
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius)).AsQueryable();
 
             if (courseId != null)
             {
                 result = result.Where(c => c.CourseId.Equals(courseId)).AsQueryable();
-            }
-
-            if (radius != null)
-            {
-                result = result.Where(c => c.DistanceInMiles <= radius);
             }
             
             return await result.ToListAsync();
@@ -59,7 +54,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return value;
         }
 
-        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon)
+        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius)
         {
             return $@"select
                         c.Id,
@@ -76,15 +71,15 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             cd.CourseId,
                             Sum(NumberOfApprentices) as ApprenticesCount,
                             Count(1) as EmployersCount,
-                            dist.DistanceInMiles as DistanceInMiles
+                            Max(dist.DistanceInMiles) as DistanceInMiles
                         from CourseDemand cd
                     inner join(
                         select
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.Id = cd.Id
-                    Group by cd.CourseId, dist.DistanceInMiles ) derv on derv.CourseId = c.CourseId";
+                        from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                    Group by cd.CourseId ) derv on derv.CourseId = c.CourseId";
         }
     }
 }
