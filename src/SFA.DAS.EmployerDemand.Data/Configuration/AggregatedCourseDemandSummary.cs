@@ -7,6 +7,8 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Domain.Entities.AggregatedCourseDemandSummary> builder)
         {
+            builder.HasNoKey();
+            
             builder.Property(x => x.ApprenticesCount).HasColumnType("int").IsRequired();
             builder.Property(x => x.EmployersCount).HasColumnType("int").IsRequired();
             builder.Property(x => x.CourseId).HasColumnType("int").IsRequired();
