@@ -16,9 +16,6 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         public async Task Then_The_Total_Is_Returned(
             int ukprn,
             int? courseId,
-            double? lat,
-            double? lon,
-            int? radius,
             CourseDemand courseDemand1,
             CourseDemand courseDemand2,
             CourseDemand courseDemand3,

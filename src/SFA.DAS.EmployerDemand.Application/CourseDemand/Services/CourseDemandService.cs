@@ -39,5 +39,10 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return summaries
                 .Select(group => (EmployerCourseDemand) group);
         }
+
+        public async Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId)
+        {
+            return await _repository.TotalEmployerCourseDemands(ukprn, courseId);
+        }
     }
 }
