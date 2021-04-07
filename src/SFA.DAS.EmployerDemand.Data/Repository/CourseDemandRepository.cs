@@ -47,6 +47,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return await result.ToListAsync();
         }
 
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
+        {
+            return await _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQueryByCourseId(courseId,lat,lon, radius)).ToListAsync();
+        }
+
         public async Task<int> TotalCourseDemands(int ukprn)
         {
             var value = await _dataContext.CourseDemands.GroupBy(c => c.CourseId).CountAsync();
@@ -57,13 +62,17 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius)
         {
             return $@"select distinct
+                        null as Id,
                         c.CourseId,
                         c.CourseTitle,
                         c.CourseLevel,
                         c.CourseRoute,
                         derv.ApprenticesCount,
                         derv.EmployersCount,
-                        derv.DistanceInMiles
+                        derv.DistanceInMiles,
+                        '' as LocationName,
+                        null as Lat,
+                        null as Long
                     from CourseDemand c
                     inner join (
                         select
@@ -79,6 +88,31 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId ) derv on derv.CourseId = c.CourseId";
+        }
+
+        private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
+        {
+            return $@"
+                select
+                    c.Id,
+                    c.CourseId,
+                    c.CourseTitle,
+                    c.CourseLevel,
+                    c.CourseRoute,
+                    c.LocationName,
+                    c.Lat,
+                    c.Long,
+                    c.NumberOfApprentices as ApprenticeCount,
+                    dist.DistanceInMiles,
+                    0 as EmployersCount
+                from CourseDemand c
+                         inner join (
+                        select
+                            Id,
+                            courseId,
+                            geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
+                        from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                Where c.CourseId = {courseId}";
         }
     }
 }
