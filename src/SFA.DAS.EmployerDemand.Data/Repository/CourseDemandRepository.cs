@@ -52,6 +52,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return await _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQueryByCourseId(courseId,lat,lon, radius)).ToListAsync();
         }
 
+        public async Task<int> TotalEmployerCourseDemands(int ukprn, int courseId)
+        {
+            return await _dataContext.CourseDemands.CountAsync(c => c.CourseId.Equals(courseId));
+        }
+
         public async Task<int> TotalCourseDemands(int ukprn)
         {
             var value = await _dataContext.CourseDemands.GroupBy(c => c.CourseId).CountAsync();
