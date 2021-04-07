@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     c.LocationName,
                     c.Lat,
                     c.Long,
-                    c.NumberOfApprentices as ApprenticeCount,
+                    c.NumberOfApprentices as ApprenticesCount,
                     dist.DistanceInMiles,
                     0 as EmployersCount
                 from CourseDemand c

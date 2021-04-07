@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCou
     public class GetEmployerCourseDemandListResult
     {
         public IEnumerable<EmployerCourseDemand> CourseDemands { get ; set ; }
+        public int Total { get ; set ; }
     }
 }

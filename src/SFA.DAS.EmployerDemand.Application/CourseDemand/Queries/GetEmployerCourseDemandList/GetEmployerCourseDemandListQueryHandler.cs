@@ -18,9 +18,12 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCou
             var result = await _courseDemandService.GetEmployerCourseDemand(request.Ukprn, request.CourseId,
                 request.Lat, request.Lon, request.Radius);
 
+            var totalResult = await _courseDemandService.GetTotalEmployerCourseDemands(request.Ukprn, request.CourseId);
+
             return new GetEmployerCourseDemandListResult
             {
-                CourseDemands = result
+                CourseDemands = result,
+                Total = totalResult
             };
         }
     }
