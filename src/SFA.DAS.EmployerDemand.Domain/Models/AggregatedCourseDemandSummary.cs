@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         {
             return new AggregatedCourseDemandSummary
             {
-                Id = source.Id,
                 CourseId = source.CourseId,
                 CourseTitle = source.CourseTitle,
                 CourseLevel = source.CourseLevel,
@@ -28,26 +27,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
                 EmployersCount = source.EmployersCount,
                 ApprenticesCount = source.ApprenticesCount
             };
-        }
-
-        public AggregatedCourseDemandSummary ()
-        {
-        }
-        
-        public AggregatedCourseDemandSummary (
-            int courseId,
-            string courseTitle,
-            int courseLevel,
-            string courseRoute,
-            int employersCount,
-            int apprenticesCount)
-        {
-            CourseId = courseId;
-            CourseLevel = courseLevel;
-            CourseRoute = courseRoute;
-            CourseTitle = courseTitle;
-            ApprenticesCount = apprenticesCount;
-            EmployersCount = employersCount;
         }
     }
 }
