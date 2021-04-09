@@ -33,6 +33,5 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 
             result.Should().BeEquivalentTo(listFromRepo, options => options.Excluding(c=>c.DistanceInMiles));
         }
-
     }
 }

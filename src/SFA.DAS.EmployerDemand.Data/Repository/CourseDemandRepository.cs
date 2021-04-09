@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 result = result.Where(c => c.CourseId.Equals(courseId)).AsQueryable();
             }
             
-            return await result.ToListAsync();
+            return await result.OrderBy(c=>c.CourseTitle).ToListAsync();
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
@@ -77,6 +77,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
+
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId ) derv on derv.CourseId = c.CourseId";
         }
