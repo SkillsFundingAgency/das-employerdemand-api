@@ -21,6 +21,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.CourseId.Should().Be(source.Course.Id);
             actual.CourseTitle.Should().Be(source.Course.Title);
             actual.CourseLevel.Should().Be(source.Course.Level);
+            actual.CourseRoute.Should().Be(source.Course.Route);
             actual.LocationName.Should().Be(source.Location.Name);
             actual.Lat.Should().Be(source.Location.Lat);
             actual.Long.Should().Be(source.Location.Lon);

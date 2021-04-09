@@ -4,7 +4,7 @@ using NLog.Web;
 
 namespace SFA.DAS.EmployerDemand.Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerDemand.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseApplicationInsights()
+                    webBuilder
                         .UseStartup<Startup>()
                         .UseNLog();
                 });

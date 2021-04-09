@@ -13,5 +13,9 @@
       <PackageReference Include="MediatR" Version="8.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="CourseDemand\Queries\GetAggregatedCourseDemandList\" />
+    </ItemGroup>
+
 
 </Project>

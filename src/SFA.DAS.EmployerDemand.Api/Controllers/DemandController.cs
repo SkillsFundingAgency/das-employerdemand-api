@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Api.ApiRequests;
+using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
 using Location = SFA.DAS.EmployerDemand.Domain.Models.Location;
@@ -53,7 +55,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                         {
                             Id = request.Course.Id,
                             Title = request.Course.Title,
-                            Level = request.Course.Level
+                            Level = request.Course.Level,
+                            Route = request.Course.Route
                         },
                         Location = new Location
                         {
@@ -79,7 +82,31 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 _logger.LogError(e,"Unable to create course demand");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
-            
+        }
+
+        [HttpGet]
+        [Route("aggregated/providers/{ukprn}")]
+        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn, [FromQuery]int? courseId, [FromQuery] double? lat, [FromQuery]double? lon, [FromQuery]int? radius)
+        {
+            var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery
+            {
+                Ukprn = ukprn,
+                Lat = lat,
+                Lon = lon,
+                Radius = radius,
+                CourseId = courseId
+            });
+
+            var getAggregatedCourseDemandSummaryResponses = resultFromMediator.AggregatedCourseDemandList.Select(summary =>
+                (GetAggregatedCourseDemandSummaryResponse) summary).ToList();
+            var response = new GetAggregatedCourseDemandListResponse
+            {
+                AggregatedCourseDemandList = getAggregatedCourseDemandSummaryResponses,
+                TotalFiltered = getAggregatedCourseDemandSummaryResponses.Count,
+                Total = resultFromMediator.Total
+            };
+
+            return Ok(response);
         }
     }
 }

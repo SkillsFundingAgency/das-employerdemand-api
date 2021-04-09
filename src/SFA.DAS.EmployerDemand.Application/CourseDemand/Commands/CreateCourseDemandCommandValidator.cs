@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
                 }
             }
 
-            if (item.CourseDemand.Course.Id == 0 || item.CourseDemand.Course.Level == 0 || string.IsNullOrEmpty(item.CourseDemand.Course.Title))
+            if (item.CourseDemand.Course.Id == 0 || item.CourseDemand.Course.Level == 0 || string.IsNullOrEmpty(item.CourseDemand.Course.Title) || string.IsNullOrEmpty(item.CourseDemand.Course.Route))
             {
                 result.AddError(nameof(item.CourseDemand.Course));
             }

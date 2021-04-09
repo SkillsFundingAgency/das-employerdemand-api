@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock
 {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock
         {
         }
 
-        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
         {
             var expectedResultType = typeof(TResult).GetGenericArguments()[0];
             var executionResult = typeof(IQueryProvider)
@@ -36,5 +36,4 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock
             return new TestAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
         }
     }
-
 }

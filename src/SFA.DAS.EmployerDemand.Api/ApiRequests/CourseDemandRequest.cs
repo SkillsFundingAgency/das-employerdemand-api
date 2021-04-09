@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerDemand.Api.ApiModels
+namespace SFA.DAS.EmployerDemand.Api.ApiRequests
 {
     public class CourseDemandRequest
     {
@@ -18,6 +18,7 @@ namespace SFA.DAS.EmployerDemand.Api.ApiModels
         public int Id { get ; set ; }
         public string Title { get ; set ; }
         public int Level { get ; set ; }
+        public string Route { get; set; }
     }
 
     public class Location

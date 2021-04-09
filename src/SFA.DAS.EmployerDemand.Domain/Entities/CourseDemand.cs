@@ -1,5 +1,4 @@
 using System;
-using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Domain.Entities
 {
@@ -12,6 +11,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public int CourseId { get; set; }
         public string CourseTitle { get; set; }
         public int CourseLevel { get; set; }
+        public string CourseRoute { get; set; }
         public string LocationName { get; set; }
         public double Lat { get; set; }
         public double Long { get; set; }
@@ -32,7 +32,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 LocationName = source.Location.Name,
                 CourseId = source.Course.Id,
                 CourseTitle = source.Course.Title,
-                CourseLevel = source.Course.Level
+                CourseLevel = source.Course.Level,
+                CourseRoute = source.Course.Route
             };
         }
     }

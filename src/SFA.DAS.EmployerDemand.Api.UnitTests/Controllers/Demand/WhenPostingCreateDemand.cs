@@ -10,7 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerDemand.Api.ApiModels;
+using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
 using SFA.DAS.Testing.AutoFixture;
@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                     && c.CourseDemand.Course.Id.Equals(request.Course.Id)
                     && c.CourseDemand.Course.Title.Equals(request.Course.Title)
                     && c.CourseDemand.Course.Level.Equals(request.Course.Level)
+                    && c.CourseDemand.Course.Route.Equals(request.Course.Route)
                     && c.CourseDemand.Location.Name.Equals(request.Location.Name)
                     && c.CourseDemand.Location.Lat == request.Location.LocationPoint.GeoPoint.First()
                     && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()

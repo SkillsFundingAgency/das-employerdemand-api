@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
         }
 
         [Test, MoqAutoData]
-        public async Task Then_If_The_Command_Is_Not_Valid_A_ValidationException_Is_Thrown(
+        public void Then_If_The_Command_Is_Not_Valid_A_ValidationException_Is_Thrown(
             string propertyName,
             CreateCourseDemandCommand command,
             [Frozen] Mock<IValidator<CreateCourseDemandCommand>> validator,
