@@ -37,13 +37,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius)).AsQueryable();
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId)).AsQueryable();
 
-            if (courseId != null)
-            {
-                result = result.Where(c => c.CourseId.Equals(courseId)).AsQueryable();
-            }
-            
             return await result.ToListAsync();
         }
 
@@ -64,7 +59,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return value;
         }
 
-        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius)
+        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct
                         null as Id,
@@ -92,7 +87,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                    Group by cd.CourseId) derv on derv.CourseId = c.CourseId 
+                    Group by cd.CourseId) derv on derv.CourseId = c.CourseId
+                    Where ({courseId} is null or c.CourseId = {courseId}) 
                     Order by c.CourseTitle";
         }
 
