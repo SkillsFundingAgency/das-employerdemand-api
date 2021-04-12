@@ -40,6 +40,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId)).AsQueryable();
 
             return await result.ToListAsync();
+
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
@@ -90,6 +91,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId}) 
                     Order by c.CourseTitle";
+
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
