@@ -116,7 +116,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                Where c.CourseId = {courseId}";
+                Where c.CourseId = {courseId}
+                Order by c.LocationName";
         }
     }
 }
