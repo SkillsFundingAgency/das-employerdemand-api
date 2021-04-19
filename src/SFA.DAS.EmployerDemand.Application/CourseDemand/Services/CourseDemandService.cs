@@ -36,8 +36,10 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
             var summaries = await _repository.GetAggregatedCourseDemandListByCourse(ukprn, courseId, lat, lon, radius);
-            return summaries
+            var items = summaries
                 .Select(group => (EmployerCourseDemand) group);
+
+            return items.OrderBy(c=>c.LocationName);
         }
 
         public async Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId)
