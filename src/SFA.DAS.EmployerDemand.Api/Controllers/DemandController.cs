@@ -10,6 +10,7 @@ using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
 using Location = SFA.DAS.EmployerDemand.Domain.Models.Location;
@@ -106,6 +107,34 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 Total = resultFromMediator.Total
             };
 
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("providers/{ukprn}/courses/{courseId}")]
+        public async Task<IActionResult> GetEmployerCourseDemandByCourse(int ukprn, int courseId, [FromQuery] double? lat, [FromQuery] double? lon, [FromQuery] int? radius)
+        {
+            var result = await _mediator.Send(new GetEmployerCourseDemandListQuery
+            {
+                Ukprn = ukprn,
+                CourseId = courseId,
+                Lat = lat,
+                Lon = lon,
+                Radius = radius
+            });
+
+            var employerDemands = result
+                .CourseDemands
+                .Select(demands => (GetEmployerCourseDemandResponse) demands)
+                .ToList();
+
+            var response = new GetEmployerCourseDemandListResponse
+            {
+                EmployerCourseDemands = employerDemands,
+                Total = result.Total,
+                TotalFiltered = employerDemands.Count
+            };
+            
             return Ok(response);
         }
     }

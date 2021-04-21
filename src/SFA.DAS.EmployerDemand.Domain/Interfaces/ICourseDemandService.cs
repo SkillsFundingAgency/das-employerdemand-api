@@ -9,5 +9,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<bool> CreateDemand(Models.CourseDemand courseDemand);
         Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius);
         Task<int> GetAggregatedDemandTotal(int ukprn);
+        Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius);
+        Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId);
     }
 }

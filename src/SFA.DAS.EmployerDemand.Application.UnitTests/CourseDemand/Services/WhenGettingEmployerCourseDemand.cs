@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -10,12 +10,12 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 {
-    public class WhenGettingAggregatedCourseDemandList
+    public class WhenGettingEmployerCourseDemand
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Repository_Is_Called(
+        public async Task Then_The_Repository_Is_Called_And_Data_Returned(
             int ukprn,
-            int? courseId,
+            int courseId,
             double? lat,
             double? lon,
             int? radius,
@@ -23,20 +23,22 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             [Frozen] Mock<ICourseDemandRepository> mockRepository,
             CourseDemandService service)
         {
-            mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius))
+            //Arrange
+            mockRepository.Setup(x => x.GetAggregatedCourseDemandListByCourse(ukprn, courseId, lat, lon, radius))
                 .ReturnsAsync(listFromRepo);
+            
+            //Act
+            var actual = await service.GetEmployerCourseDemand(ukprn, courseId, lat, lon, radius);
 
-            var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
-
-            result.Should().BeEquivalentTo(listFromRepo, options => options
+            //Assert
+            actual.Should().BeEquivalentTo(listFromRepo, options=> options
+                .Excluding(c=>c.CourseId)
+                .Excluding(c=>c.CourseTitle)
+                .Excluding(c=>c.CourseLevel)
+                .Excluding(c=>c.CourseRoute)
+                .Excluding(c=>c.EmployersCount)
                 .Excluding(c=>c.DistanceInMiles)
-                .Excluding(c=>c.Id)
-                .Excluding(c=>c.Lat)
-                .Excluding(c=>c.Long)
-                .Excluding(c=>c.LocationName)
             );
         }
-
     }
 }

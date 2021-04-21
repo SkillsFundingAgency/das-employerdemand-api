@@ -4,6 +4,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
 {
     public class AggregatedCourseDemandSummary
     {
+        public Guid? Id { get ; set ; }
         public int CourseId { get; set; }
         public string CourseTitle { get; set; }
         public int CourseLevel { get; set; }
@@ -11,5 +12,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public int EmployersCount { get; set; }
         public int ApprenticesCount { get; set; }
         public double DistanceInMiles { get; set; }
+        public string LocationName { get; set; }
+        public double? Lat { get; set; }
+        public double? Long { get; set; }
     }
 }
