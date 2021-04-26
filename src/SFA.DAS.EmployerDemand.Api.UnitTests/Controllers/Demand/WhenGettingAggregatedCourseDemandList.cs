@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             double? lat,
             double? lon,
             int radius,
+            List<string> routes,
             GetAggregatedCourseDemandListResult resultFromMediator,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] DemandController controller)
@@ -35,11 +37,12 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                         && query.CourseId == courseId
                         && query.Lat.Equals(lat)
                         && query.Lon.Equals(lon)
-                        && query.Radius == radius),
+                        && query.Radius == radius
+                        && query.Routes == routes),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator);
 
-            var result = await controller.GetAggregatedCourseDemandList(ukprn,courseId, lat, lon, radius) as ObjectResult;
+            var result = await controller.GetAggregatedCourseDemandList(ukprn,courseId, lat, lon, radius, routes) as ObjectResult;
 
             result.Should().NotBeNull();
             result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
