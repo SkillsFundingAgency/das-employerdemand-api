@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedC
         public async Task<GetAggregatedCourseDemandListResult> Handle(GetAggregatedCourseDemandListQuery request, CancellationToken cancellationToken)
         {
             var total = await _courseDemandService.GetAggregatedDemandTotal(request.Ukprn);
-            var result = await  _courseDemandService.GetAggregatedCourseDemandList(request.Ukprn, request.CourseId, request.Lat, request.Lon, request.Radius);
+            var result = await  _courseDemandService.GetAggregatedCourseDemandList(request.Ukprn, request.CourseId, request.Lat, request.Lon, request.Radius, new List<string>());
 
             return new GetAggregatedCourseDemandListResult
             {

@@ -25,10 +25,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             CourseDemandService service)
         {
             mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, new List<string>()))
+                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, routes))
                 .ReturnsAsync(listFromRepo);
 
-            var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
+            var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, routes);
 
             result.Should().BeEquivalentTo(listFromRepo, options => options
                 .Excluding(c=>c.DistanceInMiles)
