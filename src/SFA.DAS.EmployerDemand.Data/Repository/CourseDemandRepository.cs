@@ -35,12 +35,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId)).AsQueryable();
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId, routes)).AsQueryable();
 
             return await result.ToListAsync();
-
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
@@ -60,7 +59,46 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return value;
         }
 
-        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius, int? courseId)
+        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius, int? courseId, IList<string> routes)
+        {
+            var routeFilter = routes?.Count > 0
+                ? $"And c.CourseRoute in ('{string.Join("','", routes)}')"
+                : (FormattableString) $"";
+
+            FormattableString query = $@"select distinct
+                        null as Id,
+                        c.CourseId,
+                        c.CourseTitle,
+                        c.CourseLevel,
+                        c.CourseRoute,
+                        derv.ApprenticesCount,
+                        derv.EmployersCount,
+                        derv.DistanceInMiles,
+                        '' as LocationName,
+                        null as Lat,
+                        null as Long
+                    from CourseDemand c
+                    inner join (
+                        select
+                            cd.CourseId,
+                            Sum(NumberOfApprentices) as ApprenticesCount,
+                            Count(1) as EmployersCount,
+                            Max(dist.DistanceInMiles) as DistanceInMiles
+                        from CourseDemand cd
+                    inner join(
+                        select
+                            Id,
+                            courseId,
+                            geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
+                        from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                    Group by cd.CourseId) derv on derv.CourseId = c.CourseId
+                    Where ({courseId} is null or c.CourseId = {courseId})
+                    {routeFilter}
+                    Order by c.CourseTitle";
+            return query;
+        }
+
+        private FormattableString ProviderCourseDemandQuery_2ndOption(double? lat, double? lon, int? radius, int? courseId, IList<string> routes)
         {
             return $@"select distinct
                         null as Id,
@@ -90,8 +128,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId}) 
+                    And c.CourseRoute in ('{string.Join("','", routes)}')
                     Order by c.CourseTitle";
-
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)

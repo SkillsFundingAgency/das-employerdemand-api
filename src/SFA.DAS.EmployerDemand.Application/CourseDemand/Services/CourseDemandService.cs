@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
         {
-            var summaries = await _repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
+            var summaries = await _repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, new List<string>());//todo fix :O
             return summaries
                 .Select(group => (AggregatedCourseDemandSummary) group);
         }

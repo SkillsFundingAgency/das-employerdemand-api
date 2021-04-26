@@ -19,12 +19,13 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             double? lat,
             double? lon,
             int? radius,
+            List<string> routes,
             List<Domain.Entities.AggregatedCourseDemandSummary> listFromRepo, 
             [Frozen] Mock<ICourseDemandRepository> mockRepository,
             CourseDemandService service)
         {
             mockRepository
-                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius))
+                .Setup(repository => repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, new List<string>()))
                 .ReturnsAsync(listFromRepo);
 
             var result = await service.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius);
