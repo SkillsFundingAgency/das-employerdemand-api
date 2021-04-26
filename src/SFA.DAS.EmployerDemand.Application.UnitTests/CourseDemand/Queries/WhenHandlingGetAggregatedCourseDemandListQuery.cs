@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
         {
             mockDemandService
                 .Setup(service => service.GetAggregatedCourseDemandList(
-                    query.Ukprn, query.CourseId, query.Lat, query.Lon, query.Radius, new List<string>()))
+                    query.Ukprn, query.CourseId, query.Lat, query.Lon, query.Radius, query.Routes))
                 .ReturnsAsync(listFromService);
             mockDemandService
                 .Setup(service => service.GetAggregatedDemandTotal(query.Ukprn)).ReturnsAsync(totalResultCount);
