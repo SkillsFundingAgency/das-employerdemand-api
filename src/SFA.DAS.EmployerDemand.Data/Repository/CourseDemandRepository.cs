@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
             var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId));
-            if (routes?.Count > 0)
+            if (routes?.Count(s => !string.IsNullOrWhiteSpace(s)) > 0)
             {
                 result = result.Where(summary => routes.Contains(summary.CourseRoute));
             }
