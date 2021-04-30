@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[ProviderInterest]
+(
+    [Id] UNIQUEIDENTIFIER PRIMARY KEY,
+    [EmployerDemandId] UNIQUEIDENTIFIER NOT NULL,
+    [Ukprn] INT NOT NULL,
+    [DateCreated] DATETIME NOT NULL DEFAULT GETDATE()
+)
+GO
