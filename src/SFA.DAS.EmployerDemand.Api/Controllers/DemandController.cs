@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -87,7 +88,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpGet]
         [Route("aggregated/providers/{ukprn}")]
-        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn, [FromQuery]int? courseId, [FromQuery] double? lat, [FromQuery]double? lon, [FromQuery]int? radius)
+        public async Task<IActionResult> GetAggregatedCourseDemandList(int ukprn, [FromQuery]int? courseId, [FromQuery] double? lat, [FromQuery]double? lon, [FromQuery]int? radius, [FromQuery]IList<string> routes)
         {
             var resultFromMediator = await _mediator.Send(new GetAggregatedCourseDemandListQuery
             {
@@ -95,7 +96,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 Lat = lat,
                 Lon = lon,
                 Radius = radius,
-                CourseId = courseId
+                CourseId = courseId,
+                Routes = routes
             });
 
             var getAggregatedCourseDemandSummaryResponses = resultFromMediator.AggregatedCourseDemandList.Select(summary =>

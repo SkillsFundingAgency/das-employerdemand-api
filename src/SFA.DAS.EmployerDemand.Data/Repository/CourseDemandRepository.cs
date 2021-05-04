@@ -35,12 +35,16 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId)).AsQueryable();
-
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId));
+            if (routes?.Count(s => !string.IsNullOrWhiteSpace(s)) > 0)
+            {
+                result = result.Where(summary => routes.Contains(summary.CourseRoute));
+            }
+            result = result.OrderBy(summary => summary.CourseTitle);
+            
             return await result.ToListAsync();
-
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
@@ -89,9 +93,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
-                    Where ({courseId} is null or c.CourseId = {courseId}) 
-                    Order by c.CourseTitle";
-
+                    Where ({courseId} is null or c.CourseId = {courseId})";
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
