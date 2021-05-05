@@ -21,8 +21,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 Ukprn = source.Ukprn,
                 Email = source.Email,
                 Phone = source.Phone,
-                Website = source.Website,
-                DateCreated = source.DateCreated
+                Website = source.Website
             };
         }
     }
