@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands;
 
 namespace SFA.DAS.EmployerDemand.Api.Controllers
 {
@@ -31,10 +31,11 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new CreateCourseDemandCommand
+                var result = await _mediator.Send(new CreateProviderInterestCommand
                 {
-                    
+                    ProviderInterest = request
                 });
+
                 if (result.IsCreated)
                 {
                     return Created("",new {result.Id});    
