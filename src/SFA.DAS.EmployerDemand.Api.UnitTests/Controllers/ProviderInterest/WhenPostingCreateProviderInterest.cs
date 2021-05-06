@@ -21,23 +21,23 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
     {
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Sent_To_Mediator_And_Http_Created_Returned(
-            PostProviderInterestRequest request,
-            CreateProviderInterestCommandResult resultFromMediator,
+            PostProviderInterestsRequest request,
+            CreateProviderInterestsCommandResult resultFromMediator,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] ProviderInterestController controller)
         {
             //Arrange
             resultFromMediator.IsCreated = true;
-            Domain.Models.ProviderInterest model = null;
+            Domain.Models.ProviderInterests model = null;
             mockMediator
                 .Setup(x => x.Send(
-                    It.IsAny<CreateProviderInterestCommand>(),
+                    It.IsAny<CreateProviderInterestsCommand>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator)
-                .Callback((CreateProviderInterestCommand command, CancellationToken token) => model= command.ProviderInterest);
+                .Callback((CreateProviderInterestsCommand command, CancellationToken token) => model= command.ProviderInterests);
             
             //Act
-            var actual = await controller.CreateProviderInterest(request) as CreatedResult;
+            var actual = await controller.CreateProviderInterests(request) as CreatedResult;
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.Created);
@@ -47,8 +47,8 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
         
         [Test, MoqAutoData]
         public async Task And_Not_Created_Then_Http_Accepted_Returned(
-            PostProviderInterestRequest request,
-            CreateProviderInterestCommandResult resultFromMediator,
+            PostProviderInterestsRequest request,
+            CreateProviderInterestsCommandResult resultFromMediator,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] ProviderInterestController controller)
         {
@@ -56,12 +56,12 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             resultFromMediator.IsCreated = false;
             mockMediator
                 .Setup(x => x.Send(
-                    It.IsAny<CreateProviderInterestCommand>(),
+                    It.IsAny<CreateProviderInterestsCommand>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator);
             
             //Act
-            var actual = await controller.CreateProviderInterest(request) as AcceptedResult;
+            var actual = await controller.CreateProviderInterests(request) as AcceptedResult;
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
         [Test, MoqAutoData]
         public async Task And_ValidationException_Then_Http_BadRequest_Returned(
             string errorKey,
-            PostProviderInterestRequest request,
+            PostProviderInterestsRequest request,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] ProviderInterestController controller)
         {
@@ -79,12 +79,12 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             var validationResult = new ValidationResult{ValidationDictionary = { {errorKey,"Some error"}}};
             mockMediator
                 .Setup(mediator => mediator.Send(
-                    It.IsAny<CreateProviderInterestCommand>(),
+                    It.IsAny<CreateProviderInterestsCommand>(),
                     It.IsAny<CancellationToken>()))
                 .Throws(new ValidationException(validationResult.DataAnnotationResult, null, null));
             
             //Act
-            var actual = await controller.CreateProviderInterest(request) as ObjectResult;
+            var actual = await controller.CreateProviderInterests(request) as ObjectResult;
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);
@@ -94,19 +94,19 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
 
         [Test, MoqAutoData]
         public async Task And_Exception_Then_Http_InternalServerError_Returned(
-            PostProviderInterestRequest request,
+            PostProviderInterestsRequest request,
             [Frozen] Mock<IMediator> mockMediator,
             [Greedy] ProviderInterestController controller)
         {
             //Arrange
             mockMediator
                 .Setup(x => x.Send(
-                    It.IsAny<CreateProviderInterestCommand>(), 
+                    It.IsAny<CreateProviderInterestsCommand>(), 
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             
             //Act
-            var actual = await controller.CreateProviderInterest(request) as StatusCodeResult;
+            var actual = await controller.CreateProviderInterests(request) as StatusCodeResult;
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);

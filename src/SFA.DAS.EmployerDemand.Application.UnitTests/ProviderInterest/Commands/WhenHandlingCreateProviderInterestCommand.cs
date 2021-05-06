@@ -18,8 +18,8 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
         [Test, MoqAutoData]
         public void And_Command_Not_Valid_Then_ValidationException_Is_Thrown(
             string propertyName,
-            CreateProviderInterestCommand command,
-            [Frozen] Mock<IValidator<CreateProviderInterestCommand>> mockValidator,
+            CreateProviderInterestsCommand command,
+            [Frozen] Mock<IValidator<CreateProviderInterestsCommand>> mockValidator,
             [Frozen] Mock<IProviderInterestService> mockService,
             CreateProviderInterestCommandHandler handler)
         {
@@ -34,14 +34,14 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
             //Assert
             act.Should().Throw<ValidationException>()
                 .WithMessage($"*{propertyName}*");
-            mockService.Verify(x=>x.CreateInterest(It.IsAny<Domain.Models.ProviderInterest>()), Times.Never);
+            mockService.Verify(x=>x.CreateInterests(It.IsAny<Domain.Models.ProviderInterests>()), Times.Never);
         }
 
         [Test, MoqAutoData]
         public async Task And_Command_Valid_Then_Service_Called(
             bool result,
-            CreateProviderInterestCommand command,
-            [Frozen] Mock<IValidator<CreateProviderInterestCommand>> mockValidator,
+            CreateProviderInterestsCommand command,
+            [Frozen] Mock<IValidator<CreateProviderInterestsCommand>> mockValidator,
             [Frozen] Mock<IProviderInterestService> mockService,
             CreateProviderInterestCommandHandler handler)
         {
@@ -49,14 +49,13 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
                 .Setup(x => x.ValidateAsync(command))
                 .ReturnsAsync(new ValidationResult());
             mockService
-                .Setup(x=>x.CreateInterest(command.ProviderInterest))
+                .Setup(x=>x.CreateInterests(command.ProviderInterests))
                 .ReturnsAsync(result);
             
             var actual = await handler.Handle(command, CancellationToken.None);
             
             
-            mockValidator.Verify(x=>x.ValidateAsync(It.IsAny<CreateProviderInterestCommand>()), Times.Once);
-            actual.Id.Should().Be(command.ProviderInterest.Id);
+            mockValidator.Verify(x=>x.ValidateAsync(It.IsAny<CreateProviderInterestsCommand>()), Times.Once);
             actual.IsCreated.Should().Be(result);
         }
     }

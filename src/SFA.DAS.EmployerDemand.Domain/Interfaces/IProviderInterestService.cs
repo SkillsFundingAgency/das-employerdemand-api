@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
 {
     public interface IProviderInterestService
     {
-        Task<bool> CreateInterest(Models.ProviderInterest providerInterest);
+        Task<bool> CreateInterests(Models.ProviderInterests providerInterests);
     }
 }

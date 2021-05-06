@@ -1,23 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiRequests
 {
-    public class PostProviderInterestRequest
+    public class PostProviderInterestsRequest
     {
-        public Guid Id { get; set; }
-        public Guid EmployerDemandId { get; set; }
+        public IEnumerable<Guid> EmployerDemandIds { get; set; }
         public int Ukprn { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }
 
-        public static implicit operator ProviderInterest(PostProviderInterestRequest source)
+        public static implicit operator ProviderInterests(PostProviderInterestsRequest source)
         {
-            return new ProviderInterest
+            return new ProviderInterests
             {
-                Id = source.Id,
-                EmployerDemandId = source.EmployerDemandId,
+                EmployerDemandIds = source.EmployerDemandIds,
                 Ukprn = source.Ukprn,
                 Email = source.Email,
                 Phone = source.Phone,

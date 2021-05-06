@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -11,10 +12,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
     {
         [Test, AutoData]
         public async Task Then_Command_Is_Valid_If_All_Properties_Supplied(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterest.Email = "test@test.com";
+            command.ProviderInterests.Email = "test@test.com";
             
             var actual = await validator.ValidateAsync(command);
 
@@ -23,12 +24,12 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
 
         [Test, AutoData]
         public async Task Then_Command_Is_Valid_If_Required_Properties_Supplied(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterest.Email = null;
-            command.ProviderInterest.Phone = null;
-            command.ProviderInterest.Website = null;
+            command.ProviderInterests.Email = null;
+            command.ProviderInterests.Phone = null;
+            command.ProviderInterests.Website = null;
             
             var actual = await validator.ValidateAsync(command);
 
@@ -36,25 +37,12 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
         }
 
         [Test, AutoData]
-        public async Task Then_Invalid_If_No_Id(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
-        {
-            command.ProviderInterest.Id = Guid.Empty;
-            command.ProviderInterest.Email = null;
-            
-            var actual = await validator.ValidateAsync(command);
-
-            actual.IsValid().Should().BeFalse();
-        }
-
-        [Test, AutoData]
         public async Task Then_Invalid_If_No_EmployerDemandId(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterest.EmployerDemandId = Guid.Empty;
-            command.ProviderInterest.Email = null;
+            command.ProviderInterests.EmployerDemandIds = new List<Guid>();
+            command.ProviderInterests.Email = null;
             
             var actual = await validator.ValidateAsync(command);
 
@@ -63,11 +51,11 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
 
         [Test, AutoData]
         public async Task Then_Invalid_If_No_Ukprn(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterest.Ukprn = int.MinValue;
-            command.ProviderInterest.Email = null;
+            command.ProviderInterests.Ukprn = int.MinValue;
+            command.ProviderInterests.Email = null;
             
             var actual = await validator.ValidateAsync(command);
 
@@ -76,10 +64,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
 
         [Test, AutoData]
         public async Task Then_Invalid_If_Not_Valid_Email(
-            CreateProviderInterestCommand command,
-            CreateProviderInterestCommandValidator validator)
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterest.Email = "test";
+            command.ProviderInterests.Email = "test";
             
             var actual = await validator.ValidateAsync(command);
 

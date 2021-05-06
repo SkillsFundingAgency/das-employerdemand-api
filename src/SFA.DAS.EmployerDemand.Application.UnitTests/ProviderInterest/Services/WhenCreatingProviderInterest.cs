@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
     public class WhenCreatingProviderInterest
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Repository_Is_Called(
+        public async Task Then_The_Repository_Is_Called_For_Each_CourseDemand(
             bool returnValue,
-            Domain.Models.ProviderInterest providerInterest, 
+            Domain.Models.ProviderInterests providerInterests, 
             [Frozen] Mock<IProviderInterestRepository> mockRepository,
             ProviderInterestService service)
         {
@@ -25,9 +25,34 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
                 .ReturnsAsync(returnValue)
                 .Callback((Domain.Entities.ProviderInterest interest) => param = interest);
             
-            var actual = await service.CreateInterest(providerInterest);
+            var actual = await service.CreateInterests(providerInterests);
 
-            param!.Should().BeEquivalentTo(providerInterest);
+            param!.Should().BeEquivalentTo(providerInterests, options => 
+                options.Excluding(interests => interests.EmployerDemandIds));
+            actual.Should().Be(returnValue);
+            foreach (var employerDemandId in providerInterests.EmployerDemandIds)
+            {
+                mockRepository.Verify(repository => repository.Insert(
+                    It.Is<Domain.Entities.ProviderInterest>(interest => 
+                        interest.EmployerDemandId == employerDemandId)));
+            }
+        }
+
+        [Test, MoqAutoData]
+        public async Task And_Any_Repository_Response_Is_False_Then_Service_Returns_False(
+            bool returnValue,
+            Domain.Models.ProviderInterests providerInterests, 
+            [Frozen] Mock<IProviderInterestRepository> mockRepository,
+            ProviderInterestService service)
+        {
+            returnValue = false;
+            mockRepository
+                .Setup(repository => repository.Insert(
+                    It.IsAny<Domain.Entities.ProviderInterest>()))
+                .ReturnsAsync(returnValue);
+            
+            var actual = await service.CreateInterests(providerInterests);
+
             actual.Should().Be(returnValue);
         }
     }

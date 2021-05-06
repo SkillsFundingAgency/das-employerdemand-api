@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerDemand.Api.AppStart
         public static void AddMediatRValidation(this IServiceCollection services)
         {
             services.AddTransient<IValidator<CreateCourseDemandCommand>, CreateCourseDemandCommandValidator>();
-            services.AddTransient<IValidator<CreateProviderInterestCommand>, CreateProviderInterestCommandValidator>();
+            services.AddTransient<IValidator<CreateProviderInterestsCommand>, CreateProviderInterestsCommandValidator>();
         }
     }
 }

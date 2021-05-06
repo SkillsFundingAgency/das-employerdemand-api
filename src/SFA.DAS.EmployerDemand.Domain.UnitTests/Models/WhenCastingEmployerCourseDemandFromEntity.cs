@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
     public class WhenCastingEmployerCourseDemandFromEntity
     {
         [Test, AutoData]
-        public void Then_The_Fields_Are_Correctly_Mapped(Entities.AggregatedCourseDemandSummary source)
+        public void Then_The_Fields_Are_Correctly_Mapped(Domain.Entities.AggregatedCourseDemandSummary source)
         {
             //Act
             var actual = (EmployerCourseDemand) source;

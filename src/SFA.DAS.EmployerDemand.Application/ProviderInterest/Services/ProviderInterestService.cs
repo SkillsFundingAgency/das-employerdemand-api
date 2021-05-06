@@ -12,9 +12,17 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Services
             _providerInterestRepository = providerInterestRepository;
         }
 
-        public async Task<bool> CreateInterest(Domain.Models.ProviderInterest providerInterest)
+        public async Task<bool> CreateInterests(Domain.Models.ProviderInterests providerInterests)
         {
-            return await _providerInterestRepository.Insert(providerInterest);
+            var result = false;
+
+            foreach (var employerDemandId in providerInterests.EmployerDemandIds)
+            {
+                var providerInterest = new Domain.Entities.ProviderInterest(providerInterests, employerDemandId);
+                result = await _providerInterestRepository.Insert(providerInterest);
+            }
+
+            return result;
         }
     }
 }

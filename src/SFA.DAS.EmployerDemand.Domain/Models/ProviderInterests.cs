@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerDemand.Domain.Models
 {
-    public class ProviderInterest
+    public class ProviderInterests
     {
-        public Guid Id { get; set; }
-        public Guid EmployerDemandId { get; set; }
+        public IEnumerable<Guid> EmployerDemandIds { get; set; }
         public int Ukprn { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }

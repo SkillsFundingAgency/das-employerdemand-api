@@ -9,9 +9,9 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.ApiRequests
     public class WhenCastingPostProviderInterestRequestToModel
     {
         [Test, AutoData]
-        public void Then_Maps_Fields(PostProviderInterestRequest source)
+        public void Then_Maps_Fields(PostProviderInterestsRequest source)
         {
-            var result = (ProviderInterest)source;
+            var result = (ProviderInterests)source;
 
             result.Should().BeEquivalentTo(source);
         }

@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock;
 using SFA.DAS.EmployerDemand.Domain.Entities;
+using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.ProviderInterestRepository
 {
@@ -21,12 +22,11 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.ProviderInterestRepos
         [SetUp]
         public void Arrange()
         {
-            _providerInterest = 
-                new ProviderInterest
+            _providerInterest = new ProviderInterest(
+                new ProviderInterests
                 {
-                    Id = Guid.NewGuid(),
-                    DateCreated = DateTime.Now
-                };
+                    Ukprn = 1324
+                }, Guid.NewGuid());
 
             _employerDemandDataContext = new Mock<IEmployerDemandDataContext>();
             _employerDemandDataContext

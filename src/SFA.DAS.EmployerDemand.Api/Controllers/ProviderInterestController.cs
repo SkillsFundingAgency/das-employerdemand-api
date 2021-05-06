@@ -27,13 +27,13 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateProviderInterest(PostProviderInterestRequest request)
+        public async Task<IActionResult> CreateProviderInterests(PostProviderInterestsRequest request)
         {
             try
             {
-                var result = await _mediator.Send(new CreateProviderInterestCommand
+                var result = await _mediator.Send(new CreateProviderInterestsCommand
                 {
-                    ProviderInterest = request
+                    ProviderInterests = request
                 });
 
                 if (result.IsCreated)
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,"Unable to create course demand");
+                _logger.LogError(e,"Unable to create provider interests");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
