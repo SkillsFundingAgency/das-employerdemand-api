@@ -35,12 +35,16 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
+        public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(ukprn, lat,lon, radius,courseId)).AsQueryable();
-
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(ukprn, lat,lon, radius,courseId));
+            if (routes?.Count(s => !string.IsNullOrWhiteSpace(s)) > 0)
+            {
+                result = result.Where(summary => routes.Contains(summary.CourseRoute));
+            }
+            result = result.OrderBy(summary => summary.CourseTitle);
+            
             return await result.ToListAsync();
-
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
@@ -98,10 +102,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     where (pi.Ukprn is null)
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
-                    Where ({courseId} is null or c.CourseId = {courseId}) 
+                    Where ({courseId} is null or c.CourseId = {courseId})";
                     and (pi.Ukprn is null)
-                    Order by c.CourseTitle";
-
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int ukprn, int courseId, double? lat, double? lon, int? radius)
