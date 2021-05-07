@@ -17,8 +17,10 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
             {
                 result.AddError(nameof(item.ProviderInterests.EmployerDemandIds));
             }
-
-            //todo: ids need to match an employer demand
+            else if (item.ProviderInterests.EmployerDemandIds.Any(guid => guid == Guid.Empty))
+            {
+                result.AddError(nameof(item.ProviderInterests.EmployerDemandIds));
+            }
 
             if (item.ProviderInterests.Ukprn < 1)
             {

@@ -37,11 +37,24 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
         }
 
         [Test, AutoData]
-        public async Task Then_Invalid_If_No_EmployerDemandId(
+        public async Task Then_Invalid_If_No_EmployerDemandIds(
             CreateProviderInterestsCommand command,
             CreateProviderInterestsCommandValidator validator)
         {
             command.ProviderInterests.EmployerDemandIds = new List<Guid>();
+            command.ProviderInterests.Email = null;
+            
+            var actual = await validator.ValidateAsync(command);
+
+            actual.IsValid().Should().BeFalse();
+        }
+
+        [Test, AutoData]
+        public async Task Then_Invalid_If_EmployerDemandId_Empty(
+            CreateProviderInterestsCommand command,
+            CreateProviderInterestsCommandValidator validator)
+        {
+            command.ProviderInterests.EmployerDemandIds = new List<Guid>{Guid.NewGuid(), Guid.Empty};
             command.ProviderInterests.Email = null;
             
             var actual = await validator.ValidateAsync(command);
