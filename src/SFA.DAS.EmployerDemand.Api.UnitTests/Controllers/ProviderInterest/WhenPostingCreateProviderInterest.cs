@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.Created);
-            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Id});
+            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Ukprn});
             model.Should().BeEquivalentTo(request);
         }
         
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
-            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Id});
+            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Ukprn});
         }
 
         [Test, MoqAutoData]

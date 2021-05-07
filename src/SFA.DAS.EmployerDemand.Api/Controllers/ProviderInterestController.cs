@@ -38,10 +38,10 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
                 if (result.IsCreated)
                 {
-                    return Created("",new {result.Id});    
+                    return Created("",new {result.Ukprn});    
                 }
 
-                return Accepted("", new {result.Id});
+                return Accepted("", new {result.Ukprn});
             }
             catch (ValidationException e)
             {
