@@ -102,8 +102,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     where (pi.Ukprn is null)
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
-                    Where ({courseId} is null or c.CourseId = {courseId})";
-                    and (pi.Ukprn is null)
+                    Where ({courseId} is null or c.CourseId = {courseId})
+                    and (pi.Ukprn is null)";
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int ukprn, int courseId, double? lat, double? lon, int? radius)
