@@ -11,7 +11,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
 
         public ProviderInterest(Models.ProviderInterests source, Guid employerDemandId)
         {
-            Id = Guid.NewGuid();
             EmployerDemandId = employerDemandId;
             Ukprn = source.Ukprn;
             Email = source.Email;
@@ -19,7 +18,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
             Website = source.Website;
         }
 
-        public Guid Id { get; set; }
         public Guid EmployerDemandId { get; set; }
         public int Ukprn { get; set; }
         public string Email { get; set; }
