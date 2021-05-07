@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius)
         {
-            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(lat,lon, radius,courseId)).AsQueryable();
+            var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(ukprn, lat,lon, radius,courseId)).AsQueryable();
 
             return await result.ToListAsync();
 
@@ -45,22 +45,24 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
-            return await _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQueryByCourseId(courseId,lat,lon, radius)).ToListAsync();
+            return await _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQueryByCourseId(ukprn, courseId,lat,lon, radius)).ToListAsync();
         }
 
         public async Task<int> TotalEmployerCourseDemands(int ukprn, int courseId)
         {
-            return await _dataContext.CourseDemands.CountAsync(c => c.CourseId.Equals(courseId));
+            return await _dataContext.CourseDemands
+                .CountAsync(c => c.CourseId.Equals(courseId));
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
         {
-            var value = await _dataContext.CourseDemands.GroupBy(c => c.CourseId).CountAsync();
+            var value = await _dataContext.CourseDemands
+                .GroupBy(c => c.CourseId).CountAsync();
             
             return value;
         }
 
-        private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius, int? courseId)
+        private FormattableString ProviderCourseDemandQuery(int ukprn, double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct
                         null as Id,
@@ -75,6 +77,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         null as Lat,
                         null as Long
                     from CourseDemand c
+                    left join ProviderInterest pi
+                        on pi.EmployerDemandId = c.Id
+						and pi.Ukprn = {ukprn}
                     inner join (
                         select
                             cd.CourseId,
@@ -82,19 +87,24 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Count(1) as EmployersCount,
                             Max(dist.DistanceInMiles) as DistanceInMiles
                         from CourseDemand cd
+                        left join ProviderInterest pi
+							on pi.EmployerDemandId = cd.Id
+							and pi.Ukprn = {ukprn}
                     inner join(
                         select
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                    where (pi.Ukprn is null)
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId}) 
+                    and (pi.Ukprn is null)
                     Order by c.CourseTitle";
 
         }
 
-        private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
+        private FormattableString ProviderCourseDemandQueryByCourseId(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
             return $@"
                 select
@@ -110,13 +120,16 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     dist.DistanceInMiles,
                     0 as EmployersCount
                 from CourseDemand c
-                         inner join (
-                        select
-                            Id,
-                            courseId,
-                            geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                Where c.CourseId = {courseId}";
+                left join ProviderInterest pi
+                    on pi.EmployerDemandId = c.Id
+                inner join (
+                    select
+                        Id,
+                        courseId,
+                        geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
+                    from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                Where c.CourseId = {courseId}
+                And pi.Ukprn <> {ukprn}";
         }
     }
 }
