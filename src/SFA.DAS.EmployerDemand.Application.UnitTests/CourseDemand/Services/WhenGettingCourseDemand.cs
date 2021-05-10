@@ -7,7 +7,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Services;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
-using SFA.DAS.EmployerDemand.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
@@ -16,21 +15,20 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
     {
         [Test, MoqAutoData]
         public async Task Then_The_Repository_Is_Called_And_Data_Returned(
-            Guid id,
-            Domain.Entities.CourseDemand courseDemand, 
+            List<Guid> ids,
             [Frozen] Mock<ICourseDemandRepository> mockRepository,
             CourseDemandService service)
         {
             //Arrange
             mockRepository
-                .Setup(x => x.GetCourseDemand(id))
-                .ReturnsAsync(courseDemand);
+                .Setup(x => x.EmployerDemandsExist(ids))
+                .ReturnsAsync(true);
             
             //Act
-            var actual = await service.GetDemand(id);
+            var actual = await service.EmployerDemandsExist(ids);
 
             //Assert
-            actual.Should().BeEquivalentTo((EmployerCourseDemand)courseDemand);
+            actual.Should().BeTrue();
         }
     }
 }

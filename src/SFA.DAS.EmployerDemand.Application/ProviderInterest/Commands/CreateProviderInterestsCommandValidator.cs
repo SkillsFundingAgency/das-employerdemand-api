@@ -9,7 +9,14 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
 {
     public class CreateProviderInterestsCommandValidator : IValidator<CreateProviderInterestsCommand>
     {
-        public Task<ValidationResult> ValidateAsync(CreateProviderInterestsCommand item)
+        private readonly ICourseDemandService _courseDemandService;
+
+        public CreateProviderInterestsCommandValidator(ICourseDemandService courseDemandService)
+        {
+            _courseDemandService = courseDemandService;
+        }
+
+        public async Task<ValidationResult> ValidateAsync(CreateProviderInterestsCommand item)
         {
             var result = new ValidationResult();
 
@@ -17,7 +24,7 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
             {
                 result.AddError(nameof(item.ProviderInterests.EmployerDemandIds));
             }
-            else if (item.ProviderInterests.EmployerDemandIds.Any(guid => guid == Guid.Empty))
+            else if (! await _courseDemandService.EmployerDemandsExist(item.ProviderInterests.EmployerDemandIds))
             {
                 result.AddError(nameof(item.ProviderInterests.EmployerDemandIds));
             }
@@ -44,7 +51,7 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
             }
             
 
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

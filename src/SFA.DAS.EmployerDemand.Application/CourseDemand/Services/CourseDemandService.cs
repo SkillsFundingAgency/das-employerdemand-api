@@ -21,9 +21,9 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.Insert(courseDemand);
         }
 
-        public async Task<EmployerCourseDemand> GetDemand(Guid id)
+        public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
-            return await _repository.GetCourseDemand(id);
+            return await _repository.EmployerDemandsExist(idsToCheck);
         }
 
         public async Task<int> GetAggregatedDemandTotal(int ukprn)

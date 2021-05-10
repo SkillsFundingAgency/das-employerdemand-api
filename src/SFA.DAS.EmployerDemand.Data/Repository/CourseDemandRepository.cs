@@ -35,9 +35,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<CourseDemand> GetCourseDemand(Guid id)
+        public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
-            return _dataContext.CourseDemands.SingleOrDefault(c => c.Id == id);
+            return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)

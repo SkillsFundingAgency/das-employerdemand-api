@@ -11,45 +11,53 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepository
 {
-    public class WhenGettingCourseDemand
+    public class WhenGettingEmployerDemandsExist
     {
         [Test, RecursiveMoqAutoData]
-        public async Task Then_CourseDemand_Is_Returned(
-            Guid id,
-            CourseDemand courseDemand,
+        public async Task And_All_Ids_Exist_Then_Returns_True(
+            List<Guid> idsToCheck,
+            List<CourseDemand> entities,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.Id = id;
+            for (var i = 0; i < entities.Count; i++)
+            {
+                entities[i].Id = idsToCheck[i];
+            }
             mockDbContext
                 .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+                .ReturnsDbSet(entities);
 
             //Act
-            var result = await repository.GetCourseDemand(id);
+            var result = await repository.EmployerDemandsExist(idsToCheck);
             
             //Assert
-            result.Should().Be(courseDemand);
+            result.Should().BeTrue();
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task And_Not_Found_Then_Default_Is_Returned(
-            Guid id,
-            CourseDemand courseDemand,
+        public async Task And_Any_Not_Found_Then_Returns_False(
+            List<Guid> idsToCheck,
+            List<CourseDemand> entities,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
+            for (var i = 0; i < entities.Count; i++)
+            {
+                entities[i].Id = idsToCheck[i];
+            }
+            entities[0].Id = Guid.NewGuid();
             mockDbContext
                 .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+                .ReturnsDbSet(entities);
 
             //Act
-            var result = await repository.GetCourseDemand(id);
+            var result = await repository.EmployerDemandsExist(idsToCheck);
             
             //Assert
-            result.Should().BeNull();
+            result.Should().BeFalse();
         }
     }
 }
