@@ -55,13 +55,27 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<int> TotalEmployerCourseDemands(int ukprn, int courseId)
         {
             return await _dataContext.CourseDemands
-                .CountAsync(c => c.CourseId.Equals(courseId));
+                .GroupJoin(_dataContext.ProviderInterests, 
+                    c => new { EmployerDemandId = c.Id, Ukprn = ukprn }, 
+                    p => new { p.EmployerDemandId, p.Ukprn }, 
+                    (c, p) => new { CourseDemand = c, ProviderInterest = p })
+                .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
+                    (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
+                .Where(combo => combo.ProviderInterest == null)
+                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId));
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
         {
             var value = await _dataContext.CourseDemands
-                .GroupBy(c => c.CourseId).CountAsync();
+                .GroupJoin(_dataContext.ProviderInterests, 
+                    c => new { EmployerDemandId = c.Id, Ukprn = ukprn }, 
+                    p => new { p.EmployerDemandId, p.Ukprn }, 
+                    (c, p) => new { CourseDemand = c, ProviderInterest = p })
+                .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
+                    (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
+                .Where(combo => combo.ProviderInterest == null)
+                .GroupBy(c => c.CourseDemand.CourseId).CountAsync();
             
             return value;
         }
