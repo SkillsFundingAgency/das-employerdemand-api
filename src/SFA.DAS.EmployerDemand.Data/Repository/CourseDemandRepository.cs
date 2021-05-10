@@ -100,10 +100,10 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                    where (pi.Ukprn is null)
+                    where pi.Ukprn is null
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId})
-                    and (pi.Ukprn is null)";
+                    and pi.Ukprn is null";
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int ukprn, int courseId, double? lat, double? lon, int? radius)
@@ -124,6 +124,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 from CourseDemand c
                 left join ProviderInterest pi
                     on pi.EmployerDemandId = c.Id
+					and pi.Ukprn = {ukprn}
                 inner join (
                     select
                         Id,
@@ -131,7 +132,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                     from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
                 Where c.CourseId = {courseId}
-                And pi.Ukprn <> {ukprn}";
+                and pi.Ukprn is null";
         }
     }
 }
