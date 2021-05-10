@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
@@ -19,6 +19,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<bool> CreateDemand(Domain.Models.CourseDemand courseDemand)
         {
             return await _repository.Insert(courseDemand);
+        }
+
+        public async Task<EmployerCourseDemand> GetDemand(Guid id)
+        {
+            return await _repository.GetCourseDemand(id);
         }
 
         public async Task<int> GetAggregatedDemandTotal(int ukprn)

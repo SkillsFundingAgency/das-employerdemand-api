@@ -26,6 +26,18 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
             };
         }
 
+        public static implicit operator EmployerCourseDemand(Entities.CourseDemand source)
+        {
+            return new EmployerCourseDemand
+            {
+                Id = source.Id,
+                ApprenticesCount = source.NumberOfApprentices,
+                LocationName = source.LocationName,
+                Lat = source.Lat,
+                Long = source.Long
+            };
+        }
+
         private static string GetLocationName(string locationName)
         {
             var separator = "";
