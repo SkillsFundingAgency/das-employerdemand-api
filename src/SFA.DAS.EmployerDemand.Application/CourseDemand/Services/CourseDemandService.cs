@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             var summaries = await _repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, routes);
             return summaries
                 .Select(group => (AggregatedCourseDemandSummary) group);
+        }
+
+        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
+        {
+            return await _repository.VerifyCourseDemandEmail(id);
         }
 
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
