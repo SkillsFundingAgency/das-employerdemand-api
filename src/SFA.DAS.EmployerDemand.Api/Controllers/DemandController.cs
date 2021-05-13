@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;

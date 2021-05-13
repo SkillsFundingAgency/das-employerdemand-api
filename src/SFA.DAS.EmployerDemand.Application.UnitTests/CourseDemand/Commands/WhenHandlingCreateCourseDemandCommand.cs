@@ -6,7 +6,7 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.Testing.AutoFixture;
 using ValidationResult = SFA.DAS.EmployerDemand.Domain.Validation.ValidationResult;

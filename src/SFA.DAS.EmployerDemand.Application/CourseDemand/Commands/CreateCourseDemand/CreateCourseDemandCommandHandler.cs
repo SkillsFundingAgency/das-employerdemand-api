@@ -1,11 +1,10 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
+namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand
 {
     public class CreateCourseDemandCommandHandler : IRequestHandler<CreateCourseDemandCommand, CreateCourseDemandCommandResponse>
     {
