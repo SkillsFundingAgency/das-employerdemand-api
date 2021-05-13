@@ -16,10 +16,10 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseD
 
         public async Task<VerifyCourseDemandEmailCommandResponse> Handle(VerifyCourseDemandEmailCommand request, CancellationToken cancellationToken)
         {
-            await _service.CreateDemand(request.CourseDemand);
+            var result = await _service.VerifyCourseDemandEmail(request.Id);
             return new VerifyCourseDemandEmailCommandResponse
             {
-                Id = request.CourseDemand.Id
+                Id = result
             };
         }
     }
