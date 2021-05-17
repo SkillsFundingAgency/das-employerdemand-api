@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;
@@ -138,6 +139,31 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             };
             
             return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("{id}/verify-email")]
+        public async Task<IActionResult> VerifyEmployerDemandEmail(Guid id)
+        {
+            try
+            {
+                var result = await _mediator.Send(new VerifyCourseDemandEmailCommand
+                {
+                    Id = id
+                });
+
+                if (result.Id == null)
+                {
+                    return NotFound();
+                }
+
+                return Accepted("", new {result.Id});
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,"Unable to create course demand");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

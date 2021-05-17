@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,9 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.Controllers;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -34,9 +30,10 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.VerifyEmployerDemandEmail(id) as AcceptedResult;
             //Assert
             Assert.IsNotNull(actual);
-            actual.StatusCode.Should().Be((int)HttpStatusCode.Accepted);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
             actual.Value.Should().BeEquivalentTo(new { response.Id });
         }
+
         [Test, MoqAutoData]
         public async Task Then_If_Null_Returned_From_Mediator_Then_NotFound_Is_Returned(
             Guid id,
@@ -53,8 +50,9 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.VerifyEmployerDemandEmail(id) as StatusCodeResult;
             //Assert
             Assert.IsNotNull(actual);
-            actual.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
+
         [Test, MoqAutoData]
         public async Task Then_If_An_Error_Then_An_InternalServer_Error_Is_Returned(
             Guid id,
@@ -68,6 +66,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.VerifyEmployerDemandEmail(id) as StatusCodeResult;
             //Assert
             Assert.IsNotNull(actual);
-            actual.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }
+}
