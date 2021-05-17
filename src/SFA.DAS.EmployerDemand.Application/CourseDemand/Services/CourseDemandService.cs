@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
@@ -51,6 +50,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId)
         {
             return await _repository.TotalEmployerCourseDemands(ukprn, courseId);
+        }
+
+        public async Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id)
+        {
+            return await _repository.GetCourseDemand(id);
         }
     }
 }
