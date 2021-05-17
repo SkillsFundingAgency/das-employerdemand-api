@@ -10,6 +10,37 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         public string OrganisationName { get ; set ; }
         public string ContactEmailAddress { get ; set ; }
         public int NumberOfApprentices { get ; set ; }
+        public bool EmailVerified { get ; set ; }
+
+        public static implicit operator CourseDemand(Domain.Entities.CourseDemand source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+            
+            return new CourseDemand
+            {
+                Id = source.Id,
+                OrganisationName = source.OrganisationName,
+                ContactEmailAddress = source.ContactEmailAddress,
+                NumberOfApprentices = source.NumberOfApprentices,
+                EmailVerified = source.EmailVerified,
+                Course = new Course
+                {
+                    Id = source.CourseId,
+                    Level = source.CourseLevel,
+                    Title = source.CourseTitle,
+                    Route = source.CourseRoute
+                },
+                Location = new Location
+                {
+                    Name = source.LocationName,
+                    Lat = source.Lat,
+                    Lon = source.Long
+                }
+            };
+        }
     }
 
     public class Course
