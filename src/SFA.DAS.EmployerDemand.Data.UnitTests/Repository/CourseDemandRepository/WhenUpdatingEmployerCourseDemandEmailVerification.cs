@@ -21,11 +21,16 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
+            //Arrange
             courseDemandEntity.Id = id;
             courseDemandEntity.EmailVerified = false;
             mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
                 .ReturnsAsync(courseDemandEntity);
+            
+            //Act
             var actual = await repository.VerifyCourseDemandEmail(id);
+            
+            //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
             actual.Should().Be(courseDemandEntity.Id);
             courseDemandEntity.EmailVerified.Should().BeTrue();
@@ -36,9 +41,14 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
+            //Arrange
             mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
                 .ReturnsAsync((CourseDemand)null);
+            
+            //Act
             var actual = await repository.VerifyCourseDemandEmail(id);
+            
+            //Assert
             mockDbContext.Verify(x => x.CourseDemands.Update(It.IsAny<CourseDemand>()), Times.Never);
             mockDbContext.Verify(x => x.SaveChanges(), Times.Never);
             actual.Should().BeNull();

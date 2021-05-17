@@ -77,6 +77,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return value;
         }
 
+        public async Task<CourseDemand> GetCourseDemand(Guid id)
+        {
+            return await _dataContext.CourseDemands.FindAsync(id);
+        }
+        
         private FormattableString ProviderCourseDemandQuery(double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct
