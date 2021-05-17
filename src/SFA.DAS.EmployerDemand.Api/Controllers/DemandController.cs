@@ -12,6 +12,7 @@ using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
@@ -161,7 +162,34 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,"Unable to create course demand");
+                _logger.LogError(e,"Unable to verify course demand email");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetEmployerCourseDemand(Guid id)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseDemandQuery
+                {
+                    Id = id
+                });
+
+                if (result.CourseDemand == null)
+                {
+                    return NotFound();
+                }
+
+                var model = (GetCourseDemandResponse) result.CourseDemand;
+
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Unable to get course demand {id}");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
