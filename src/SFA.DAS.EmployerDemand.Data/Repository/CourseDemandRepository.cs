@@ -67,12 +67,12 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
 
         public async Task<int> TotalEmployerCourseDemands(int ukprn, int courseId)
         {
-            return await _dataContext.CourseDemands.CountAsync(c => c.CourseId.Equals(courseId));
+            return await _dataContext.CourseDemands.CountAsync(c => c.CourseId.Equals(courseId) && c.EmailVerified);
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
         {
-            var value = await _dataContext.CourseDemands.GroupBy(c => c.CourseId).CountAsync();
+            var value = await _dataContext.CourseDemands.Where(c=>c.EmailVerified).GroupBy(c => c.CourseId).CountAsync();
             
             return value;
         }
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
-                    Where ({courseId} is null or c.CourseId = {courseId})";
+                    Where ({courseId} is null or c.CourseId = {courseId})  and c.EmailVerified = true";
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
@@ -136,7 +136,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
                         from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                Where c.CourseId = {courseId}";
+                Where c.CourseId = {courseId} and c.EmailVerified = true";
         }
     }
 }
