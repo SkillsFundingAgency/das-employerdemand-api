@@ -109,9 +109,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.Id = cd.Id and cd.EmailVerified = 'true' and ({radius} is null or (DistanceInMiles < {radius}))
+                        from CourseDemand) as dist on dist.Id = cd.Id and cd.EmailVerified = 1 and ({radius} is null or (DistanceInMiles < {radius}))
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
-                    Where ({courseId} is null or c.CourseId = {courseId}) and c.EmailVerified = 'true'";
+                    Where ({courseId} is null or c.CourseId = {courseId}) and c.EmailVerified = 1";
         }
 
         private FormattableString ProviderCourseDemandQueryByCourseId(int courseId, double? lat, double? lon, int? radius)
@@ -135,8 +135,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand where EmailVerified='true') as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                Where c.CourseId = {courseId} and c.EmailVerified = 'true'";
+                        from CourseDemand where EmailVerified=1) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                Where c.CourseId = {courseId} and c.EmailVerified = 1";
         }
     }
 }
