@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.Should().BeEquivalentTo(source, options => options
                 .Excluding(c=> c.Location)
                 .Excluding(c=> c.Course)
+                .Excluding(c=> c.EmailVerified)
             );
             actual.CourseId.Should().Be(source.Course.Id);
             actual.CourseTitle.Should().Be(source.Course.Title);
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.LocationName.Should().Be(source.Location.Name);
             actual.Lat.Should().Be(source.Location.Lat);
             actual.Long.Should().Be(source.Location.Lon);
+            actual.EmailVerified.Should().BeFalse();
         }
     }
 }

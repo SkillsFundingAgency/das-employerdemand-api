@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerDemand.Domain.Models;
@@ -11,5 +12,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<int> GetAggregatedDemandTotal(int ukprn);
         Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius);
         Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId);
+        Task<Guid?> VerifyCourseDemandEmail(Guid id);
+        Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id);
     }
 }

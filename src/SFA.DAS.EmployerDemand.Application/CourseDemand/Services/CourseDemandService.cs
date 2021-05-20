@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
@@ -33,6 +33,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
                 .Select(group => (AggregatedCourseDemandSummary) group);
         }
 
+        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
+        {
+            return await _repository.VerifyCourseDemandEmail(id);
+        }
+
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
             var summaries = await _repository.GetAggregatedCourseDemandListByCourse(ukprn, courseId, lat, lon, radius);
@@ -45,6 +50,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId)
         {
             return await _repository.TotalEmployerCourseDemands(ukprn, courseId);
+        }
+
+        public async Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id)
+        {
+            return await _repository.GetCourseDemand(id);
         }
     }
 }

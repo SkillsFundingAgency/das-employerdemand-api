@@ -12,7 +12,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.Controllers;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.Testing.AutoFixture;
 using ValidationResult = SFA.DAS.EmployerDemand.Domain.Validation.ValidationResult;
 

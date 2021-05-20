@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Validation;
 
-namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
+namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand
 {
     public class CreateCourseDemandCommandValidator : IValidator<CreateCourseDemandCommand>
     {

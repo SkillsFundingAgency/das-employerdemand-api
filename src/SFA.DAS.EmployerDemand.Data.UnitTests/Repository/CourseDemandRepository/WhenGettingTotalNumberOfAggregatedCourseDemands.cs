@@ -24,6 +24,9 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         {
             //arrange
             courseDemand1.CourseId = courseDemand2.CourseId;
+            courseDemand1.EmailVerified = true;
+            courseDemand2.EmailVerified = false;
+            courseDemand3.EmailVerified = false;
             mockDbContext
                 .Setup(context => context.CourseDemands)
                 .ReturnsDbSet(new List<CourseDemand>{courseDemand1,courseDemand2,courseDemand3});
@@ -32,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             var result = await repository.TotalCourseDemands(ukprn);
             
             //Assert
-            result.Should().Be(2);
+            result.Should().Be(1);
         }
     }
 }
