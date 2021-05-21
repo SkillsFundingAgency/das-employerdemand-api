@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
-                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId) && c.EmailVerified);
+                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId) && c.CourseDemand.EmailVerified);
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
-                .Where(c=>c.EmailVerified)
+                .Where(c=>c.CourseDemand.EmailVerified)
                 .GroupBy(c => c.CourseDemand.CourseId).CountAsync();
             
             return value;

@@ -64,6 +64,10 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             courseDemand2.CourseId = courseId;
             courseDemand1.CourseId = courseDemand2.CourseId;
             courseDemand3.CourseId = courseDemand2.CourseId;
+            courseDemand1.EmailVerified = true;
+            courseDemand2.EmailVerified = true;
+            courseDemand3.EmailVerified = true;
+            courseDemand4.EmailVerified = true;
             providerInterest.EmployerDemandId = courseDemand3.Id;
             providerInterest.Ukprn = ukprn;
             mockDbContext
