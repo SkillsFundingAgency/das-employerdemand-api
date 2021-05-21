@@ -40,6 +40,19 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
         }
 
+        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
+        {
+            var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
+            if (courseDemandEntity == null)
+            {
+                return null;
+            }
+
+            courseDemandEntity.EmailVerified = true;
+            _dataContext.SaveChanges();
+            return id;
+        }
+
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
             var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(ukprn, lat,lon, radius,courseId));
@@ -67,7 +80,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
-                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId));
+                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId) && c.EmailVerified);
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
@@ -80,11 +93,17 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
+                .Where(c=>c.EmailVerified)
                 .GroupBy(c => c.CourseDemand.CourseId).CountAsync();
             
             return value;
         }
 
+        public async Task<CourseDemand> GetCourseDemand(Guid id)
+        {
+            return await _dataContext.CourseDemands.FindAsync(id);
+        }
+        
         private FormattableString ProviderCourseDemandQuery(int ukprn, double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct
@@ -118,10 +137,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.Id = cd.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                        from CourseDemand) as dist on dist.Id = cd.Id and cd.EmailVerified = 1 and ({radius} is null or (DistanceInMiles < {radius}))
                     where pi.Ukprn is null
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId})
+                    and c.EmailVerified = 1
                     and pi.Ukprn is null";
         }
 
@@ -149,8 +169,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         Id,
                         courseId,
                         geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                    from CourseDemand) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
-                Where c.CourseId = {courseId}
+                    from CourseDemand where EmailVerified=1) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                Where c.CourseId = {courseId} 
+                and c.EmailVerified = 1
                 and pi.Ukprn is null";
         }
     }

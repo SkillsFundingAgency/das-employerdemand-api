@@ -13,5 +13,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<int> TotalCourseDemands(int ukprn);
         Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandListByCourse(int ukprn, int courseId, double? lat, double? lon, int? radius);
         Task<int> TotalEmployerCourseDemands(int ukprn, int courseId);
+        Task<Guid?> VerifyCourseDemandEmail(Guid id);
+        Task<CourseDemand> GetCourseDemand(Guid id);
     }
 }

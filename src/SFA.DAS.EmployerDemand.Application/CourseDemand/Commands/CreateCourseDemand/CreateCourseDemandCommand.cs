@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
+namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand
 {
     public class CreateCourseDemandCommand : IRequest<CreateCourseDemandCommandResponse>
     {

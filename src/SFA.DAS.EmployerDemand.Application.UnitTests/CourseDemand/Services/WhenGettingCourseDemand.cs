@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -13,22 +12,21 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 {
     public class WhenGettingCourseDemand
     {
-        [Test, MoqAutoData]
-        public async Task Then_The_Repository_Is_Called_And_Data_Returned(
-            List<Guid> ids,
-            [Frozen] Mock<ICourseDemandRepository> mockRepository,
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_The_Repository_Is_Called_And_CourseDemand_Returned(
+            Guid id,
+            Domain.Entities.CourseDemand fromRepo,
+            [Frozen] Mock<ICourseDemandRepository> repository,
             CourseDemandService service)
         {
             //Arrange
-            mockRepository
-                .Setup(x => x.EmployerDemandsExist(ids))
-                .ReturnsAsync(true);
+            repository.Setup(x => x.GetCourseDemand(id)).ReturnsAsync(fromRepo);
             
             //Act
-            var actual = await service.EmployerDemandsExist(ids);
-
+            var actual = await service.GetCourseDemand(id);
+            
             //Assert
-            actual.Should().BeTrue();
+            actual.Id.Should().Be(fromRepo.Id);
         }
     }
 }

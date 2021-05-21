@@ -1,6 +1,6 @@
 using System;
 
-namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands
+namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand
 {
     public class CreateCourseDemandCommandResponse
     {

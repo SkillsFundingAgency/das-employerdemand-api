@@ -20,24 +20,4 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
             };
         }
     }
-
-    public class Location
-    {
-        public Location(string locationName, double lat, double lon)
-        {
-            Name = locationName;
-            LocationPoint = new LocationPoint
-            {
-                GeoPoint = new List<double> {lat, lon}
-            };
-        }
-
-        public string Name { get; set; }
-        public LocationPoint LocationPoint { get; set; }
-    }
-    
-    public class LocationPoint
-    {
-        public List<double> GeoPoint { get; set; }
-    }
 }
