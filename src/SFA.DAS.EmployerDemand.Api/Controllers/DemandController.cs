@@ -42,8 +42,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
-        public async Task<IActionResult> CreateDemand(CourseDemandRequest request)
+        [Route("{id}")]
+        public async Task<IActionResult> CreateDemand([FromRoute] Guid id, CourseDemandRequest request)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 {
                     CourseDemand = new CourseDemand
                     {
-                        Id = request.Id,
+                        Id = id,
                         OrganisationName = request.OrganisationName,
                         ContactEmailAddress = request.ContactEmailAddress,
                         NumberOfApprentices = request.NumberOfApprentices,

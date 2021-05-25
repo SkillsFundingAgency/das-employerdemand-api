@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
     {
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned(
+            Guid id,
             CreateCourseDemandCommandResponse response,
             CourseDemandRequest request,
             [Frozen] Mock<IMediator> mediator,
@@ -30,7 +31,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Arrange
             response.IsCreated = true;
             mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
-                    c.CourseDemand.Id.Equals(request.Id)
+                    c.CourseDemand.Id.Equals(id)
                     && c.CourseDemand.OrganisationName.Equals(request.OrganisationName)
                     && c.CourseDemand.ContactEmailAddress.Equals(request.ContactEmailAddress)
                     && c.CourseDemand.NumberOfApprentices.Equals(request.NumberOfApprentices)
@@ -45,7 +46,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .ReturnsAsync(response);
             
             //Act
-            var actual = await controller.CreateDemand(request) as CreatedResult;
+            var actual = await controller.CreateDemand(id, request) as CreatedResult;
             
             //Assert
             Assert.IsNotNull(actual);
@@ -56,6 +57,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned_And_If_Not_Created_Accepted_Returned(
+            Guid id,
             CreateCourseDemandCommandResponse response,
             CourseDemandRequest request,
             [Frozen] Mock<IMediator> mediator,
@@ -64,12 +66,12 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Arrange
             response.IsCreated = false;
             mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
-                    c.CourseDemand.Id.Equals(request.Id)
+                    c.CourseDemand.Id.Equals(id)
                 ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
             
             //Act
-            var actual = await controller.CreateDemand(request) as AcceptedResult;
+            var actual = await controller.CreateDemand(id, request) as AcceptedResult;
             
             //Assert
             Assert.IsNotNull(actual);
@@ -79,6 +81,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
 
         [Test, MoqAutoData]
         public async Task Then_If_Validation_Exception_Bad_Request_Returned(
+            Guid id,
             string errorKey,
             CourseDemandRequest request,
             [Frozen] Mock<IMediator> mediator,
@@ -93,7 +96,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .Throws(new ValidationException(validationResult.DataAnnotationResult, null, null));
             
             //Act
-            var actual = await controller.CreateDemand(request) as ObjectResult;
+            var actual = await controller.CreateDemand(id, request) as ObjectResult;
             
             //Assert
             Assert.IsNotNull(actual);
@@ -104,6 +107,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
 
         [Test, MoqAutoData]
         public async Task Then_If_An_Error_Then_An_InternalServer_Error_Is_Returned(
+            Guid id,
             CourseDemandRequest request,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
@@ -113,7 +117,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .ThrowsAsync(new Exception());
             
             //Act
-            var actual = await controller.CreateDemand(request) as StatusCodeResult;
+            var actual = await controller.CreateDemand(id, request) as StatusCodeResult;
             
             //Assert
             Assert.IsNotNull(actual);
