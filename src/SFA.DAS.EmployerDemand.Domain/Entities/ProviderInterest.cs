@@ -9,14 +9,17 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
             
         }
 
-        public ProviderInterest(Models.ProviderInterests source, Guid employerDemandId)
+        public ProviderInterest(Guid id, Models.ProviderInterests source, Guid employerDemandId)
         {
+            Id = id;
             EmployerDemandId = employerDemandId;
             Ukprn = source.Ukprn;
             Email = source.Email;
             Phone = source.Phone;
             Website = source.Website;
         }
+
+        public Guid Id { get ; set ; }
 
         public Guid EmployerDemandId { get; set; }
         public int Ukprn { get; set; }
