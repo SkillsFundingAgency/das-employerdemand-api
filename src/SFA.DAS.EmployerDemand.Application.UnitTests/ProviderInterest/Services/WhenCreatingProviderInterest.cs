@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
@@ -13,6 +14,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
     {
         [Test, MoqAutoData]
         public async Task Then_The_Repository_Is_Called_For_Each_CourseDemand(
+            Guid id,
             bool returnValue,
             Domain.Models.ProviderInterests providerInterests, 
             [Frozen] Mock<IProviderInterestRepository> mockRepository,
@@ -25,11 +27,14 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
                 .ReturnsAsync(returnValue)
                 .Callback((Domain.Entities.ProviderInterest interest) => param = interest);
             
-            var actual = await service.CreateInterests(providerInterests);
+            var actual = await service.CreateInterests(id, providerInterests);
 
             param!.Should().BeEquivalentTo(providerInterests, options => 
-                options.Excluding(interests => interests.EmployerDemandIds));
+                options
+                    .Excluding(interests => interests.EmployerDemandIds)
+            );
             actual.Should().Be(returnValue);
+            param!.Id.Should().Be(id);
             foreach (var employerDemandId in providerInterests.EmployerDemandIds)
             {
                 mockRepository.Verify(repository => repository.Insert(
@@ -40,6 +45,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
 
         [Test, MoqAutoData]
         public async Task And_Any_Repository_Response_Is_False_Then_Service_Returns_False(
+            Guid id,
             bool returnValue,
             Domain.Models.ProviderInterests providerInterests, 
             [Frozen] Mock<IProviderInterestRepository> mockRepository,
@@ -51,7 +57,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Services
                     It.IsAny<Domain.Entities.ProviderInterest>()))
                 .ReturnsAsync(returnValue);
             
-            var actual = await service.CreateInterests(providerInterests);
+            var actual = await service.CreateInterests(id, providerInterests);
 
             actual.Should().Be(returnValue);
         }
