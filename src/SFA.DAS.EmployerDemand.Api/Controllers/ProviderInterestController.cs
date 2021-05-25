@@ -26,22 +26,23 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
-        public async Task<IActionResult> CreateProviderInterests(PostProviderInterestsRequest request)
+        [Route("{id}")]
+        public async Task<IActionResult> CreateProviderInterests([FromRoute] Guid id, [FromBody]PostProviderInterestsRequest request)
         {
             try
             {
                 var result = await _mediator.Send(new CreateProviderInterestsCommand
                 {
+                    Id = id,
                     ProviderInterests = request
                 });
 
                 if (result.IsCreated)
                 {
-                    return Created("",new {result.Ukprn});    
+                    return Created("",new {result.Id});    
                 }
 
-                return Accepted("", new {result.Ukprn});
+                return Accepted("", new {result.Id});
             }
             catch (ValidationException e)
             {

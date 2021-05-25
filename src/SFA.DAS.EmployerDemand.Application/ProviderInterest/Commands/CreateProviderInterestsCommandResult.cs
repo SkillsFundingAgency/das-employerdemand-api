@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
     {
         public int Ukprn { get; set; }
         public bool IsCreated { get; set; }
+        public Guid Id { get ; set ; }
     }
 }

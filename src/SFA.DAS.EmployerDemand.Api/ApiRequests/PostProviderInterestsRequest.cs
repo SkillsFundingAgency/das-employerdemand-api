@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiRequests
 {
     public class PostProviderInterestsRequest
     {
+        
         public IEnumerable<Guid> EmployerDemandIds { get; set; }
+        
         public int Ukprn { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }

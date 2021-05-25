@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiRequests
 {
     public class CourseDemandRequest
     {
-        public Guid Id { get ; set ; }
         public string OrganisationName { get ; set ; }
         public string ContactEmailAddress { get ; set ; }
         public int NumberOfApprentices { get ; set ; }
