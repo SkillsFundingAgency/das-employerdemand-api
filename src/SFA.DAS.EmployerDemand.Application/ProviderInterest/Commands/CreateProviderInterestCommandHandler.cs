@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
                 throw new ValidationException(validationResult.DataAnnotationResult,null, null);
             }
             
-            var result = await _service.CreateInterests(request.ProviderInterests);
+            var result = await _service.CreateInterests(request.Id, request.ProviderInterests);
             return new CreateProviderInterestsCommandResult
             {
                 Ukprn = request.ProviderInterests.Ukprn,

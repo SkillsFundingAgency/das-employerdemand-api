@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
             //Assert
             act.Should().Throw<ValidationException>()
                 .WithMessage($"*{propertyName}*");
-            mockService.Verify(x=>x.CreateInterests(It.IsAny<Domain.Models.ProviderInterests>()), Times.Never);
+            mockService.Verify(x=>x.CreateInterests(It.IsAny<Guid>(),It.IsAny<Domain.Models.ProviderInterests>()), Times.Never);
         }
 
         [Test, MoqAutoData]
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
                 .Setup(x => x.ValidateAsync(command))
                 .ReturnsAsync(new ValidationResult());
             mockService
-                .Setup(x=>x.CreateInterests(command.ProviderInterests))
+                .Setup(x=>x.CreateInterests(command.Id, command.ProviderInterests))
                 .ReturnsAsync(result);
             
             var actual = await handler.Handle(command, CancellationToken.None);

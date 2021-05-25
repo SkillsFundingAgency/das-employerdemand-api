@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             
             //Assert
             actual!.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
-            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Ukprn});
+            actual!.Value.Should().BeEquivalentTo(new {resultFromMediator.Id});
         }
 
         [Test, MoqAutoData]

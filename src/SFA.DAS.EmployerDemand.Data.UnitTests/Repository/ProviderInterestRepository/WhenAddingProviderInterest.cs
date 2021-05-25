@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.ProviderInterestRepos
         public void Arrange()
         {
             _providerInterest = new ProviderInterest(
+                Guid.NewGuid(),
                 new ProviderInterests
                 {
                     Ukprn = 1324
