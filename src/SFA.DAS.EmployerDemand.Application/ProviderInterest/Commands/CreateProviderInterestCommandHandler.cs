@@ -31,6 +31,7 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
             var result = await _service.CreateInterests(request.Id, request.ProviderInterests);
             return new CreateProviderInterestsCommandResult
             {
+                Id = request.Id,
                 Ukprn = request.ProviderInterests.Ukprn,
                 IsCreated = result
             };

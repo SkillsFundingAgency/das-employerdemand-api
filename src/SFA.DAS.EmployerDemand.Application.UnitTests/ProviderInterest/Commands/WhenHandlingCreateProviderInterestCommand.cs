@@ -58,6 +58,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
             mockValidator.Verify(x=>x.ValidateAsync(It.IsAny<CreateProviderInterestsCommand>()), Times.Once);
             actual.IsCreated.Should().Be(result);
             actual.Ukprn.Should().Be(command.ProviderInterests.Ukprn);
+            actual.Id.Should().Be(command.Id);
         }
     }
 }
