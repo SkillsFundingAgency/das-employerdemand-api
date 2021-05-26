@@ -19,7 +19,6 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
             [Frozen] Mock<ICourseDemandService> mockService,
             CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterests.Email = "test@test.com";
             mockService
                 .Setup(service => service.EmployerDemandsExist(command.ProviderInterests.EmployerDemandIds))
                 .ReturnsAsync(true);
@@ -35,8 +34,6 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
             [Frozen] Mock<ICourseDemandService> mockService,
             CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterests.Email = null;
-            command.ProviderInterests.Phone = null;
             command.ProviderInterests.Website = null;
             mockService
                 .Setup(service => service.EmployerDemandsExist(command.ProviderInterests.EmployerDemandIds))
@@ -98,12 +95,28 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.ProviderInterest.Commands
         }
 
         [Test, MoqAutoData]
-        public async Task Then_Invalid_If_Not_Valid_Email(
+        public async Task Then_Invalid_If_No_Email(
             CreateProviderInterestsCommand command,
             [Frozen] Mock<ICourseDemandService> mockService,
             CreateProviderInterestsCommandValidator validator)
         {
-            command.ProviderInterests.Email = "test";
+            command.ProviderInterests.Email = null;
+            mockService
+                .Setup(service => service.EmployerDemandsExist(command.ProviderInterests.EmployerDemandIds))
+                .ReturnsAsync(true);
+            
+            var actual = await validator.ValidateAsync(command);
+
+            actual.IsValid().Should().BeFalse();
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_Invalid_If_No_Phone(
+            CreateProviderInterestsCommand command,
+            [Frozen] Mock<ICourseDemandService> mockService,
+            CreateProviderInterestsCommandValidator validator)
+        {
+            command.ProviderInterests.Phone = null;
             mockService
                 .Setup(service => service.EmployerDemandsExist(command.ProviderInterests.EmployerDemandIds))
                 .ReturnsAsync(true);

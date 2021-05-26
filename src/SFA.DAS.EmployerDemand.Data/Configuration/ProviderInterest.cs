@@ -13,8 +13,8 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.EmployerDemandId).HasColumnName("EmployerDemandId").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.Ukprn).HasColumnName("Ukprn").HasColumnType("int").IsRequired();
-            builder.Property(x => x.Email).HasColumnName("Email").HasColumnType("varchar").HasMaxLength(250);
-            builder.Property(x => x.Phone).HasColumnName("Phone").HasColumnType("varchar").HasMaxLength(50);
+            builder.Property(x => x.Email).HasColumnName("Email").HasColumnType("varchar").HasMaxLength(250).IsRequired();
+            builder.Property(x => x.Phone).HasColumnName("Phone").HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(x => x.Website).HasColumnName("Website").HasColumnType("varchar").HasMaxLength(500);
             builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired().ValueGeneratedOnAdd();
             

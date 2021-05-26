@@ -34,22 +34,15 @@ namespace SFA.DAS.EmployerDemand.Application.ProviderInterest.Commands
                 result.AddError(nameof(item.ProviderInterests.Ukprn));
             }
 
-            if (!string.IsNullOrEmpty(item.ProviderInterests.Email))
+            if (string.IsNullOrEmpty(item.ProviderInterests.Email))
             {
-                try
-                {
-                    var emailAddress = new MailAddress(item.ProviderInterests.Email);
-                    if (!emailAddress.Address.Equals(item.ProviderInterests.Email, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        result.AddError(nameof(item.ProviderInterests.Email));
-                    }
-                }
-                catch (FormatException)
-                {
-                    result.AddError(nameof(item.ProviderInterests.Email));
-                }
+                result.AddError(nameof(item.ProviderInterests.Email));
             }
-            
+
+            if (string.IsNullOrEmpty(item.ProviderInterests.Phone))
+            {
+                result.AddError(nameof(item.ProviderInterests.Phone));
+            }
 
             return result;
         }
