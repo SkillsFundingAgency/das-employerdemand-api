@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
@@ -207,6 +208,30 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 });
 
                 return Ok(new { result.EmployerDemandIds });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error getting unmet employer demands",e);
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("{courseDemandId}/notification-audit/{id}")]
+        public async Task<IActionResult> CreateDemandNotificationAudit(Guid id, Guid courseDemandId)
+        {
+            try
+            {
+                await _mediator.Send(new CreateCourseDemandNotificationAuditCommand
+                {
+                    CourseDemandNotificationAudit = new CourseDemandNotificationAudit
+                    {
+                        Id = id,
+                        CourseDemandId = courseDemandId
+                    }
+                });
+
+                return Created("", new { id });
             }
             catch (Exception e)
             {
