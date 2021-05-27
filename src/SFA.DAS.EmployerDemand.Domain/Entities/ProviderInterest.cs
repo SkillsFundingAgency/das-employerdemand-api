@@ -27,5 +27,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public string Phone { get; set; }
         public string Website { get; set; }
         public DateTime DateCreated { get; set; }
+        public virtual CourseDemand CourseDemand { get ; set ; }
     }
 }

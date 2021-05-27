@@ -24,6 +24,12 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired().ValueGeneratedOnAdd();
             
             builder.HasIndex(x => x.Id).IsUnique();
+            
+            builder.HasMany(c => c.ProviderInterests)
+                .WithOne(c => c.CourseDemand)
+                .HasForeignKey(c => c.EmployerDemandId)
+                .HasPrincipalKey(c => c.Id)
+                .Metadata.DeleteBehavior = DeleteBehavior.Restrict;
         }
     }
 }

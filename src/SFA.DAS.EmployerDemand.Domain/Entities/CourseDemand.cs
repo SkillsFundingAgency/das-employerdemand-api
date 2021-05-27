@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerDemand.Domain.Entities
 {
@@ -17,6 +18,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public double Long { get; set; }
         public DateTime DateCreated { get; set; }
         public bool EmailVerified { get; set; }
+        public virtual ICollection<ProviderInterest> ProviderInterests { get ; set ; }
 
         public static implicit operator CourseDemand(Models.CourseDemand source)
         {
