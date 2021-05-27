@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public DateTime DateCreated { get; set; }
         public virtual CourseDemand CourseDemand { get ; set ; }
 
-        public static implicit operator CourseDemandNotificationAudit(Models.CourseDemandNotificationAudit source)
+        public static explicit operator CourseDemandNotificationAudit(Models.CourseDemandNotificationAudit source)
         {
             return new CourseDemandNotificationAudit
             {

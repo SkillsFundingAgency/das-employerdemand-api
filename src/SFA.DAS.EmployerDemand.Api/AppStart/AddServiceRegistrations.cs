@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerDemand.Api.AppStart
                         
             services.AddTransient<ICourseDemandService, CourseDemandService>();
             services.AddTransient<IProviderInterestService, ProviderInterestService>();
+            services.AddTransient<ICourseDemandNotificationAuditService, CourseDemandNotificationAuditService>();
         }
     }
 }
