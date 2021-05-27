@@ -5,10 +5,10 @@ using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
 {
-    public class WhenCastingEmployerCourseDemandFromEntity
+    public class WhenCastingEmployerCourseDemandFromAggregatedEntity
     {
         [Test, AutoData]
-        public void Then_The_Fields_Are_Correctly_Mapped(Entities.AggregatedCourseDemandSummary source)
+        public void Then_The_Fields_Are_Correctly_Mapped(Domain.Entities.AggregatedCourseDemandSummary source)
         {
             //Act
             var actual = (EmployerCourseDemand) source;

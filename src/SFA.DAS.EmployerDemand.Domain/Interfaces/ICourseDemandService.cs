@@ -8,6 +8,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
     public interface ICourseDemandService
     {
         Task<bool> CreateDemand(Models.CourseDemand courseDemand);
+        Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck);
         Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes);
         Task<int> GetAggregatedDemandTotal(int ukprn);
         Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius);

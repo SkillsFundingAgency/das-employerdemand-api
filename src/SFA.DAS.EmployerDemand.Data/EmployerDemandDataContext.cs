@@ -3,6 +3,7 @@ using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EmployerDemand.Data.Configuration;
 using SFA.DAS.EmployerDemand.Domain.Configuration;
 using CourseDemand = SFA.DAS.EmployerDemand.Data.Configuration.CourseDemand;
 using AggregatedCourseDemandSummary = SFA.DAS.EmployerDemand.Data.Configuration.AggregatedCourseDemandSummary;
@@ -12,6 +13,7 @@ namespace SFA.DAS.EmployerDemand.Data
     public interface IEmployerDemandDataContext
     {
         DbSet<Domain.Entities.CourseDemand> CourseDemands { get; set; }
+        DbSet<Domain.Entities.ProviderInterest> ProviderInterests { get; set; }
         DbSet<Domain.Entities.AggregatedCourseDemandSummary> AggregatedCourseDemandSummary { get; set; }
         int SaveChanges();
     }
@@ -23,6 +25,7 @@ namespace SFA.DAS.EmployerDemand.Data
         private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
 
         public DbSet<Domain.Entities.CourseDemand> CourseDemands { get; set; }
+        public DbSet<Domain.Entities.ProviderInterest> ProviderInterests { get; set; }
         public DbSet<Domain.Entities.AggregatedCourseDemandSummary> AggregatedCourseDemandSummary { get; set; }
 
         public EmployerDemandDataContext ()
@@ -58,6 +61,7 @@ namespace SFA.DAS.EmployerDemand.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CourseDemand());
+            modelBuilder.ApplyConfiguration(new ProviderInterest());
             modelBuilder.ApplyConfiguration(new AggregatedCourseDemandSummary());
             
             base.OnModelCreating(modelBuilder);

@@ -59,5 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\CourseDemand.sql" />
+    <Build Include="Tables\ProviderInterest.sql" />
   </ItemGroup>
 </Project>
