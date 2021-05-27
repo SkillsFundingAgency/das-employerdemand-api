@@ -14,6 +14,7 @@ using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDeman
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
 using Location = SFA.DAS.EmployerDemand.Domain.Models.Location;
@@ -190,6 +191,26 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,$"Unable to get course demand {id}");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("unmet")]
+        public async Task<IActionResult> GetUnmetCourseDemands([FromQuery]uint ageOfDemandInDays)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetUnmetEmployerDemandsQuery
+                {
+                    AgeOfDemandInDays = ageOfDemandInDays
+                });
+
+                return Ok(new { result.EmployerDemandIds });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error getting unmet employer demands",e);
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
