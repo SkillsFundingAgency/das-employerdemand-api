@@ -61,5 +61,12 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         {
             return await _repository.GetCourseDemand(id);
         }
+
+        public async Task<IEnumerable<Guid>> GetUnmetEmployerDemands(int ageOfDemand)
+        {
+            var demands = await _repository.GetCourseDemandsWithNoProviderInterest(ageOfDemand);
+
+            return demands.Select(c => c.Id);
+        }
     }
 }
