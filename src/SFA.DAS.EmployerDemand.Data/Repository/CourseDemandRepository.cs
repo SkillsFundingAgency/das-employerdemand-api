@@ -104,7 +104,21 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         {
             return await _dataContext.CourseDemands.FindAsync(id);
         }
-        
+
+        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(int courseDemandAgeInDays)
+        {
+            var courseDemands = await _dataContext.CourseDemands
+                .Include(c=>c.ProviderInterests)
+                .Include(c=>c.CourseDemandNotificationAudits)
+                .Where(c => c.EmailVerified)
+                .Where(c=>c.DateEmailVerified != null && DateTime.UtcNow > c.DateEmailVerified.Value.AddDays(courseDemandAgeInDays))
+                .Where(c => !c.ProviderInterests.Any())
+                .Where(c => c.CourseDemandNotificationAudits.FirstOrDefault(x => x.DateCreated.ToShortDateString() == x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).ToShortDateString()) == null)
+                .ToListAsync();
+
+            return courseDemands;
+        }
+
         private FormattableString ProviderCourseDemandQuery(int ukprn, double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct
