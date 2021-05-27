@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
                 {
                     Id = Guid.NewGuid(),
                     CourseDemandId = courseDemand3.Id,
-                    DateCreated = DateTime.UtcNow.AddDays(-1),
+                    DateCreated = DateTime.UtcNow,
                     CourseDemand = courseDemand3
                 }
             };

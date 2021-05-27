@@ -108,12 +108,10 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays)
         {
             var courseDemands = await _dataContext.CourseDemands
-                .Include(c=>c.ProviderInterests)
-                .Include(c=>c.CourseDemandNotificationAudits)
                 .Where(c => c.EmailVerified)
                 .Where(c=>c.DateEmailVerified != null && DateTime.UtcNow > c.DateEmailVerified.Value.AddDays(courseDemandAgeInDays))
                 .Where(c => !c.ProviderInterests.Any())
-                .Where(c => c.CourseDemandNotificationAudits.FirstOrDefault(x => x.DateCreated.ToShortDateString() == x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).ToShortDateString()) == null)
+                .Where(c => c.CourseDemandNotificationAudits.Count(x => x.DateCreated.Date == x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays + 1).Date) == 0)
                 .ToListAsync();
 
             return courseDemands;
