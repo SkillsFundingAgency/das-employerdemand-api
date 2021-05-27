@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             await service.CreateNotificationAudit(model);
             
             //Assert
-            repository.Verify(x=>x.Insert(model));
+            repository.Verify(x=>x.Insert((Domain.Entities.CourseDemandNotificationAudit)model));
         }
     }
 }

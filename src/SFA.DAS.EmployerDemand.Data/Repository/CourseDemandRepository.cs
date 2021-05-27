@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return await _dataContext.CourseDemands.FindAsync(id);
         }
 
-        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(int courseDemandAgeInDays)
+        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays)
         {
             var courseDemands = await _dataContext.CourseDemands
                 .Include(c=>c.ProviderInterests)

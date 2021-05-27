@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         public async Task Then_The_Verified_Demands_Are_Returned_Which_Have_Not_Had_A_Notification_Sent_Or_Any_Interest(
             int ukprn,
             int courseId,
-            int courseDemandAgeInDays,
+            uint courseDemandAgeInDays,
             CourseDemand courseDemand1,
             CourseDemand courseDemand2,
             CourseDemand courseDemand3,
