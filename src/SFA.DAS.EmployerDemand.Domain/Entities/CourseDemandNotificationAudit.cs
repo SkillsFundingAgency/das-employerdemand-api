@@ -8,5 +8,15 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public Guid CourseDemandId { get; set; }
         public DateTime DateCreated { get; set; }
         public virtual CourseDemand CourseDemand { get ; set ; }
+
+        public static implicit operator CourseDemandNotificationAudit(Models.CourseDemandNotificationAudit source)
+        {
+            return new CourseDemandNotificationAudit
+            {
+                Id = source.Id,
+                CourseDemandId = source.CourseDemandId,
+                DateCreated = DateTime.UtcNow
+            };
+        }
     }
 }
