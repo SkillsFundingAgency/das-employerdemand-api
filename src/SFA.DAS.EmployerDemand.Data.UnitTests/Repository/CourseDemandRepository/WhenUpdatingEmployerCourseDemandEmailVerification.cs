@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         {
             //Arrange
             courseDemandEntity.Id = id;
+            courseDemandEntity.DateEmailVerified = null;
             courseDemandEntity.EmailVerified = false;
             mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
                 .ReturnsAsync(courseDemandEntity);
@@ -34,6 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
             actual.Should().Be(courseDemandEntity.Id);
             courseDemandEntity.EmailVerified.Should().BeTrue();
+            courseDemandEntity.DateEmailVerified.Should().BeCloseTo(DateTime.UtcNow);
         }
         [Test, RecursiveMoqAutoData]
         public async Task Then_If_The_Record_Does_Not_Exist_Then_Null_Is_Returned(

@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             }
 
             courseDemandEntity.EmailVerified = true;
+            courseDemandEntity.DateEmailVerified = DateTime.UtcNow;
             _dataContext.SaveChanges();
             return id;
         }
