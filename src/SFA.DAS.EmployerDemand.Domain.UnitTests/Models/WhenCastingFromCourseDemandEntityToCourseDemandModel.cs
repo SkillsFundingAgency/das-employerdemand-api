@@ -2,12 +2,13 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Domain.Models;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
 {
     public class WhenCastingFromCourseDemandEntityToCourseDemandModel
     {
-        [Test, AutoData]
+        [Test, RecursiveMoqAutoData]
         public void Then_The_Fields_Are_Mapped(Domain.Entities.CourseDemand source)
         {
             //Act
