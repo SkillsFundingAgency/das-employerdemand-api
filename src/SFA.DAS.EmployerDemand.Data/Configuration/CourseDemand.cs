@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.Long).HasColumnName("Long").HasColumnType("float").IsRequired();
             builder.Property(x => x.EmailVerified).HasColumnName("EmailVerified").HasColumnType("bit").IsRequired();
             builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired().ValueGeneratedOnAdd();
+            builder.Property(x => x.DateEmailVerified).HasColumnName("DateEmailVerified").HasColumnType("datetime").IsRequired(false);
             
             builder.HasIndex(x => x.Id).IsUnique();
             
@@ -29,6 +30,12 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
                 .WithOne(c => c.CourseDemand)
                 .HasForeignKey(c => c.EmployerDemandId)
                 .HasPrincipalKey(c => c.Id)
+                .Metadata.DeleteBehavior = DeleteBehavior.Restrict;
+            
+            builder.HasMany(c=>c.CourseDemandNotificationAudits)
+                .WithOne(c=>c.CourseDemand)
+                .HasForeignKey(c=>c.CourseDemandId)
+                .HasPrincipalKey(c=>c.Id)
                 .Metadata.DeleteBehavior = DeleteBehavior.Restrict;
         }
     }

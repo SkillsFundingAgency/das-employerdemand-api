@@ -20,6 +20,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public bool EmailVerified { get; set; }
         public virtual ICollection<ProviderInterest> ProviderInterests { get ; set ; }
         public DateTime? DateEmailVerified { get ; set ; }
+        public virtual ICollection<CourseDemandNotificationAudit> CourseDemandNotificationAudits { get ; set ; }
 
         public static implicit operator CourseDemand(Models.CourseDemand source)
         {

@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[CourseDemandNotificationAudit]
+(
+    [Id] UNIQUEIDENTIFIER PRIMARY KEY,
+    [CourseDemandId] UNIQUEIDENTIFIER PRIMARY KEY,
+    [DateCreated] DATETIME NOT NULL DEFAULT GETDATE(),
+)
+GO
