@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmploy
 {
     public class GetUnmetEmployerDemandsQuery : IRequest<GetUnmetEmployerDemandsQueryResult>
     {
-        public uint AgeOfDemand { get ; set ; }
+        public uint AgeOfDemandInDays { get ; set ; }
     }
 }

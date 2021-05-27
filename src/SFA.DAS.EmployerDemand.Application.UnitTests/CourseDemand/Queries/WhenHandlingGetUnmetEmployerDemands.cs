@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
             GetUnmetEmployerDemandsQueryHandler handler)
         {
             //Arrange
-            service.Setup(x => x.GetUnmetEmployerDemands(query.AgeOfDemand)).ReturnsAsync(ids);
+            service.Setup(x => x.GetUnmetEmployerDemands(query.AgeOfDemandInDays)).ReturnsAsync(ids);
             
             //Act
             var actual = await handler.Handle(query, CancellationToken.None);

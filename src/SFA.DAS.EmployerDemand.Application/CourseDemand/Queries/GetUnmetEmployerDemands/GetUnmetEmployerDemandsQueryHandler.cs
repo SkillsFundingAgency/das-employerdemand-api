@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmploy
         }
         public async Task<GetUnmetEmployerDemandsQueryResult> Handle(GetUnmetEmployerDemandsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _service.GetUnmetEmployerDemands(request.AgeOfDemand);
+            var result = await _service.GetUnmetEmployerDemands(request.AgeOfDemandInDays);
 
             return new GetUnmetEmployerDemandsQueryResult
             {
