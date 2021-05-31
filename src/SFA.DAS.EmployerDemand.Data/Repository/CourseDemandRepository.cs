@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .Where(c => c.EmailVerified)
                 .Where(c=>c.DateEmailVerified != null && DateTime.UtcNow > c.DateEmailVerified.Value.AddDays(courseDemandAgeInDays))
                 .Where(c => !c.ProviderInterests.Any())
-                .Where(c => c.CourseDemandNotificationAudits.Count(x => x.DateCreated.Date == x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays + 1).Date) == 0)
+                .Where(c => c.CourseDemandNotificationAudits.Count(x => x.DateCreated.Date >= x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).Date) == 0)
                 .ToListAsync();
 
             return courseDemands;
