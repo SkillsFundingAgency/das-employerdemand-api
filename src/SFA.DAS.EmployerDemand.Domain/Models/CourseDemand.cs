@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         public string ContactEmailAddress { get ; set ; }
         public int NumberOfApprentices { get ; set ; }
         public bool EmailVerified { get ; set ; }
+        public string StopSharingUrl { get; set; }
 
         public static implicit operator CourseDemand(Domain.Entities.CourseDemand source)
         {
