@@ -209,5 +209,18 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
 
             actual.IsValid().Should().BeFalse();
         }
+
+        [Test, AutoData]
+        public async Task Then_Invalid_If_No_StopSharingUrl(
+            CreateCourseDemandCommand command,
+            CreateCourseDemandCommandValidator validator)
+        {
+            command.CourseDemand.StopSharingUrl = null;
+            command.CourseDemand.ContactEmailAddress = "test@test.com";
+            
+            var actual = await validator.ValidateAsync(command);
+
+            actual.IsValid().Should().BeFalse();
+        }
     }
 }

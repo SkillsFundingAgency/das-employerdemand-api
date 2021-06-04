@@ -69,7 +69,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                             Name = request.Location.Name,
                             Lat = request.Location.LocationPoint.GeoPoint.First(),
                             Lon = request.Location.LocationPoint.GeoPoint.Last()
-                        }
+                        },
+                        StopSharingUrl = request.StopSharingUrl
                     }
                 });
                 if (result.IsCreated)
