@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             }
 
             courseDemandEntity.EmailVerified = true;
+            courseDemandEntity.DateEmailVerified = DateTime.UtcNow;
             _dataContext.SaveChanges();
             return id;
         }
@@ -103,7 +104,19 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         {
             return await _dataContext.CourseDemands.FindAsync(id);
         }
-        
+
+        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays)
+        {
+            var courseDemands = await _dataContext.CourseDemands
+                .Where(c => c.EmailVerified)
+                .Where(c=>c.DateEmailVerified != null && DateTime.UtcNow > c.DateEmailVerified.Value.AddDays(courseDemandAgeInDays))
+                .Where(c => !c.ProviderInterests.Any())
+                .Where(c => c.CourseDemandNotificationAudits.Count(x => x.DateCreated.Date >= x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).Date) == 0)
+                .ToListAsync();
+
+            return courseDemands;
+        }
+
         private FormattableString ProviderCourseDemandQuery(int ukprn, double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct

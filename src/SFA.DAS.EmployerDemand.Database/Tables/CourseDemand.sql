@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[CourseDemand]
     [Lat] FLOAT NOT NULL DEFAULT 0,
     [Long] FLOAT NOT NULL DEFAULT 0,
     [DateCreated] DATETIME NOT NULL DEFAULT GETDATE(),
-    [EmailVerified] BIT NOT NULL DEFAULT 0
+    [EmailVerified] BIT NOT NULL DEFAULT 0,
+    [DateEmailVerified] DATETIME NULL
 )
 GO

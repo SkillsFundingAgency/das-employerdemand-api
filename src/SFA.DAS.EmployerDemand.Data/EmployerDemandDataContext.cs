@@ -15,6 +15,7 @@ namespace SFA.DAS.EmployerDemand.Data
         DbSet<Domain.Entities.CourseDemand> CourseDemands { get; set; }
         DbSet<Domain.Entities.ProviderInterest> ProviderInterests { get; set; }
         DbSet<Domain.Entities.AggregatedCourseDemandSummary> AggregatedCourseDemandSummary { get; set; }
+        DbSet<Domain.Entities.CourseDemandNotificationAudit> CourseDemandNotificationAudit { get; set; }
         int SaveChanges();
     }
     
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerDemand.Data
         public DbSet<Domain.Entities.CourseDemand> CourseDemands { get; set; }
         public DbSet<Domain.Entities.ProviderInterest> ProviderInterests { get; set; }
         public DbSet<Domain.Entities.AggregatedCourseDemandSummary> AggregatedCourseDemandSummary { get; set; }
+        public DbSet<Domain.Entities.CourseDemandNotificationAudit> CourseDemandNotificationAudit { get; set; }
 
         public EmployerDemandDataContext ()
         {
@@ -63,6 +65,7 @@ namespace SFA.DAS.EmployerDemand.Data
             modelBuilder.ApplyConfiguration(new CourseDemand());
             modelBuilder.ApplyConfiguration(new ProviderInterest());
             modelBuilder.ApplyConfiguration(new AggregatedCourseDemandSummary());
+            modelBuilder.ApplyConfiguration(new CourseDemandNotificationAudit());
             
             base.OnModelCreating(modelBuilder);
         }

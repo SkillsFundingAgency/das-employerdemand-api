@@ -15,8 +15,11 @@ namespace SFA.DAS.EmployerDemand.Api.AppStart
             services.AddTransient<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
             services.AddTransient<ICourseDemandRepository, CourseDemandRepository>();
             services.AddTransient<IProviderInterestRepository, ProviderInterestRepository>();
+            services.AddTransient<ICourseDemandNotificationAuditRepository, CourseDemandNotificationAuditRepository>();
+                        
             services.AddTransient<ICourseDemandService, CourseDemandService>();
             services.AddTransient<IProviderInterestService, ProviderInterestService>();
+            services.AddTransient<ICourseDemandNotificationAuditService, CourseDemandNotificationAuditService>();
         }
     }
 }
