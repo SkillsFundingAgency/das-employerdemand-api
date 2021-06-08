@@ -15,14 +15,13 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
     {
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Verified_Demands_Are_Returned_Which_Have_Not_Had_A_Notification_Sent_Or_Any_Interest(
-            int ukprn,
             int courseId,
             uint courseDemandAgeInDays,
             CourseDemand courseDemand1,
             CourseDemand courseDemand2,
             CourseDemand courseDemand3,
             CourseDemand courseDemand4,
-            ProviderInterest providerInterest,
+            CourseDemand courseDemand5,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
@@ -30,6 +29,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             courseDemand2.CourseId = courseId;
             courseDemand1.CourseId = courseDemand2.CourseId;
             courseDemand3.CourseId = courseDemand2.CourseId;
+            courseDemand5.CourseId = courseDemand2.CourseId;
             
             courseDemand1.EmailVerified = true;
             courseDemand1.DateEmailVerified = DateTime.UtcNow;
@@ -57,10 +57,16 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             courseDemand4.EmailVerified = false;
             courseDemand4.DateEmailVerified = null;
             courseDemand4.ProviderInterests = new List<ProviderInterest>();
+
+            courseDemand5.EmailVerified = true;
+            courseDemand5.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand5.ProviderInterests = new List<ProviderInterest>();
+            courseDemand5.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand5.Stopped = true;
             
             mockDbContext
                 .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand1,courseDemand2,courseDemand3,courseDemand4});
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand1,courseDemand2,courseDemand3,courseDemand4, courseDemand5});
             
             //Act
             var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);

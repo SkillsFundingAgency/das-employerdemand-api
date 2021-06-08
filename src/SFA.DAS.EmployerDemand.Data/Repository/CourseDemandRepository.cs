@@ -81,7 +81,10 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .SelectMany(combo => combo.ProviderInterest.DefaultIfEmpty(), 
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
-                .CountAsync(c => c.CourseDemand.CourseId.Equals(courseId) && c.CourseDemand.EmailVerified);
+                .CountAsync(c => 
+                    c.CourseDemand.CourseId.Equals(courseId) 
+                    && c.CourseDemand.EmailVerified
+                    && !c.CourseDemand.Stopped);
         }
 
         public async Task<int> TotalCourseDemands(int ukprn)
@@ -95,7 +98,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     (c, p) => new { CourseDemand = c.CourseDemand, ProviderInterest = p })
                 .Where(combo => combo.ProviderInterest == null)
                 .Where(c=>c.CourseDemand.EmailVerified)
-                .GroupBy(c => c.CourseDemand.CourseId).CountAsync();
+                .Where(c => !c.CourseDemand.Stopped)
+                .GroupBy(c => c.CourseDemand.CourseId)
+                .CountAsync();
             
             return value;
         }
@@ -109,6 +114,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         {
             var courseDemands = await _dataContext.CourseDemands
                 .Where(c => c.EmailVerified)
+                .Where(c => !c.Stopped)
                 .Where(c=>c.DateEmailVerified != null && DateTime.UtcNow > c.DateEmailVerified.Value.AddDays(courseDemandAgeInDays))
                 .Where(c => !c.ProviderInterests.Any())
                 .Where(c => c.CourseDemandNotificationAudits.Count(x => x.DateCreated.Date >= x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).Date) == 0)
@@ -155,6 +161,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId})
                     and c.EmailVerified = 1
+                    and c.Stopped = 0
                     and pi.Ukprn is null";
         }
 
@@ -185,6 +192,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                     from CourseDemand where EmailVerified=1) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
                 Where c.CourseId = {courseId} 
                 and c.EmailVerified = 1
+                and c.Stopped = 0
                 and pi.Ukprn is null";
         }
     }
