@@ -12,21 +12,21 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
 {
     public class WhenStoppingEmployerDemand
     {
-        [Test, MoqAutoData]
+        [Test, RecursiveMoqAutoData]
         public async Task Then_The_Repository_Is_Called_And_Value_Returned(
             Guid id,
-            Guid returnId,
+            Domain.Entities.CourseDemand entity,
             [Frozen] Mock<ICourseDemandRepository> repository,
             CourseDemandService service)
         {
             //Arrange
             repository
                 .Setup(x => x.StopCourseDemand(id))
-                .ReturnsAsync(returnId);
+                .ReturnsAsync(entity);
             //Act
             var actual = await service.StopCourseDemand(id);
             //Assert
-            actual.Should().Be(returnId);
+            actual.Should().BeEquivalentTo((Domain.Models.CourseDemand)entity);
         }
     }
 }

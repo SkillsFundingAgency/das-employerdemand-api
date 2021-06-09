@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.VerifyCourseDemandEmail(id);
         }
 
-        public async Task<Guid?> StopCourseDemand(Guid id)
+        public async Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id)
         {
             return await _repository.StopCourseDemand(id);
         }

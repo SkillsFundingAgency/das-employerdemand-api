@@ -22,7 +22,8 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             courseDemandEntity.Id = id;
             courseDemandEntity.DateStopped = null;
             courseDemandEntity.Stopped = false;
-            mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
+            mockDbContext
+                .Setup(x => x.CourseDemands.FindAsync(id))
                 .ReturnsAsync(courseDemandEntity);
             
             //Act
@@ -30,7 +31,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().Be(courseDemandEntity.Id);
+            actual.Should().Be(courseDemandEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow);
         }
@@ -42,7 +43,8 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             Data.Repository.CourseDemandRepository repository)
         {
             //Arrange
-            mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
+            mockDbContext
+                .Setup(x => x.CourseDemands.FindAsync(id))
                 .ReturnsAsync((CourseDemand)null);
             
             //Act

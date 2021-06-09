@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return id;
         }
 
-        public async Task<Guid?> StopCourseDemand(Guid id)
+        public async Task<CourseDemand> StopCourseDemand(Guid id)
         {
             var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
             if (courseDemandEntity == null)
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             courseDemandEntity.Stopped = true;
             courseDemandEntity.DateStopped = DateTime.UtcNow;
             _dataContext.SaveChanges();
-            return id;
+            return courseDemandEntity;
         }
 
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
