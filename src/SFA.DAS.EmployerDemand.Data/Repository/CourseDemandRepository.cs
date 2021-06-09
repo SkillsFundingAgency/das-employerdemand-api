@@ -54,6 +54,20 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return id;
         }
 
+        public async Task<Guid?> StopCourseDemand(Guid id)
+        {
+            var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
+            if (courseDemandEntity == null)
+            {
+                return null;
+            }
+            
+            courseDemandEntity.Stopped = true;
+            courseDemandEntity.DateStopped = DateTime.UtcNow;
+            _dataContext.SaveChanges();
+            return id;
+        }
+
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
             var result = _dataContext.AggregatedCourseDemandSummary.FromSqlInterpolated(ProviderCourseDemandQuery(ukprn, lat,lon, radius,courseId));
