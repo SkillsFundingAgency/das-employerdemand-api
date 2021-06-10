@@ -16,7 +16,21 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDe
         }
         public async Task<PatchCourseDemandCommandResponse> Handle(PatchCourseDemandCommand request, CancellationToken cancellationToken)
         {
-            var result = await _service.UpdateCourseDemand(request.CourseDemand);
+            var demand = await _service.GetCourseDemand(request.Id);
+
+            if (demand == null)
+            {
+                return new PatchCourseDemandCommandResponse
+                {
+                    Id = null
+                };
+            }
+            
+            demand.OrganisationName = request.OrganisationName;
+            demand.ContactEmailAddress = request.ContactEmailAddress;
+            demand.Stopped = request.Stopped;
+            
+            var result = await _service.UpdateCourseDemand(demand);
 
             return new PatchCourseDemandCommandResponse
             {

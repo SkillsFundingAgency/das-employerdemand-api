@@ -16,15 +16,41 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Service_Called(
             Guid? result,
+            Domain.Models.CourseDemand courseDemand,
             PatchCourseDemandCommand command,
             [Frozen] Mock<ICourseDemandService> service,
             PatchCourseDemandCommandHandler handler)
         {
-            service.Setup(x=>x.UpdateCourseDemand(command.CourseDemand)).ReturnsAsync(result);
+            //Arrange
+            courseDemand.OrganisationName = command.OrganisationName;
+            courseDemand.ContactEmailAddress = command.ContactEmailAddress;
+            courseDemand.Stopped = command.Stopped;
+            service.Setup(x => x.GetCourseDemand(command.Id)).ReturnsAsync(courseDemand);
+            service.Setup(x=>x.UpdateCourseDemand(courseDemand)).ReturnsAsync(result);
             
+            //Act
             var actual = await handler.Handle(command, CancellationToken.None);
             
+            //Assert
             actual.Id.Should().Be(result);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_The_Demand_Does_Not_Exist_Null_Returned(
+            Guid? result,
+            PatchCourseDemandCommand command,
+            [Frozen] Mock<ICourseDemandService> service,
+            PatchCourseDemandCommandHandler handler)
+        {
+            //Arrange
+            service.Setup(x => x.GetCourseDemand(command.Id)).ReturnsAsync((Domain.Models.CourseDemand)null);
+            
+            //Act
+            var actual = await handler.Handle(command, CancellationToken.None);
+            
+            //Assert
+            actual.Id.Should().BeNull();
+            service.Verify(x=>x.UpdateCourseDemand(It.IsAny<Domain.Models.CourseDemand>()), Times.Never);
         }
     }
 }

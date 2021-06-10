@@ -1,9 +1,13 @@
+using System;
 using MediatR;
 
 namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand
 {
     public class PatchCourseDemandCommand : IRequest<PatchCourseDemandCommandResponse>
     {
-        public Domain.Models.CourseDemand CourseDemand { get; set; }
+        public Guid Id { get; set; }
+        public string OrganisationName { get ; set ; }
+        public string ContactEmailAddress { get ; set ; }
+        public bool Stopped { get; set; }
     }
 }
