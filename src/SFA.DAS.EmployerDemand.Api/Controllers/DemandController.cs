@@ -11,6 +11,7 @@ using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.StopCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
@@ -88,6 +89,35 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,"Unable to create course demand");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] PatchCourseDemandRequest request)
+        {
+            try
+            {
+                var result = await _mediator.Send(new PatchCourseDemandCommand
+                {
+                    Id = id,
+                    Stopped = request.Stopped ?? false,
+                    OrganisationName = request.OrganisationName,
+                    ContactEmailAddress = request.ContactEmailAddress,
+
+                });
+
+                if (result.Id == null)
+                {
+                    return NotFound();
+                }
+                
+                return Accepted("", new {result.Id});
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,"Unable to update course demand");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
