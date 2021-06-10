@@ -44,6 +44,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                     && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()
                     && c.CourseDemand.StopSharingUrl == request.StopSharingUrl
                     && c.CourseDemand.StartSharingUrl == request.StartSharingUrl
+                    && c.CourseDemand.ExpiredCourseDemandId == request.ExpiredCourseDemandId
                     ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
             

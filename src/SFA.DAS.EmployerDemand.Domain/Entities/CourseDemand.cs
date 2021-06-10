@@ -26,6 +26,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public virtual ICollection<ProviderInterest> ProviderInterests { get ; set ; }
         public virtual ICollection<CourseDemandNotificationAudit> CourseDemandNotificationAudits { get ; set ; }
         public string StartSharingUrl { get ; set ; }
+        public Guid? ExpiredCourseDemandId { get ; set ; }
 
 
         public static implicit operator CourseDemand(Models.CourseDemand source)
@@ -45,7 +46,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 CourseLevel = source.Course.Level,
                 CourseRoute = source.Course.Route,
                 StopSharingUrl = source.StopSharingUrl,
-                StartSharingUrl = source.StartSharingUrl
+                StartSharingUrl = source.StartSharingUrl,
+                ExpiredCourseDemandId = source.ExpiredCourseDemandId
             };
         }
     }

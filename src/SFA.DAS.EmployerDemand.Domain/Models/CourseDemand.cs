@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         public string StopSharingUrl { get; set; }
         public bool Stopped { get; set; }
         public string StartSharingUrl { get ; set ; }
+        public Guid? ExpiredCourseDemandId { get ; set ; }
 
         public static implicit operator CourseDemand(Entities.CourseDemand source)
         {
@@ -44,7 +45,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
                 },
                 StopSharingUrl = source.StopSharingUrl,
                 Stopped = source.Stopped,
-                StartSharingUrl = source.StartSharingUrl
+                StartSharingUrl = source.StartSharingUrl,
+                ExpiredCourseDemandId = source.ExpiredCourseDemandId
             };
         }
     }

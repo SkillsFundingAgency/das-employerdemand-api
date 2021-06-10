@@ -73,7 +73,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                             Lon = request.Location.LocationPoint.GeoPoint.Last()
                         },
                         StopSharingUrl = request.StopSharingUrl,
-                        StartSharingUrl = request.StartSharingUrl
+                        StartSharingUrl = request.StartSharingUrl,
+                        ExpiredCourseDemandId = request.ExpiredCourseDemandId
                     }
                 });
                 if (result.IsCreated)
