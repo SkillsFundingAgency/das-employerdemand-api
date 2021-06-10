@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[CourseDemand]
     [DateEmailVerified] DATETIME NULL,
     [StopSharingUrl] VARCHAR(1000) NOT NULL,
     [Stopped] BIT NOT NULL DEFAULT 0,
-    [DateStopped] DATETIME NULL
+    [DateStopped] DATETIME NULL,
+    [StartSharingUrl] VARCHAR(1000) NOT NULL
 )
 GO

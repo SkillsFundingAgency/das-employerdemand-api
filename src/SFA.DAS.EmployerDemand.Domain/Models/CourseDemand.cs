@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
         public bool EmailVerified { get ; set ; }
         public string StopSharingUrl { get; set; }
         public bool Stopped { get; set; }
+        public string StartSharingUrl { get ; set ; }
 
         public static implicit operator CourseDemand(Entities.CourseDemand source)
         {
@@ -42,7 +43,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Models
                     Lon = source.Long
                 },
                 StopSharingUrl = source.StopSharingUrl,
-                Stopped = source.Stopped
+                Stopped = source.Stopped,
+                StartSharingUrl = source.StartSharingUrl
             };
         }
     }

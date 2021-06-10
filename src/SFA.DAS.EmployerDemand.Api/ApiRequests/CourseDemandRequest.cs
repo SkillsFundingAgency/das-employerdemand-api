@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerDemand.Api.ApiRequests
         public Course Course { get; set; }
         public Location Location { get; set; }
         public string StopSharingUrl { get; set; }
+        public string StartSharingUrl { get ; set ; }
     }
 
     public class Course
