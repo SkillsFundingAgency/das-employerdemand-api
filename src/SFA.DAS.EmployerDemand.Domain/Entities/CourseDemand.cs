@@ -18,9 +18,14 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public double Long { get; set; }
         public DateTime DateCreated { get; set; }
         public bool EmailVerified { get; set; }
-        public virtual ICollection<ProviderInterest> ProviderInterests { get ; set ; }
         public DateTime? DateEmailVerified { get ; set ; }
+        public string StopSharingUrl { get; set; }
+        public bool Stopped { get; set; }
+        public DateTime? DateStopped { get ; set ; }
+
+        public virtual ICollection<ProviderInterest> ProviderInterests { get ; set ; }
         public virtual ICollection<CourseDemandNotificationAudit> CourseDemandNotificationAudits { get ; set ; }
+        
 
         public static implicit operator CourseDemand(Models.CourseDemand source)
         {
@@ -37,7 +42,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 CourseId = source.Course.Id,
                 CourseTitle = source.Course.Title,
                 CourseLevel = source.Course.Level,
-                CourseRoute = source.Course.Route
+                CourseRoute = source.Course.Route,
+                StopSharingUrl = source.StopSharingUrl
             };
         }
     }

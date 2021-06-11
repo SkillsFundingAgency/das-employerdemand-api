@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius);
         Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId);
         Task<Guid?> VerifyCourseDemandEmail(Guid id);
+        Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id);
         Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id);
         Task<IEnumerable<Guid>> GetUnmetEmployerDemands(uint ageOfDemandInDays);
     }

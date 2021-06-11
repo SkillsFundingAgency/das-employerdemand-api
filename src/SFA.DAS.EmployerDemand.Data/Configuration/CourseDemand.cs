@@ -23,6 +23,9 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.EmailVerified).HasColumnName("EmailVerified").HasColumnType("bit").IsRequired();
             builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("datetime").IsRequired().ValueGeneratedOnAdd();
             builder.Property(x => x.DateEmailVerified).HasColumnName("DateEmailVerified").HasColumnType("datetime").IsRequired(false);
+            builder.Property(x => x.StopSharingUrl).HasColumnName("StopSharingUrl").HasColumnType("varchar").HasMaxLength(1000).IsRequired();
+            builder.Property(x => x.Stopped).HasColumnName("Stopped").HasColumnType("bit").IsRequired();
+            builder.Property(x => x.DateStopped).HasColumnName("DateStopped").HasColumnType("datetime").IsRequired(false);
             
             builder.HasIndex(x => x.Id).IsUnique();
             

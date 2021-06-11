@@ -43,6 +43,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.VerifyCourseDemandEmail(id);
         }
 
+        public async Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id)
+        {
+            return await _repository.StopCourseDemand(id);
+        }
+
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
             var summaries = await _repository.GetAggregatedCourseDemandListByCourse(ukprn, courseId, lat, lon, radius);

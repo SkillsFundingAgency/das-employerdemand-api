@@ -27,6 +27,8 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.Location.Name.Should().Be(source.LocationName);
             actual.Location.Lat.Should().Be(source.Lat);
             actual.Location.Lon.Should().Be(source.Long);
+            actual.StopSharingUrl.Should().Be(source.StopSharingUrl);
+            actual.Stopped.Should().Be(source.Stopped);
         }
 
         [Test]

@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerDemand.Api.ApiRequests
         public int NumberOfApprentices { get ; set ; }
         public Course Course { get; set; }
         public Location Location { get; set; }
+        public string StopSharingUrl { get; set; }
     }
 
     public class Course

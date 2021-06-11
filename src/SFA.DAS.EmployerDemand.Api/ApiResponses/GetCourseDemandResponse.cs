@@ -11,6 +11,8 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
         public string ContactEmailAddress { get ; set ; }
         public int NumberOfApprentices { get ; set ; }
         public bool EmailVerified { get ; set ; }
+        public string StopSharingUrl { get; set; }
+        public bool Stopped { get; set; }
         
         public static implicit operator GetCourseDemandResponse(Domain.Models.CourseDemand source)
         {
@@ -27,7 +29,9 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
                 NumberOfApprentices = source.NumberOfApprentices,
                 EmailVerified = source.EmailVerified,
                 Location = source.Location,
-                Course = source.Course
+                Course = source.Course,
+                StopSharingUrl = source.StopSharingUrl,
+                Stopped = source.Stopped
             };
         }
     }

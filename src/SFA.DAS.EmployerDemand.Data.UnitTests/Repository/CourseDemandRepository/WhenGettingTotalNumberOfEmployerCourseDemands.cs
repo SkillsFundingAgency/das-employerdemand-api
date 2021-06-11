@@ -31,7 +31,8 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             providerInterest.EmployerDemandId = courseDemand3.Id;
             courseDemand1.EmailVerified = true;
             courseDemand2.EmailVerified = true;
-            courseDemand3.EmailVerified = false;
+            courseDemand3.EmailVerified = true;
+            courseDemand3.Stopped = true;
             courseDemand4.EmailVerified = false;
             
             mockDbContext
