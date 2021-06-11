@@ -18,5 +18,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<CourseDemand> GetCourseDemand(Guid id);
         Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays);
         Task<Guid?> UpdateCourseDemand(CourseDemand updateEntity);
+        Task<CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId);
     }
 }
