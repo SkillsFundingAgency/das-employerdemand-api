@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,8 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseD
             var result = await _service.CreateDemand(request.CourseDemand);
             return new CreateCourseDemandCommandResponse
             {
-                Id = request.CourseDemand.Id,
+                Id = (!result && request.CourseDemand.ExpiredCourseDemandId.HasValue) 
+                    ? (Guid?)null : request.CourseDemand.Id,
                 IsCreated = result
             };
         }
