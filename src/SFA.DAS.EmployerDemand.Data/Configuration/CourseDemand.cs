@@ -42,6 +42,11 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
                 .HasForeignKey(c=>c.CourseDemandId)
                 .HasPrincipalKey(c=>c.Id)
                 .Metadata.DeleteBehavior = DeleteBehavior.Restrict;
+            
+            builder.HasOne(c=>c.ExpiredCourseDemand)
+                .WithOne()
+                .HasForeignKey<Domain.Entities.CourseDemand>(c=>c.ExpiredCourseDemandId)
+                .Metadata.DeleteBehavior = DeleteBehavior.Restrict;
         }
     }
 }

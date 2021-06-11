@@ -21,3 +21,5 @@ CREATE TABLE [dbo].[CourseDemand]
     [ExpiredCourseDemandId] UNIQUEIDENTIFIER NULL
 )
 GO
+
+CREATE UNIQUE INDEX IDX_ExpiredCourseDemandId on CourseDemand (ExpiredCourseDemandId) where ExpiredCourseDemandId IS NOT NULL

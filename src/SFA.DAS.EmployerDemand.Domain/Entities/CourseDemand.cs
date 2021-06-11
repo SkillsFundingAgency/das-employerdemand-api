@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public virtual ICollection<CourseDemandNotificationAudit> CourseDemandNotificationAudits { get ; set ; }
         public string StartSharingUrl { get ; set ; }
         public Guid? ExpiredCourseDemandId { get ; set ; }
+        public virtual CourseDemand ExpiredCourseDemand { get ; set ; }
 
 
         public static implicit operator CourseDemand(Models.CourseDemand source)
