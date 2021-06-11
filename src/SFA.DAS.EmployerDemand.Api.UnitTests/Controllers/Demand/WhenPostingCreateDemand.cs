@@ -83,6 +83,30 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         }
 
         [Test, MoqAutoData]
+        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned_And_Conflict_Returned_If_Not_Created_False_And_Id_Is_Null(
+            Guid id,
+            CreateCourseDemandCommandResponse response,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            response.IsCreated = false;
+            response.Id = null;
+            mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
+                    c.CourseDemand.Id.Equals(id)
+                ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+            
+            //Act
+            var actual = await controller.CreateDemand(id, request) as StatusCodeResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Conflict);
+        }
+
+        [Test, MoqAutoData]
         public async Task Then_If_Validation_Exception_Bad_Request_Returned(
             Guid id,
             string errorKey,

@@ -77,6 +77,12 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                         ExpiredCourseDemandId = request.ExpiredCourseDemandId
                     }
                 });
+                
+                if (!result.IsCreated && !result.Id.HasValue)
+                {
+                    return Conflict();
+                }
+                
                 if (result.IsCreated)
                 {
                     return Created("",new {result.Id});    
