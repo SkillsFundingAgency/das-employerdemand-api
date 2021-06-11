@@ -16,6 +16,7 @@ using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.StopCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemandByExpiredDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Models;
@@ -231,6 +232,33 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,"Unable to verify course demand email");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetEmployerCourseDemandByExpiredId([FromQuery]Guid expiredCourseDemandId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseDemandByExpiredDemandQuery()
+                {
+                    ExpiredCourseDemandId = expiredCourseDemandId
+                });
+
+                if (result.CourseDemand == null)
+                {
+                    return NotFound();
+                }
+
+                var model = (GetCourseDemandResponse) result.CourseDemand;
+
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Unable to get course demand by expired id {expiredCourseDemandId}");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
