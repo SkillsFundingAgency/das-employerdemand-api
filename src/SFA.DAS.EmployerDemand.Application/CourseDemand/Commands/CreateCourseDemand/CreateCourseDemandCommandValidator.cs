@@ -51,6 +51,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseD
             {
                 result.AddError(nameof(item.CourseDemand.StopSharingUrl));
             }
+            
+            if (string.IsNullOrEmpty(item.CourseDemand.StartSharingUrl))
+            {
+                result.AddError(nameof(item.CourseDemand.StartSharingUrl));
+            }
 
             return Task.FromResult(result);
         }
