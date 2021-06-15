@@ -44,6 +44,10 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             }
             
             courseDemandEntity.Stopped = updateEntity.Stopped;
+            if (updateEntity.Stopped)
+            {
+                courseDemandEntity.DateStopped = DateTime.UtcNow;
+            }
             courseDemandEntity.OrganisationName = string.IsNullOrEmpty(updateEntity.OrganisationName)
                 ? courseDemandEntity.OrganisationName
                 : updateEntity.OrganisationName;

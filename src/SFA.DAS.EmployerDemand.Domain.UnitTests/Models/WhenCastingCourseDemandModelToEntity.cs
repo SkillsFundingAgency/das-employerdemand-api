@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.Lat.Should().Be(source.Location.Lat);
             actual.Long.Should().Be(source.Location.Lon);
             actual.EmailVerified.Should().BeFalse();
+            actual.Stopped.Should().Be(source.Stopped);
         }
     }
 }
