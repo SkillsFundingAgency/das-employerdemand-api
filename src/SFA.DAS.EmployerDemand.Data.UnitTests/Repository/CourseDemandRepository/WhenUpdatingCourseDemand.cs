@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         }
         
         [Test, RecursiveMoqAutoData]
-        public async Task Then_If_Stopped_Is_True_Then_The_Date_Is_Populated(
+        public async Task Then_If_Stopped_Is_True_And_Updated_From_False_Then_The_Date_Is_Populated(
             Guid id,
             string orgName,
             CourseDemand updateEntity,
@@ -86,6 +86,35 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             actual.Should().Be(courseDemandEntity.Id);
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow);
+        }
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_Stopped_Is_True_And_Updated_From_False_Then_The_Date_Is_Not_Updated(
+            Guid id,
+            string orgName,
+            DateTime stoppedDate,
+            CourseDemand updateEntity,
+            CourseDemand courseDemandEntity,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //Arrange
+            courseDemandEntity.Id = id;
+            courseDemandEntity.DateStopped = stoppedDate;
+            courseDemandEntity.Stopped = true;
+            updateEntity.Id = id;
+            updateEntity.Stopped = true;
+            updateEntity.OrganisationName = orgName;
+            mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
+                .ReturnsAsync(courseDemandEntity);
+            
+            //Act
+            var actual = await repository.UpdateCourseDemand(updateEntity);
+            
+            //Assert
+            mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
+            actual.Should().Be(courseDemandEntity.Id);
+            courseDemandEntity.Stopped.Should().BeTrue();
+            courseDemandEntity.DateStopped.Should().Be(stoppedDate);
         }
     }
 }
