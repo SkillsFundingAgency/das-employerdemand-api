@@ -14,65 +14,200 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
     public class WhenGettingVerifiedUnmetCourseDemands
     {
         [Test, RecursiveMoqAutoData]
-        public async Task Then_The_Verified_Demands_Are_Returned_Which_Have_Not_Had_A_Notification_Sent_Or_Any_Interest(
+        public async Task Then_Demands_Are_Returned(
             int courseId,
             uint courseDemandAgeInDays,
-            CourseDemand courseDemand1,
-            CourseDemand courseDemand2,
-            CourseDemand courseDemand3,
-            CourseDemand courseDemand4,
-            CourseDemand courseDemand5,
+            CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand2.CourseId = courseId;
-            courseDemand1.CourseId = courseDemand2.CourseId;
-            courseDemand3.CourseId = courseDemand2.CourseId;
-            courseDemand5.CourseId = courseDemand2.CourseId;
-            
-            courseDemand1.EmailVerified = true;
-            courseDemand1.DateEmailVerified = DateTime.UtcNow;
-            courseDemand1.ProviderInterests = new List<ProviderInterest>();
-            
-            courseDemand2.EmailVerified = true;
-            courseDemand2.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
-            courseDemand2.ProviderInterests = new List<ProviderInterest>();
-            courseDemand2.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
-            
-            courseDemand3.EmailVerified = true;
-            courseDemand3.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
-            courseDemand3.ProviderInterests = new List<ProviderInterest>();
-            courseDemand3.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>
-            {
-                new CourseDemandNotificationAudit
-                {
-                    Id = Guid.NewGuid(),
-                    CourseDemandId = courseDemand3.Id,
-                    DateCreated = DateTime.UtcNow,
-                    CourseDemand = courseDemand3
-                }
-            };
-            
-            courseDemand4.EmailVerified = false;
-            courseDemand4.DateEmailVerified = null;
-            courseDemand4.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = false;
 
-            courseDemand5.EmailVerified = true;
-            courseDemand5.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
-            courseDemand5.ProviderInterests = new List<ProviderInterest>();
-            courseDemand5.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
-            courseDemand5.Stopped = true;
-            
             mockDbContext
                 .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand1,courseDemand2,courseDemand3,courseDemand4, courseDemand5});
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
             
             //Act
             var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);
             
             //Assert
-            result.Should().BeEquivalentTo(new List<CourseDemand>{courseDemand2});
+            result.Should().BeEquivalentTo(new List<CourseDemand>{courseDemand});
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_Unverified_Demands_Not_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = false;
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = false;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);
+            
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_Demands_With_ProviderInterest_Not_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>{new ProviderInterest{Id = Guid.NewGuid()}};
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = false;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);
+            
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_Demands_With_NotificationAudit_Not_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>
+            {
+                new CourseDemandNotificationAudit
+                {
+                    Id = Guid.NewGuid(),
+                    CourseDemandId = courseDemand.Id,
+                    DateCreated = DateTime.UtcNow,
+                    CourseDemand = courseDemand
+                }
+            };
+            courseDemand.Stopped = false;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);
+            
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_Stopped_Demands_Not_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = true;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays);
+            
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task And_CourseId_Set_Then_Demands_Not_Matching_CourseId_Not_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId+1;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = false;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays, courseId);
+            
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task And_CourseId_Set_Then_Demands_Matching_CourseId_Are_Returned(
+            int courseId,
+            uint courseDemandAgeInDays,
+            CourseDemand courseDemand,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //arrange
+            courseDemand.CourseId = courseId;
+            courseDemand.EmailVerified = true;
+            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
+            courseDemand.ProviderInterests = new List<ProviderInterest>();
+            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
+            courseDemand.Stopped = false;
+
+            mockDbContext
+                .Setup(context => context.CourseDemands)
+                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
+            
+            //Act
+            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays, courseId);
+            
+            //Assert
+            result.Should().BeEquivalentTo(new List<CourseDemand>{courseDemand});
         }
     }
 }

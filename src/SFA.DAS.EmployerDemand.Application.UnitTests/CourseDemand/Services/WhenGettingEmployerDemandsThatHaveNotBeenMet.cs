@@ -16,12 +16,15 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Repository_Is_Called_And_Ids_Returned_Of_Demands_Not_Met_After_Inputted_Days(
             uint ageOfDemand,
+            int courseId,
             List<Domain.Entities.CourseDemand> demands,
             [Frozen] Mock<ICourseDemandRepository> repository,
             CourseDemandService service)
         {
             //Arrange
-            repository.Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand)).ReturnsAsync(demands);
+            repository
+                .Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand, null))//todo
+                .ReturnsAsync(demands);
             
             //Act
             var actual = await service.GetUnmetEmployerDemands(ageOfDemand);
