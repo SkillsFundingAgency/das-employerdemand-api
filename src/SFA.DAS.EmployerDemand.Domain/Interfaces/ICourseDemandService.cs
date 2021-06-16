@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<Guid?> VerifyCourseDemandEmail(Guid id);
         Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id);
         Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id);
-        Task<IEnumerable<Guid>> GetUnmetEmployerDemands(uint ageOfDemandInDays);
+        Task<IEnumerable<Guid>> GetUnmetEmployerDemands(uint ageOfDemandInDays, int? courseId = null);
         Task<Guid?> UpdateCourseDemand(Domain.Models.CourseDemand demand);
         Task<Domain.Models.CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId);
     }

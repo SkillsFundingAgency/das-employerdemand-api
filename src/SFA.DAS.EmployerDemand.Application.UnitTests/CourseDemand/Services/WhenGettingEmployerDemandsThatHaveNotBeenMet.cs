@@ -23,11 +23,11 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         {
             //Arrange
             repository
-                .Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand, null))//todo
+                .Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand, courseId))
                 .ReturnsAsync(demands);
             
             //Act
-            var actual = await service.GetUnmetEmployerDemands(ageOfDemand);
+            var actual = await service.GetUnmetEmployerDemands(ageOfDemand, courseId);
             
             //Assert
             actual.Should().BeEquivalentTo(demands.Select(c => c.Id));

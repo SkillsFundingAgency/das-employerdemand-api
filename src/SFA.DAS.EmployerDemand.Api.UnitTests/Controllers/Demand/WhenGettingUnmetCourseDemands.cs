@@ -19,16 +19,22 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         [Test, MoqAutoData]
         public async Task Then_Mediator_Is_Called_And_Data_Returned(
             uint numberOfDays,
+            int courseId,
             GetUnmetEmployerDemandsQueryResult result,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
         {
             //Arrange
-            mediator.Setup(x => x.Send(It.Is<GetUnmetEmployerDemandsQuery>(c=>c.AgeOfDemandInDays.Equals(numberOfDays)), It.IsAny<CancellationToken>()))
+            mediator
+                .Setup(x => x.Send(
+                    It.Is<GetUnmetEmployerDemandsQuery>(c=>
+                        c.AgeOfDemandInDays.Equals(numberOfDays)
+                        && c.CourseId.Equals(courseId)), 
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(result);
             
             //Act
-            var actual = await controller.GetUnmetCourseDemands(numberOfDays) as OkObjectResult;
+            var actual = await controller.GetUnmetCourseDemands(numberOfDays, courseId) as OkObjectResult;
             
             //Assert
             Assert.IsNotNull(actual);
@@ -39,6 +45,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         [Test, MoqAutoData]
         public async Task Then_If_There_Is_An_Exception_Then_Internal_Server_Error_Returned(
             uint numberOfDays,
+            int courseId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
         {
@@ -47,7 +54,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .ThrowsAsync(new Exception());
             
             //Act
-            var actual = await controller.GetUnmetCourseDemands(numberOfDays) as StatusCodeResult;
+            var actual = await controller.GetUnmetCourseDemands(numberOfDays, courseId) as StatusCodeResult;
             
             //Assert
             Assert.IsNotNull(actual);
