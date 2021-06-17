@@ -16,7 +16,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
             {
                 Id = source.Id,
                 CourseDemandId = source.CourseDemandId,
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                NotificationType = (short)source.NotificationType
             };
         }
     }
