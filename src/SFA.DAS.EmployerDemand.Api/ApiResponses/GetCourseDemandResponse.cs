@@ -13,7 +13,9 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
         public bool EmailVerified { get ; set ; }
         public string StopSharingUrl { get; set; }
         public bool Stopped { get; set; }
-        
+        public string StartSharingUrl { get ; set ; }
+        public Guid? ExpiredCourseDemandId { get ; set ; }
+
         public static implicit operator GetCourseDemandResponse(Domain.Models.CourseDemand source)
         {
             if (source == null)
@@ -31,7 +33,9 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
                 Location = source.Location,
                 Course = source.Course,
                 StopSharingUrl = source.StopSharingUrl,
-                Stopped = source.Stopped
+                Stopped = source.Stopped,
+                StartSharingUrl = source.StartSharingUrl,
+                ExpiredCourseDemandId = source.ExpiredCourseDemandId
             };
         }
     }

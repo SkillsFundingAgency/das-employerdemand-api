@@ -35,6 +35,30 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
+        public async Task<Guid?> UpdateCourseDemand(CourseDemand updateEntity)
+        {
+            var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(updateEntity.Id);
+            if (courseDemandEntity == null)
+            {
+                return null;
+            }
+            
+            if (updateEntity.Stopped && !courseDemandEntity.Stopped)
+            {
+                courseDemandEntity.DateStopped = DateTime.UtcNow;
+            }
+            
+            courseDemandEntity.Stopped = updateEntity.Stopped;
+            courseDemandEntity.OrganisationName = string.IsNullOrEmpty(updateEntity.OrganisationName)
+                ? courseDemandEntity.OrganisationName
+                : updateEntity.OrganisationName;
+            courseDemandEntity.ContactEmailAddress = string.IsNullOrEmpty(updateEntity.ContactEmailAddress)
+                ? courseDemandEntity.ContactEmailAddress
+                : updateEntity.ContactEmailAddress;
+            _dataContext.SaveChanges();
+            return updateEntity.Id;
+        }
+
         public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
             return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
@@ -122,6 +146,11 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<CourseDemand> GetCourseDemand(Guid id)
         {
             return await _dataContext.CourseDemands.FindAsync(id);
+        }
+
+        public async Task<CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId)
+        {
+            return await _dataContext.CourseDemands.SingleOrDefaultAsync(c => c.ExpiredCourseDemandId.Equals(expiredCourseDemandId));
         }
 
         public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays)

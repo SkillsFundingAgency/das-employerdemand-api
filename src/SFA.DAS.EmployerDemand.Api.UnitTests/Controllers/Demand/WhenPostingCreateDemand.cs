@@ -43,6 +43,8 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                     && c.CourseDemand.Location.Lat == request.Location.LocationPoint.GeoPoint.First()
                     && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()
                     && c.CourseDemand.StopSharingUrl == request.StopSharingUrl
+                    && c.CourseDemand.StartSharingUrl == request.StartSharingUrl
+                    && c.CourseDemand.ExpiredCourseDemandId == request.ExpiredCourseDemandId
                     ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
             
@@ -78,6 +80,30 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
             actual.Value.Should().BeEquivalentTo(new {response.Id});
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned_And_Conflict_Returned_If_Not_Created_False_And_Id_Is_Null(
+            Guid id,
+            CreateCourseDemandCommandResponse response,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            response.IsCreated = false;
+            response.Id = null;
+            mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
+                    c.CourseDemand.Id.Equals(id)
+                ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+            
+            //Act
+            var actual = await controller.CreateDemand(id, request) as StatusCodeResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Conflict);
         }
 
         [Test, MoqAutoData]

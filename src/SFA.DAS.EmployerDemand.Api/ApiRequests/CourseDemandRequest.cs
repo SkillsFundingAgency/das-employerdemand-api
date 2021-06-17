@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiRequests
@@ -10,6 +11,8 @@ namespace SFA.DAS.EmployerDemand.Api.ApiRequests
         public Course Course { get; set; }
         public Location Location { get; set; }
         public string StopSharingUrl { get; set; }
+        public string StartSharingUrl { get ; set ; }
+        public Guid? ExpiredCourseDemandId { get ; set ; }
     }
 
     public class Course

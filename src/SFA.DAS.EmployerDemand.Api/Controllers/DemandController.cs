@@ -11,10 +11,12 @@ using SFA.DAS.EmployerDemand.Api.ApiRequests;
 using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.StopCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemandByExpiredDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Models;
@@ -71,9 +73,17 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                             Lat = request.Location.LocationPoint.GeoPoint.First(),
                             Lon = request.Location.LocationPoint.GeoPoint.Last()
                         },
-                        StopSharingUrl = request.StopSharingUrl
+                        StopSharingUrl = request.StopSharingUrl,
+                        StartSharingUrl = request.StartSharingUrl,
+                        ExpiredCourseDemandId = request.ExpiredCourseDemandId
                     }
                 });
+                
+                if (!result.IsCreated && !result.Id.HasValue)
+                {
+                    return Conflict();
+                }
+                
                 if (result.IsCreated)
                 {
                     return Created("",new {result.Id});    
@@ -88,6 +98,35 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,"Unable to create course demand");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] PatchCourseDemandRequest request)
+        {
+            try
+            {
+                var result = await _mediator.Send(new PatchCourseDemandCommand
+                {
+                    Id = id,
+                    Stopped = request.Stopped ?? false,
+                    OrganisationName = request.OrganisationName,
+                    ContactEmailAddress = request.ContactEmailAddress,
+
+                });
+
+                if (result.Id == null)
+                {
+                    return NotFound();
+                }
+                
+                return Accepted("", new {result.Id});
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,"Unable to update course demand");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
@@ -193,6 +232,33 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,"Unable to verify course demand email");
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetEmployerCourseDemandByExpiredId([FromQuery]Guid expiredCourseDemandId)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetCourseDemandByExpiredDemandQuery()
+                {
+                    ExpiredCourseDemandId = expiredCourseDemandId
+                });
+
+                if (result.CourseDemand == null)
+                {
+                    return NotFound();
+                }
+
+                var model = (GetCourseDemandResponse) result.CourseDemand;
+
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Unable to get course demand by expired id {expiredCourseDemandId}");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }

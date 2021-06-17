@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             [Frozen] Mock<ICourseDemandService> service,
             CreateCourseDemandCommandHandler handler)
         {
+            command.CourseDemand.ExpiredCourseDemandId = null;
             validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult());
             service.Setup(x=>x.CreateDemand(command.CourseDemand)).ReturnsAsync(result);
             
@@ -32,6 +33,44 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             validator.Verify(x=>x.ValidateAsync(It.IsAny<CreateCourseDemandCommand>()), Times.Once);
             actual.Id.Should().Be(command.CourseDemand.Id);
             actual.IsCreated.Should().Be(result);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_The_Record_Is_Not_Created_And_The_ExpiredCourseDemandId_Is_Not_Populated_Then_Id_Returned(
+            CreateCourseDemandCommand command,
+            [Frozen] Mock<IValidator<CreateCourseDemandCommand>> validator,
+            [Frozen] Mock<ICourseDemandService> service,
+            CreateCourseDemandCommandHandler handler)
+        {
+            command.CourseDemand.ExpiredCourseDemandId = null;
+            validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult());
+            service.Setup(x=>x.CreateDemand(command.CourseDemand)).ReturnsAsync(false);
+            
+            var actual = await handler.Handle(command, CancellationToken.None);
+            
+            
+            validator.Verify(x=>x.ValidateAsync(It.IsAny<CreateCourseDemandCommand>()), Times.Once);
+            actual.Id.Should().Be(command.CourseDemand.Id);
+            actual.IsCreated.Should().BeFalse();
+        }
+        
+        [Test, MoqAutoData]
+        public async Task Then_If_The_Record_Is_Not_Created_And_The_ExpiredCourseDemandId_Is_Populated_Then_Null_Returned(
+            CreateCourseDemandCommand command,
+            [Frozen] Mock<IValidator<CreateCourseDemandCommand>> validator,
+            [Frozen] Mock<ICourseDemandService> service,
+            CreateCourseDemandCommandHandler handler)
+        {
+            command.CourseDemand.ExpiredCourseDemandId = Guid.NewGuid();
+            validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult());
+            service.Setup(x=>x.CreateDemand(command.CourseDemand)).ReturnsAsync(false);
+            
+            var actual = await handler.Handle(command, CancellationToken.None);
+            
+            
+            validator.Verify(x=>x.ValidateAsync(It.IsAny<CreateCourseDemandCommand>()), Times.Once);
+            actual.Id.Should().BeNull();
+            actual.IsCreated.Should().BeFalse();
         }
 
         [Test, MoqAutoData]

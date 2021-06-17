@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseD
 {
     public class CreateCourseDemandCommandResponse
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public bool IsCreated { get; set; }
     }
 }

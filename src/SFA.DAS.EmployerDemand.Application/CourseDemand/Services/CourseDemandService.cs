@@ -21,6 +21,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.Insert(courseDemand);
         }
 
+        public async Task<Guid?> UpdateCourseDemand(Domain.Models.CourseDemand demand)
+        {
+            return await _repository.UpdateCourseDemand(demand);
+        }
+
         public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
             return await _repository.EmployerDemandsExist(idsToCheck);
@@ -30,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         {
             return await _repository.TotalCourseDemands(ukprn);
         }
-        
+
         public async Task<IEnumerable<AggregatedCourseDemandSummary>> GetAggregatedCourseDemandList(int ukprn, int? courseId, double? lat, double? lon, int? radius, IList<string> routes)
         {
             var summaries = await _repository.GetAggregatedCourseDemandList(ukprn, courseId, lat, lon, radius, routes);
@@ -65,6 +70,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id)
         {
             return await _repository.GetCourseDemand(id);
+        }
+
+        public async Task<Domain.Models.CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId)
+        {
+            return await _repository.GetCourseDemandByExpiredId(expiredCourseDemandId);
         }
 
         public async Task<IEnumerable<Guid>> GetUnmetEmployerDemands(uint ageOfDemandInDays)
