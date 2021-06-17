@@ -313,7 +313,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpPost]
         [Route("{courseDemandId}/notification-audit/{id}")]
-        public async Task<IActionResult> CreateDemandNotificationAudit(Guid id, Guid courseDemandId)
+        public async Task<IActionResult> CreateDemandNotificationAudit( Guid id, Guid courseDemandId,
+            NotificationType notificationType)
         {
             try
             {
@@ -322,7 +323,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                     CourseDemandNotificationAudit = new CourseDemandNotificationAudit
                     {
                         Id = id,
-                        CourseDemandId = courseDemandId
+                        CourseDemandId = courseDemandId,
+                        NotificationType = notificationType
                     }
                 });
 
