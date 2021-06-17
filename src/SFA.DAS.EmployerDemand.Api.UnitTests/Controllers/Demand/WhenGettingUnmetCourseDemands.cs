@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.Testing.AutoFixture;
@@ -19,7 +21,6 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         [Test, MoqAutoData]
         public async Task Then_Mediator_Is_Called_And_Data_Returned(
             uint numberOfDays,
-            int courseId,
             GetUnmetEmployerDemandsQueryResult result,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
@@ -28,18 +29,20 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             mediator
                 .Setup(x => x.Send(
                     It.Is<GetUnmetEmployerDemandsQuery>(c=>
-                        c.AgeOfDemandInDays.Equals(numberOfDays)
-                        && c.CourseId.Equals(courseId)), 
+                        c.AgeOfDemandInDays.Equals(numberOfDays)), 
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(result);
             
             //Act
-            var actual = await controller.GetUnmetCourseDemands(numberOfDays, courseId) as OkObjectResult;
+            var actual = await controller.GetUnmetCourseDemands(numberOfDays) as OkObjectResult;
             
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
-            actual.Value.Should().BeEquivalentTo(new {result.EmployerDemandIds});
+            var actualModel = actual.Value as GetUnmetCourseDemandResponse;
+            Assert.IsNotNull(actualModel);
+            actualModel.UnmetCourseDemands.Select(c => c.Id).Should()
+                .BeEquivalentTo(result.EmployerDemands.Select(c => c.Id));
         }
 
         [Test, MoqAutoData]
@@ -54,7 +57,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .ThrowsAsync(new Exception());
             
             //Act
-            var actual = await controller.GetUnmetCourseDemands(numberOfDays, courseId) as StatusCodeResult;
+            var actual = await controller.GetUnmetCourseDemands(numberOfDays) as StatusCodeResult;
             
             //Assert
             Assert.IsNotNull(actual);

@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Services;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
+using SFA.DAS.EmployerDemand.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
@@ -27,10 +28,10 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
                 .ReturnsAsync(demands);
             
             //Act
-            var actual = await service.GetUnmetEmployerDemands(ageOfDemand, courseId);
+            var actual = await service.GetUnmetEmployerDemands(ageOfDemand);
             
             //Assert
-            actual.Should().BeEquivalentTo(demands.Select(c => c.Id));
+            actual.Should().BeEquivalentTo(demands.Select(c=>(Domain.Models.CourseDemand)c).ToList());
         }
     }
 }

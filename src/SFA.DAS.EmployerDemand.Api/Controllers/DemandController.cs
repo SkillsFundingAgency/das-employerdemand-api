@@ -292,17 +292,21 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpGet]
         [Route("unmet")]
-        public async Task<IActionResult> GetUnmetCourseDemands([FromQuery]uint ageOfDemandInDays, [FromQuery]int? courseId = null)
+        public async Task<IActionResult> GetUnmetCourseDemands([FromQuery]uint ageOfDemandInDays)
         {
             try
             {
                 var result = await _mediator.Send(new GetUnmetEmployerDemandsQuery
                 {
-                    AgeOfDemandInDays = ageOfDemandInDays,
-                    CourseId = courseId
+                    AgeOfDemandInDays = ageOfDemandInDays
                 });
 
-                return Ok(new { result.EmployerDemandIds });
+                var model = new GetUnmetCourseDemandResponse
+                {
+                    UnmetCourseDemands = result.EmployerDemands.Select(c=>(GetUnmetCourseDemand)c).ToList()
+                };
+                
+                return Ok(model);
             }
             catch (Exception e)
             {
