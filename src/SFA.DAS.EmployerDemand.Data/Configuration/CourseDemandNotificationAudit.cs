@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.CourseDemandId).HasColumnName("CourseDemandId").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.DateCreated).HasColumnName("DateCreated").HasColumnType("DateTime").IsRequired();
+            builder.Property(x => x.NotificationType).HasColumnName("NotificationType").HasColumnType("smallint").IsRequired();
         }
     }
 }

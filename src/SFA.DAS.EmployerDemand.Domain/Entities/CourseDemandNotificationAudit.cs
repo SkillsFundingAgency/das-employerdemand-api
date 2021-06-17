@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
         public Guid Id { get; set; }
         public Guid CourseDemandId { get; set; }
         public DateTime DateCreated { get; set; }
+        public short NotificationType { get; set; }
         public virtual CourseDemand CourseDemand { get ; set ; }
 
         public static explicit operator CourseDemandNotificationAudit(Models.CourseDemandNotificationAudit source)
