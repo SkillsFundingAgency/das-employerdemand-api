@@ -156,58 +156,5 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             result.Should().BeEmpty();
         }
 
-        [Test, RecursiveMoqAutoData]
-        public async Task And_CourseId_Set_Then_Demands_Not_Matching_CourseId_Not_Returned(
-            int courseId,
-            uint courseDemandAgeInDays,
-            CourseDemand courseDemand,
-            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
-            Data.Repository.CourseDemandRepository repository)
-        {
-            //arrange
-            courseDemand.CourseId = courseId+1;
-            courseDemand.EmailVerified = true;
-            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
-            courseDemand.ProviderInterests = new List<ProviderInterest>();
-            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
-            courseDemand.Stopped = false;
-
-            mockDbContext
-                .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
-            
-            //Act
-            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays, courseId);
-            
-            //Assert
-            result.Should().BeEmpty();
-        }
-
-        [Test, RecursiveMoqAutoData]
-        public async Task And_CourseId_Set_Then_Demands_Matching_CourseId_Are_Returned(
-            int courseId,
-            uint courseDemandAgeInDays,
-            CourseDemand courseDemand,
-            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
-            Data.Repository.CourseDemandRepository repository)
-        {
-            //arrange
-            courseDemand.CourseId = courseId;
-            courseDemand.EmailVerified = true;
-            courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
-            courseDemand.ProviderInterests = new List<ProviderInterest>();
-            courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
-            courseDemand.Stopped = false;
-
-            mockDbContext
-                .Setup(context => context.CourseDemands)
-                .ReturnsDbSet(new List<CourseDemand>{courseDemand});
-            
-            //Act
-            var result = await repository.GetCourseDemandsWithNoProviderInterest(courseDemandAgeInDays, courseId);
-            
-            //Assert
-            result.Should().BeEquivalentTo(new List<CourseDemand>{courseDemand});
-        }
     }
 }

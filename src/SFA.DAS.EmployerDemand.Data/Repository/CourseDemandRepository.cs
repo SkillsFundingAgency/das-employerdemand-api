@@ -153,7 +153,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return await _dataContext.CourseDemands.SingleOrDefaultAsync(c => c.ExpiredCourseDemandId.Equals(expiredCourseDemandId));
         }
 
-        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays, int? courseId = null)
+        public async Task<IEnumerable<CourseDemand>> GetCourseDemandsWithNoProviderInterest(uint courseDemandAgeInDays)
         {
             var courseDemands = await _dataContext.CourseDemands
                 .Where(c => c.EmailVerified)
@@ -162,13 +162,6 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 .Where(c => !c.ProviderInterests.Any())
                 .Where(c => !c.CourseDemandNotificationAudits.Any(x => x.DateCreated.Date >= x.CourseDemand.DateEmailVerified.Value.AddDays(courseDemandAgeInDays).Date))
                 .ToListAsync();
-
-            if (courseId.HasValue)
-            {
-                courseDemands = courseDemands
-                    .Where(demand => demand.CourseId == courseId)
-                    .ToList();
-            }
 
             return courseDemands;
         }

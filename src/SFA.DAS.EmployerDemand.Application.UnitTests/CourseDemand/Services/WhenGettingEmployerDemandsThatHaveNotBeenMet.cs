@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         {
             //Arrange
             repository
-                .Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand, courseId))
+                .Setup(x => x.GetCourseDemandsWithNoProviderInterest(ageOfDemand))
                 .ReturnsAsync(demands);
             
             //Act
