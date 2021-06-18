@@ -39,5 +39,4 @@ namespace SFA.DAS.EmployerDemand.Api.ApiResponses
             };
         }
     }
-
 }

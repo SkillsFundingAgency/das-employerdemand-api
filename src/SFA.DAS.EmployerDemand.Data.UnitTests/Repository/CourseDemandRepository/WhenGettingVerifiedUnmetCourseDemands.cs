@@ -15,14 +15,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
     {
         [Test, RecursiveMoqAutoData]
         public async Task Then_Demands_Are_Returned(
-            int courseId,
             uint courseDemandAgeInDays,
             CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.CourseId = courseId;
             courseDemand.EmailVerified = true;
             courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
             courseDemand.ProviderInterests = new List<ProviderInterest>();
@@ -42,14 +40,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
 
         [Test, RecursiveMoqAutoData]
         public async Task Then_Unverified_Demands_Not_Returned(
-            int courseId,
             uint courseDemandAgeInDays,
             CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.CourseId = courseId;
             courseDemand.EmailVerified = false;
             courseDemand.ProviderInterests = new List<ProviderInterest>();
             courseDemand.CourseDemandNotificationAudits = new List<CourseDemandNotificationAudit>();
@@ -67,15 +63,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task Then_Demands_With_ProviderInterest_Not_Returned(
-            int courseId,
-            uint courseDemandAgeInDays,
+        public async Task Then_Demands_With_ProviderInterest_Not_Returned(            uint courseDemandAgeInDays,
             CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.CourseId = courseId;
             courseDemand.EmailVerified = true;
             courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
             courseDemand.ProviderInterests = new List<ProviderInterest>{new ProviderInterest{Id = Guid.NewGuid()}};
@@ -95,14 +88,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
 
         [Test, RecursiveMoqAutoData]
         public async Task Then_Demands_With_NotificationAudit_Not_Returned(
-            int courseId,
             uint courseDemandAgeInDays,
             CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.CourseId = courseId;
             courseDemand.EmailVerified = true;
             courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
             courseDemand.ProviderInterests = new List<ProviderInterest>();
@@ -131,14 +122,12 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
 
         [Test, RecursiveMoqAutoData]
         public async Task Then_Stopped_Demands_Not_Returned(
-            int courseId,
             uint courseDemandAgeInDays,
             CourseDemand courseDemand,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
             Data.Repository.CourseDemandRepository repository)
         {
             //arrange
-            courseDemand.CourseId = courseId;
             courseDemand.EmailVerified = true;
             courseDemand.DateEmailVerified = DateTime.UtcNow.AddDays(-courseDemandAgeInDays--);
             courseDemand.ProviderInterests = new List<ProviderInterest>();
@@ -155,6 +144,5 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             //Assert
             result.Should().BeEmpty();
         }
-
     }
 }

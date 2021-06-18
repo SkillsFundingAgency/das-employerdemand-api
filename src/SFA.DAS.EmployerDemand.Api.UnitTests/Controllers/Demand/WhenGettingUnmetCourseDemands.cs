@@ -41,14 +41,13 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
             var actualModel = actual.Value as GetUnmetCourseDemandResponse;
             Assert.IsNotNull(actualModel);
-            actualModel.UnmetCourseDemands.Select(c => c.Id).Should()
-                .BeEquivalentTo(result.EmployerDemands.Select(c => c.Id));
+            actualModel.UnmetCourseDemands.Should()
+                .BeEquivalentTo(result.EmployerDemands.Select(c => (GetUnmetCourseDemand)c));
         }
 
         [Test, MoqAutoData]
         public async Task Then_If_There_Is_An_Exception_Then_Internal_Server_Error_Returned(
             uint numberOfDays,
-            int courseId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] DemandController controller)
         {
