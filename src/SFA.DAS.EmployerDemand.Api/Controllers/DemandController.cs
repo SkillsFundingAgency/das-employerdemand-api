@@ -301,7 +301,12 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                     AgeOfDemandInDays = ageOfDemandInDays
                 });
 
-                return Ok(new { result.EmployerDemandIds });
+                var model = new GetUnmetCourseDemandResponse
+                {
+                    UnmetCourseDemands = result.EmployerDemands.Select(c=>(GetUnmetCourseDemand)c).ToList()
+                };
+                
+                return Ok(model);
             }
             catch (Exception e)
             {
@@ -312,7 +317,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpPost]
         [Route("{courseDemandId}/notification-audit/{id}")]
-        public async Task<IActionResult> CreateDemandNotificationAudit(Guid id, Guid courseDemandId)
+        public async Task<IActionResult> CreateDemandNotificationAudit( Guid id, Guid courseDemandId,
+            NotificationType notificationType)
         {
             try
             {
@@ -321,7 +327,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                     CourseDemandNotificationAudit = new CourseDemandNotificationAudit
                     {
                         Id = id,
-                        CourseDemandId = courseDemandId
+                        CourseDemandId = courseDemandId,
+                        NotificationType = notificationType
                     }
                 });
 

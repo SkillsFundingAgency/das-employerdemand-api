@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmploy
 {
     public class GetUnmetEmployerDemandsQueryResult 
     {
-        public List<Guid> EmployerDemandIds { get ; set ; }
+        public List<Domain.Models.CourseDemand> EmployerDemands { get ; set ; }
     }
 }

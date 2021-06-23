@@ -11,6 +11,9 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
         [Test, AutoData]
         public void Then_The_Fields_Are_Mapped(CourseDemandNotificationAudit source)
         {
+            //Arrange
+            source.NotificationType = NotificationType.StoppedCourseClosed;
+            
             //Act
             var actual = (Domain.Entities.CourseDemandNotificationAudit) source;
             
@@ -18,6 +21,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             actual.Id.Should().Be(source.Id);
             actual.CourseDemandId.Should().Be(source.CourseDemandId);
             actual.DateCreated.Should().BeCloseTo(DateTime.UtcNow);
+            actual.NotificationType.Should().Be((short) source.NotificationType);
         }
     }
 }

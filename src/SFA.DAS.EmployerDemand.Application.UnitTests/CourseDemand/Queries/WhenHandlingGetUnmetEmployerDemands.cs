@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
+using SFA.DAS.EmployerDemand.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
@@ -16,18 +17,18 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
     {
         [Test, MoqAutoData]
         public async Task Then_The_Service_Is_Called_And_Ids_Returned_In_The_Response(
-            List<Guid> ids,
+            List<Domain.Models.CourseDemand> demands,
             GetUnmetEmployerDemandsQuery query,
             [Frozen] Mock<ICourseDemandService> service,
             GetUnmetEmployerDemandsQueryHandler handler)
         {
             //Arrange
-            service.Setup(x => x.GetUnmetEmployerDemands(query.AgeOfDemandInDays)).ReturnsAsync(ids);
+            service.Setup(x => x.GetUnmetEmployerDemands(query.AgeOfDemandInDays)).ReturnsAsync(demands);
             
             //Act
             var actual = await handler.Handle(query, CancellationToken.None);
 
-            actual.EmployerDemandIds.Should().BeEquivalentTo(ids);
+            actual.EmployerDemands.Should().BeEquivalentTo(demands);
         }
     }
 }

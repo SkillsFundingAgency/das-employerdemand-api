@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Api.Controllers;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.Testing.AutoFixture;
@@ -24,7 +26,11 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             [Greedy] DemandController controller)
         {
             //Arrange
-            mediator.Setup(x => x.Send(It.Is<GetUnmetEmployerDemandsQuery>(c=>c.AgeOfDemandInDays.Equals(numberOfDays)), It.IsAny<CancellationToken>()))
+            mediator
+                .Setup(x => x.Send(
+                    It.Is<GetUnmetEmployerDemandsQuery>(c=>
+                        c.AgeOfDemandInDays.Equals(numberOfDays)), 
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(result);
             
             //Act
@@ -33,7 +39,10 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
-            actual.Value.Should().BeEquivalentTo(new {result.EmployerDemandIds});
+            var actualModel = actual.Value as GetUnmetCourseDemandResponse;
+            Assert.IsNotNull(actualModel);
+            actualModel.UnmetCourseDemands.Should()
+                .BeEquivalentTo(result.EmployerDemands.Select(c => (GetUnmetCourseDemand)c));
         }
 
         [Test, MoqAutoData]

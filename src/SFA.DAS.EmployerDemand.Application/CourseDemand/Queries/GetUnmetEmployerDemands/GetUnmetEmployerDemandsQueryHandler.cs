@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmploy
 
             return new GetUnmetEmployerDemandsQueryResult
             {
-                EmployerDemandIds = result.ToList()
+                EmployerDemands = result.ToList()
             };
         }
     }
