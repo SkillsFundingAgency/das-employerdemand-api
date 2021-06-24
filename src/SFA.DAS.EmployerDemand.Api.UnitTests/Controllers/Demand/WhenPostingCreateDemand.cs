@@ -30,6 +30,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
         {
             //Arrange
             response.IsCreated = true;
+            request.EntryPoint = EntryPoint.CourseDetail;
             mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
                     c.CourseDemand.Id.Equals(id)
                     && c.CourseDemand.OrganisationName.Equals(request.OrganisationName)
@@ -45,6 +46,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                     && c.CourseDemand.StopSharingUrl == request.StopSharingUrl
                     && c.CourseDemand.StartSharingUrl == request.StartSharingUrl
                     && c.CourseDemand.ExpiredCourseDemandId == request.ExpiredCourseDemandId
+                    && c.CourseDemand.EntryPoint == (short)request.EntryPoint
                     ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
             
