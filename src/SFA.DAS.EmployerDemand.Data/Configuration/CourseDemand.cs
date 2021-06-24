@@ -28,6 +28,7 @@ namespace SFA.DAS.EmployerDemand.Data.Configuration
             builder.Property(x => x.Stopped).HasColumnName("Stopped").HasColumnType("bit").IsRequired();
             builder.Property(x => x.DateStopped).HasColumnName("DateStopped").HasColumnType("datetime").IsRequired(false);
             builder.Property(x => x.ExpiredCourseDemandId).HasColumnName("ExpiredCourseDemandId").HasColumnType("uniqueidentifier").IsRequired(false);
+            builder.Property(x => x.EntryPoint).HasColumnName("EntryPoint").HasColumnType("smallint").IsRequired(false);
             
             builder.HasIndex(x => x.Id).IsUnique();
             

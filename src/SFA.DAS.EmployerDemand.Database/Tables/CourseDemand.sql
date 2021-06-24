@@ -18,7 +18,8 @@ CREATE TABLE [dbo].[CourseDemand]
     [Stopped] BIT NOT NULL DEFAULT 0,
     [DateStopped] DATETIME NULL,
     [StartSharingUrl] VARCHAR(1000) NOT NULL,
-    [ExpiredCourseDemandId] UNIQUEIDENTIFIER NULL
+    [ExpiredCourseDemandId] UNIQUEIDENTIFIER NULL,
+    [EntryPoint] SMALLINT NULL 
 )
 GO
 
