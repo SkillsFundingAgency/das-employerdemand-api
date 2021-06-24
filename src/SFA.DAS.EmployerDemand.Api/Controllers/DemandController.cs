@@ -39,13 +39,6 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             _logger = logger;
         }
         
-        [HttpGet]
-        [Route("show")]
-        public IActionResult ShowDemand()
-        {
-            return Ok();
-        }
-
         [HttpPost]
         [Route("{id}")]
         public async Task<IActionResult> CreateDemand([FromRoute] Guid id, [FromBody] CourseDemandRequest request)
