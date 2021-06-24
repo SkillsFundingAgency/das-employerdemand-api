@@ -50,7 +50,8 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 StopSharingUrl = source.StopSharingUrl,
                 StartSharingUrl = source.StartSharingUrl,
                 ExpiredCourseDemandId = source.ExpiredCourseDemandId,
-                Stopped = source.Stopped
+                Stopped = source.Stopped,
+                EntryPoint = source.EntryPoint
             };
         }
     }
