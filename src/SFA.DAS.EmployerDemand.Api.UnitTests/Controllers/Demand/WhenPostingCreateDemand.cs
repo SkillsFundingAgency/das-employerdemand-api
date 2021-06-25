@@ -59,6 +59,45 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             actual.Value.Should().BeEquivalentTo(new {response.Id});
 
         }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_The_EntryPoint_Is_Not_Valid_Null_Is_Set(
+            Guid id,
+            CreateCourseDemandCommandResponse response,
+            CourseDemandRequest request,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] DemandController controller)
+        {
+            //Arrange
+            response.IsCreated = true;
+            request.EntryPoint = (EntryPoint)10;
+            mediator.Setup(x => x.Send(It.Is<CreateCourseDemandCommand>( c=> 
+                    c.CourseDemand.Id.Equals(id)
+                    && c.CourseDemand.OrganisationName.Equals(request.OrganisationName)
+                    && c.CourseDemand.ContactEmailAddress.Equals(request.ContactEmailAddress)
+                    && c.CourseDemand.NumberOfApprentices.Equals(request.NumberOfApprentices)
+                    && c.CourseDemand.Course.Id.Equals(request.Course.Id)
+                    && c.CourseDemand.Course.Title.Equals(request.Course.Title)
+                    && c.CourseDemand.Course.Level.Equals(request.Course.Level)
+                    && c.CourseDemand.Course.Route.Equals(request.Course.Route)
+                    && c.CourseDemand.Location.Name.Equals(request.Location.Name)
+                    && c.CourseDemand.Location.Lat == request.Location.LocationPoint.GeoPoint.First()
+                    && c.CourseDemand.Location.Lon == request.Location.LocationPoint.GeoPoint.Last()
+                    && c.CourseDemand.StopSharingUrl == request.StopSharingUrl
+                    && c.CourseDemand.StartSharingUrl == request.StartSharingUrl
+                    && c.CourseDemand.ExpiredCourseDemandId == request.ExpiredCourseDemandId
+                    && c.CourseDemand.EntryPoint == null
+                ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+            
+            //Act
+            var actual = await controller.CreateDemand(id, request) as CreatedResult;
+            
+            //Assert
+            Assert.IsNotNull(actual);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
+            actual.Value.Should().BeEquivalentTo(new {response.Id});
+        }
         
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Sent_To_Mediator_And_Response_Returned_And_If_Not_Created_Accepted_Returned(
