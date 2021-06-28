@@ -49,12 +49,8 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             }
             
             courseDemandEntity.Stopped = updateEntity.Stopped;
-            courseDemandEntity.OrganisationName = string.IsNullOrEmpty(updateEntity.OrganisationName)
-                ? courseDemandEntity.OrganisationName
-                : updateEntity.OrganisationName;
-            courseDemandEntity.ContactEmailAddress = string.IsNullOrEmpty(updateEntity.ContactEmailAddress)
-                ? courseDemandEntity.ContactEmailAddress
-                : updateEntity.ContactEmailAddress;
+            courseDemandEntity.OrganisationName = updateEntity.OrganisationName ?? courseDemandEntity.OrganisationName;
+            courseDemandEntity.ContactEmailAddress = updateEntity.ContactEmailAddress ?? courseDemandEntity.ContactEmailAddress;
             _dataContext.SaveChanges();
             return updateEntity.Id;
         }
