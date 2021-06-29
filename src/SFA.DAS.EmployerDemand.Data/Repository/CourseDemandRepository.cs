@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<Guid?> UpdateCourseDemand(CourseDemand updateEntity)
+        public async Task<CourseDemand> UpdateCourseDemand(CourseDemand updateEntity)
         {
             var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(updateEntity.Id);
             if (courseDemandEntity == null)
@@ -56,7 +56,34 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 ? courseDemandEntity.ContactEmailAddress
                 : updateEntity.ContactEmailAddress;
             _dataContext.SaveChanges();
-            return updateEntity.Id;
+
+            return new CourseDemand
+            {
+                ContactEmailAddress = updateEntity.ContactEmailAddress ?? courseDemandEntity.ContactEmailAddress,
+                CourseDemandNotificationAudits = updateEntity.CourseDemandNotificationAudits ??
+                                                 courseDemandEntity.CourseDemandNotificationAudits,
+                CourseId = updateEntity.CourseId,
+                CourseLevel = updateEntity.CourseLevel,
+                CourseRoute = updateEntity.CourseRoute ?? courseDemandEntity.CourseRoute,
+                CourseTitle = updateEntity.CourseTitle ?? courseDemandEntity.CourseTitle,
+                DateCreated = updateEntity.DateCreated,
+                DateEmailVerified = updateEntity.DateEmailVerified,
+                DateStopped = updateEntity.DateStopped ?? courseDemandEntity.DateStopped,
+                EmailVerified = updateEntity.EmailVerified,
+                EntryPoint = updateEntity.EntryPoint,
+                ExpiredCourseDemand = updateEntity.ExpiredCourseDemand ?? courseDemandEntity.ExpiredCourseDemand,
+                ExpiredCourseDemandId = updateEntity.ExpiredCourseDemandId ?? courseDemandEntity.ExpiredCourseDemandId,
+                Id = updateEntity.Id,
+                Lat = updateEntity.Lat,
+                Long = updateEntity.Long,
+                LocationName = updateEntity.LocationName ?? courseDemandEntity.LocationName,
+                NumberOfApprentices = updateEntity.NumberOfApprentices,
+                OrganisationName = updateEntity.OrganisationName ?? courseDemandEntity.OrganisationName,
+                ProviderInterests = updateEntity.ProviderInterests ?? courseDemandEntity.ProviderInterests,
+                StartSharingUrl = updateEntity.StartSharingUrl ?? courseDemandEntity.StartSharingUrl,
+                StopSharingUrl = updateEntity.StopSharingUrl ?? courseDemandEntity.StopSharingUrl,
+                Stopped = updateEntity.Stopped
+            };
         }
 
         public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)

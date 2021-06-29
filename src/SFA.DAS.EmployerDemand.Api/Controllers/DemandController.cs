@@ -12,7 +12,6 @@ using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.StopCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
@@ -118,12 +117,12 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
                 });
 
-                if (result.Id == null)
+                if (result.CourseDemand == null)
                 {
                     return NotFound();
                 }
                 
-                return Accepted("", new {result.Id});
+                return Accepted("", new {result.CourseDemand});
             }
             catch (Exception e)
             {
@@ -203,32 +202,6 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 }
 
                 return Accepted("", new {result.Id});
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,"Unable to verify course demand email");
-                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/stop")]
-        public async Task<IActionResult> StopEmployerDemand(Guid id)
-        {
-            try
-            {
-                var result = await _mediator.Send(new StopCourseDemandCommand
-                {
-                    Id = id
-                });
-
-                if (result.CourseDemand == null)
-                {
-                    return NotFound();
-                }
-
-                var model = (GetCourseDemandResponse) result.CourseDemand;
-                return Ok(model);
             }
             catch (Exception e)
             {

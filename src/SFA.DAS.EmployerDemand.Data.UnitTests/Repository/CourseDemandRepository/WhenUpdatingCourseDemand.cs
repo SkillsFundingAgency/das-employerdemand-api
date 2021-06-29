@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().Be(courseDemandEntity.Id);
+            actual.Should().BeEquivalentTo(updateEntity, c => c.Excluding(o => o.ContactEmailAddress));
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.ContactEmailAddress.Should().Be(courseDemandEntity.ContactEmailAddress);
             courseDemandEntity.OrganisationName.Should().Be(orgName);
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().Be(courseDemandEntity.Id);
+            actual.Should().BeEquivalentTo(updateEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow);
         }
@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().Be(courseDemandEntity.Id);
+            actual.Should().BeEquivalentTo(updateEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.DateStopped.Should().Be(stoppedDate);
         }
