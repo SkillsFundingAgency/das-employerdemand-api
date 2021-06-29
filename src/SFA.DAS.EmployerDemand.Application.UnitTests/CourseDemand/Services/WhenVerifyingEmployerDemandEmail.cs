@@ -6,8 +6,6 @@ using SFA.DAS.EmployerDemand.Application.CourseDemand.Services;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.Testing.AutoFixture;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services

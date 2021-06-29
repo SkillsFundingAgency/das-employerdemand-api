@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net.Mail;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
 using SFA.DAS.EmployerDemand.Domain.Validation;

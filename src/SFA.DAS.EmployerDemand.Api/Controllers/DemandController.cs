@@ -52,6 +52,13 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
         {
             try
             {
+                short? entryPoint = null;
+                
+                if (request.EntryPoint.HasValue && Enum.IsDefined(typeof(EntryPoint), request.EntryPoint.Value))
+                {
+                    entryPoint = (short) request.EntryPoint.Value;
+                }
+                
                 var result = await _mediator.Send(new CreateCourseDemandCommand
                 {
                     CourseDemand = new CourseDemand
@@ -75,7 +82,8 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                         },
                         StopSharingUrl = request.StopSharingUrl,
                         StartSharingUrl = request.StartSharingUrl,
-                        ExpiredCourseDemandId = request.ExpiredCourseDemandId
+                        ExpiredCourseDemandId = request.ExpiredCourseDemandId,
+                        EntryPoint = entryPoint
                     }
                 });
                 
