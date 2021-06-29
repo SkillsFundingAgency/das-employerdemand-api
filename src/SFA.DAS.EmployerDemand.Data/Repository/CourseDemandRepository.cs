@@ -199,7 +199,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                             Id,
                             courseId,
                             geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                        from CourseDemand) as dist on dist.Id = cd.Id and cd.EmailVerified = 1 and ({radius} is null or (DistanceInMiles < {radius}))
+                        from CourseDemand) as dist on dist.Id = cd.Id and cd.EmailVerified = 1 and cd.stopped = 0 and ({radius} is null or (DistanceInMiles < {radius}))
                     where pi.Ukprn is null
                     Group by cd.CourseId) derv on derv.CourseId = c.CourseId
                     Where ({courseId} is null or c.CourseId = {courseId})
@@ -232,7 +232,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                         Id,
                         courseId,
                         geography::Point(isnull(Lat,0), isnull(Long,0), 4326).STDistance(geography::Point(isnull({lat},0), isnull({lon},0), 4326)) * 0.0006213712 as DistanceInMiles
-                    from CourseDemand where EmailVerified=1) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
+                    from CourseDemand where EmailVerified=1 and Stopped = 0) as dist on dist.Id = c.Id and ({radius} is null or (DistanceInMiles < {radius}))
                 Where c.CourseId = {courseId} 
                 and c.EmailVerified = 1
                 and c.Stopped = 0

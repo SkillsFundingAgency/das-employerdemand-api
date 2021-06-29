@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.ApiResponses
             actual.Should().BeEquivalentTo(source, options=> options
                 .Excluding(c=>c.Location.Lat)
                 .Excluding(c=>c.Location.Lon)
+                .Excluding(c=>c.EntryPoint)
             );
         }
 
