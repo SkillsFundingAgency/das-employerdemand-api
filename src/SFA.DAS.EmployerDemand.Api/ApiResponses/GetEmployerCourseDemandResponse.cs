@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiResponses

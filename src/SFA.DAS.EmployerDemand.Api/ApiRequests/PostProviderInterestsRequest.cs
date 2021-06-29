@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
 namespace SFA.DAS.EmployerDemand.Api.ApiRequests

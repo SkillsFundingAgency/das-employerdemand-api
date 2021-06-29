@@ -3,10 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Testing.AutoFixture;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock;
 using SFA.DAS.EmployerDemand.Domain.Entities;
 using FluentAssertions;
 
