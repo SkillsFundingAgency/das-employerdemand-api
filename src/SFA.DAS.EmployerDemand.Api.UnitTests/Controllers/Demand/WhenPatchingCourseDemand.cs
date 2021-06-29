@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
-            actual.Value.Should().BeEquivalentTo(new { response.CourseDemand });
+            actual.Value.Should().BeEquivalentTo(new { response.Id });
         }
         
         [Test, MoqAutoData]
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             //Assert
             Assert.IsNotNull(actual);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
-            actual.Value.Should().BeEquivalentTo(new { response.CourseDemand });
+            actual.Value.Should().BeEquivalentTo(new { response.Id });
         }
 
         [Test, MoqAutoData]
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             mediator.Setup(x => x.Send(It.IsAny<PatchCourseDemandCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new PatchCourseDemandCommandResponse
                 {
-                    CourseDemand = null
+                    Id = null
                 });
             
             //Act

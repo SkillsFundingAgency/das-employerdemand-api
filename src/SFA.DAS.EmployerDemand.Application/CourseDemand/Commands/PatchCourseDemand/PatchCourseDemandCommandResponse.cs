@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDe
 {
     public class PatchCourseDemandCommandResponse
     {
-        public Domain.Models.CourseDemand CourseDemand { get; set; }
+        public Guid? Id { get; set; }
     }
 }

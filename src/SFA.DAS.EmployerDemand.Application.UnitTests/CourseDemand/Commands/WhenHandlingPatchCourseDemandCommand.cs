@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
     {
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Service_Called(
-            Domain.Models.CourseDemand result,
+            Guid? result,
             Domain.Models.CourseDemand courseDemand,
             PatchCourseDemandCommand command,
             [Frozen] Mock<ICourseDemandService> service,
@@ -32,11 +32,12 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             var actual = await handler.Handle(command, CancellationToken.None);
             
             //Assert
-            actual.CourseDemand.Should().Be(result);
+            actual.Id.Should().Be(result);
         }
 
         [Test, MoqAutoData]
         public async Task Then_If_The_Demand_Does_Not_Exist_Null_Returned(
+            Guid? result,
             PatchCourseDemandCommand command,
             [Frozen] Mock<ICourseDemandService> service,
             PatchCourseDemandCommandHandler handler)
@@ -48,7 +49,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
             var actual = await handler.Handle(command, CancellationToken.None);
             
             //Assert
-            actual.Should().BeEquivalentTo(new PatchCourseDemandCommandResponse());
+            actual.Id.Should().BeNull();
             service.Verify(x=>x.UpdateCourseDemand(It.IsAny<Domain.Models.CourseDemand>()), Times.Never);
         }
     }

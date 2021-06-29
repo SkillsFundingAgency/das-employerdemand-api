@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
             return await _repository.Insert(courseDemand);
         }
 
-        public async Task<Domain.Models.CourseDemand> UpdateCourseDemand(Domain.Models.CourseDemand demand)
+        public async Task<Guid?> UpdateCourseDemand(Domain.Models.CourseDemand demand)
         {
             return await _repository.UpdateCourseDemand(demand);
         }
@@ -46,6 +46,11 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
         public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
         {
             return await _repository.VerifyCourseDemandEmail(id);
+        }
+
+        public async Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id)
+        {
+            return await _repository.StopCourseDemand(id);
         }
 
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
