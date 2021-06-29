@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
             actual.Should().BeEquivalentTo(updateEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
-            courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow);
+            courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
         }
         [Test, RecursiveMoqAutoData]
         public async Task Then_If_Stopped_Is_True_And_Updated_From_False_Then_The_Date_Is_Not_Updated(

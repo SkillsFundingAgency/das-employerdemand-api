@@ -66,6 +66,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
                 DateEmailVerified = updateEntity.DateEmailVerified,
                 DateStopped = updateEntity.DateStopped ?? courseDemandEntity.DateStopped,
                 EmailVerified = updateEntity.EmailVerified,
+                EntryPoint = updateEntity.EntryPoint,
                 ExpiredCourseDemand = updateEntity.ExpiredCourseDemand ?? courseDemandEntity.ExpiredCourseDemand,
                 ExpiredCourseDemandId = updateEntity.ExpiredCourseDemandId ?? courseDemandEntity.ExpiredCourseDemandId,
                 Id = updateEntity.Id,
