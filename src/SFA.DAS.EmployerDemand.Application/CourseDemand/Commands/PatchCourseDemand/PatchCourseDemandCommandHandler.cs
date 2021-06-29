@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDe
             {
                 return new PatchCourseDemandCommandResponse
                 {
-                    Id = null
+                    CourseDemand = null
                 };
             }
             
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDe
 
             return new PatchCourseDemandCommandResponse
             {
-                Id = result
+                CourseDemand = result
             };
         }
     }
