@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().BeEquivalentTo(updateEntity, c => c.Excluding(o => o.ContactEmailAddress));
+            actual.Should().BeEquivalentTo(courseDemandEntity, c => c.Excluding(o => o.ContactEmailAddress));
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.ContactEmailAddress.Should().Be(courseDemandEntity.ContactEmailAddress);
             courseDemandEntity.OrganisationName.Should().Be(orgName);
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().BeEquivalentTo(updateEntity);
+            actual.Should().BeEquivalentTo(courseDemandEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
             courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
         }
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         public async Task Then_If_Stopped_Is_True_And_Updated_From_False_Then_The_Date_Is_Not_Updated(
             Guid id,
             string orgName,
-            DateTime stoppedDate,
+            DateTime dateVerified,
             CourseDemand updateEntity,
             CourseDemand courseDemandEntity,
             [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
         {
             //Arrange
             courseDemandEntity.Id = id;
-            courseDemandEntity.DateStopped = stoppedDate;
+            courseDemandEntity.DateStopped = dateVerified;
             courseDemandEntity.Stopped = true;
             updateEntity.Id = id;
             updateEntity.Stopped = true;
@@ -112,9 +112,66 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             
             //Assert
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
-            actual.Should().BeEquivalentTo(updateEntity);
+            actual.Should().BeEquivalentTo(courseDemandEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
-            courseDemandEntity.DateStopped.Should().Be(stoppedDate);
+            courseDemandEntity.DateStopped.Should().Be(dateVerified);
+        }
+        
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_EmailVerified_Is_True_And_Updated_From_False_Then_The_Date_Is_Populated(
+            Guid id,
+            string orgName,
+            CourseDemand updateEntity,
+            CourseDemand courseDemandEntity,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //Arrange
+            courseDemandEntity.Id = id;
+            courseDemandEntity.EmailVerified = false;
+            updateEntity.Id = id;
+            updateEntity.EmailVerified = true;
+            updateEntity.OrganisationName = orgName;
+            mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
+                .ReturnsAsync(courseDemandEntity);
+            
+            //Act
+            var actual = await repository.UpdateCourseDemand(updateEntity);
+            
+            //Assert
+            mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
+            actual.Should().BeEquivalentTo(courseDemandEntity);
+            courseDemandEntity.EmailVerified.Should().BeTrue();
+            courseDemandEntity.DateEmailVerified.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+        }
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_EmailVerified_Is_True_And_Updated_From_False_Then_The_Date_Is_Not_Updated(
+            Guid id,
+            string orgName,
+            DateTime dateVerified,
+            CourseDemand updateEntity,
+            CourseDemand courseDemandEntity,
+            [Frozen] Mock<IEmployerDemandDataContext> mockDbContext,
+            Data.Repository.CourseDemandRepository repository)
+        {
+            //Arrange
+            courseDemandEntity.Id = id;
+            courseDemandEntity.DateEmailVerified = dateVerified;
+            courseDemandEntity.EmailVerified = true;
+            updateEntity.Id = id;
+            updateEntity.EmailVerified = true;
+            updateEntity.OrganisationName = orgName;
+            mockDbContext.Setup(x => x.CourseDemands.FindAsync(id))
+                .ReturnsAsync(courseDemandEntity);
+            
+            //Act
+            var actual = await repository.UpdateCourseDemand(updateEntity);
+            
+            //Assert
+            mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
+            actual.Should().BeEquivalentTo(courseDemandEntity);
+            courseDemandEntity.EmailVerified.Should().BeTrue();
+            courseDemandEntity.DateEmailVerified.Should().Be(dateVerified);
         }
     }
 }
