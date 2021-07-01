@@ -13,7 +13,6 @@ using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemandByExpiredDemand;
@@ -190,31 +189,6 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             };
             
             return Ok(response);
-        }
-
-        [HttpPost]
-        [Route("{id}/verify-email")]
-        public async Task<IActionResult> VerifyEmployerDemandEmail(Guid id)
-        {
-            try
-            {
-                var result = await _mediator.Send(new VerifyCourseDemandEmailCommand
-                {
-                    Id = id
-                });
-
-                if (result.Id == null)
-                {
-                    return NotFound();
-                }
-
-                return Accepted("", new {result.Id});
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,"Unable to verify course demand email");
-                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-            }
         }
 
         [HttpGet]

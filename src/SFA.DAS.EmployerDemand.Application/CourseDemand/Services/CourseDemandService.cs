@@ -43,11 +43,6 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
                 .Select(group => (AggregatedCourseDemandSummary) group);
         }
 
-        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
-        {
-            return await _repository.VerifyCourseDemandEmail(id);
-        }
-
         public async Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius)
         {
             var summaries = await _repository.GetAggregatedCourseDemandListByCourse(ukprn, courseId, lat, lon, radius);

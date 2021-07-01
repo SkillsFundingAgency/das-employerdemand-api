@@ -67,20 +67,6 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
         }
 
-        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
-        {
-            var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
-            if (courseDemandEntity == null)
-            {
-                return null;
-            }
-
-            courseDemandEntity.EmailVerified = true;
-            courseDemandEntity.DateEmailVerified = DateTime.UtcNow;
-            _dataContext.SaveChanges();
-            return id;
-        }
-
         public async Task<CourseDemand> StopCourseDemand(Guid id)
         {
             var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
