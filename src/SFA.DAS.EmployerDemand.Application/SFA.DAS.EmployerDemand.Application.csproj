@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <Folder Include="CourseDemand\Queries\GetAggregatedCourseDemandList\" />
+      <Folder Include="CourseDemand\Queries\GetEmployerDemandsOlderThan3Years\" />
     </ItemGroup>
 
 
