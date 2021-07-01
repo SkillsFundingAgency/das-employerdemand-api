@@ -24,10 +24,15 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDe
                     CourseDemand = null
                 };
             }
+
+            var patchedDemand = (Domain.Models.PatchCourseDemand) demand;
             
-            demand.OrganisationName = request.OrganisationName;
-            demand.ContactEmailAddress = request.ContactEmailAddress;
-            demand.Stopped = request.Stopped;
+            request.Patch.ApplyTo(patchedDemand);
+
+            demand.OrganisationName = patchedDemand.OrganisationName;
+            demand.ContactEmailAddress = patchedDemand.ContactEmailAddress;
+            demand.Stopped = patchedDemand.Stopped;
+            demand.EmailVerified = patchedDemand.EmailVerified;
             
             var result = await _service.UpdateCourseDemand(demand);
 

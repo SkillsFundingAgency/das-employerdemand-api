@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -29,8 +28,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             var actual = await service.UpdateCourseDemand(demand);
             
             //Assert
-            actual.Should().BeEquivalentTo(response, c => c.Excluding(o => o.EmailVerified));
-            actual.EmailVerified.Should().BeFalse();
+            actual.Should().BeEquivalentTo(response);
         }
         
     }
