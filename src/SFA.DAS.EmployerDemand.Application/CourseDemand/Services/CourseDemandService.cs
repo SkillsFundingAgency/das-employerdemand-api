@@ -83,5 +83,12 @@ namespace SFA.DAS.EmployerDemand.Application.CourseDemand.Services
 
             return demands.Select(c=>(Domain.Models.CourseDemand)c);
         }
+
+        public async Task<IEnumerable<Domain.Models.CourseDemand>> GetDemandsOlderThan3Years()
+        {
+            var demands = await _repository.GetDemandsOlderThan3Years();
+
+            return demands.Select(c=>(Domain.Models.CourseDemand)c);
+        }
     }
 }
