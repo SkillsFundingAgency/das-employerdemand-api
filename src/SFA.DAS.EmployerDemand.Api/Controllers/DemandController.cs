@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
@@ -111,17 +112,14 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] PatchCourseDemandRequest request)
+        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] JsonPatchDocument<PatchCourseDemand> request)
         {
             try
             {
                 var result = await _mediator.Send(new PatchCourseDemandCommand
                 {
                     Id = id,
-                    Stopped = request.Stopped ?? false,
-                    OrganisationName = request.OrganisationName,
-                    ContactEmailAddress = request.ContactEmailAddress,
-
+                    Patch = request
                 });
 
                 if (result.CourseDemand == null)
@@ -129,7 +127,9 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                     return NotFound();
                 }
                 
-                return Accepted("", new {result.CourseDemand});
+                var model = (GetCourseDemandResponse) result.CourseDemand;
+
+                return Accepted("", model);
             }
             catch (Exception e)
             {
