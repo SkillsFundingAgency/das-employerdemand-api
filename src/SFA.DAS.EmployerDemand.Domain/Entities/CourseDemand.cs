@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerDemand.Domain.Entities
                 ContactEmailAddress = source.ContactEmailAddress,
                 OrganisationName = source.OrganisationName,
                 NumberOfApprentices = source.NumberOfApprentices,
-                EmailVerified = false,
+                EmailVerified = source.EmailVerified,
                 Lat = source.Location.Lat,
                 Long = source.Location.Lon,
                 LocationName = source.Location.Name,
