@@ -165,7 +165,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         public async Task<IEnumerable<CourseDemand>> GetDemandsOlderThan3Years()
         {
             var courseDemands = await _dataContext.CourseDemands
-                .Where(demand => demand.DateCreated.Date > DateTime.Today.AddYears(3))
+                .Where(demand => demand.DateCreated.Date < DateTime.Today.AddYears(-3))
                 .ToListAsync();
 
             return courseDemands;

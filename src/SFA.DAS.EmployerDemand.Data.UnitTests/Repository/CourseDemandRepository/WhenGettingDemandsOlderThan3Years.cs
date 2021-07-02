@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             //Arrange
             foreach (var courseDemand in courseDemandEntities)
             {
-                courseDemand.DateCreated = DateTime.UtcNow.AddYears(4);
+                courseDemand.DateCreated = DateTime.UtcNow.AddYears(-4);
             }
             mockDbContext.Setup(context => context.CourseDemands)
                 .ReturnsDbSet(courseDemandEntities);
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             //Arrange
             foreach (var courseDemand in courseDemandEntities)
             {
-                courseDemand.DateCreated = DateTime.UtcNow.AddYears(2);
+                courseDemand.DateCreated = DateTime.UtcNow.AddYears(-2);
             }
             mockDbContext.Setup(context => context.CourseDemands)
                 .ReturnsDbSet(courseDemandEntities);
