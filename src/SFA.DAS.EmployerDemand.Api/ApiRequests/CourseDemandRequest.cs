@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerDemand.Api.ApiRequests
         public string StopSharingUrl { get; set; }
         public string StartSharingUrl { get ; set ; }
         public Guid? ExpiredCourseDemandId { get ; set ; }
+        public EntryPoint? EntryPoint { get; set; }
     }
 
     public class Course
@@ -32,5 +33,13 @@ namespace SFA.DAS.EmployerDemand.Api.ApiRequests
     public class LocationPoint
     {
         public List<double> GeoPoint { get; set; }
+    }
+
+    public enum EntryPoint
+    {
+        Shortlist = 0,
+        CourseDetail = 1,
+        Providers = 2,
+        ProviderDetail = 3
     }
 }

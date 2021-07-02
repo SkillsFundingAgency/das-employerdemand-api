@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Interfaces;
-using SFA.DAS.EmployerDemand.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Queries
