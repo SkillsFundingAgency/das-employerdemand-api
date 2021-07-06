@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
     public class WhenPatchingCourseDemand
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Accepted_Returned(
+        public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned(
             Guid id,
             PatchCourseDemandCommandResponse response,
             JsonPatchDocument<PatchCourseDemand> request,
@@ -36,11 +36,11 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
                 .ReturnsAsync(response);
             
             //Act
-            var actual = await controller.PatchDemand(id, request) as AcceptedResult;
+            var actual = await controller.PatchDemand(id, request) as OkObjectResult;
             
             //Assert
             Assert.IsNotNull(actual);
-            actual.StatusCode.Should().Be((int) HttpStatusCode.Accepted);
+            actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
             actual.Value.Should().BeEquivalentTo((GetCourseDemandResponse) response.CourseDemand );
         }
         

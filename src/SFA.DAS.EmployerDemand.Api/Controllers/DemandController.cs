@@ -128,7 +128,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
                 
                 var model = (GetCourseDemandResponse) result.CourseDemand;
 
-                return Accepted("", model);
+                return Ok(model);
             }
             catch (Exception e)
             {
