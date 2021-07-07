@@ -1,5 +1,3 @@
-using System;
-
 namespace SFA.DAS.EmployerDemand.Domain.Models
 {
     public class CourseDemandBase
