@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -15,7 +14,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Repository_Is_Called(
             Domain.Models.CourseDemand demand,
-            Guid id,
+            Domain.Models.CourseDemand response,
             [Frozen] Mock<ICourseDemandRepository> repository,
             CourseDemandService service)
         {
@@ -23,13 +22,13 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Services
             repository.Setup(
                     x => x.UpdateCourseDemand(
                         It.Is<Domain.Entities.CourseDemand>(c => c.Id.Equals(demand.Id))))
-                .ReturnsAsync(id);
+                .ReturnsAsync(response);
             
             //Act
             var actual = await service.UpdateCourseDemand(demand);
             
             //Assert
-            actual.Should().Be(id);
+            actual.Should().BeEquivalentTo(response);
         }
         
     }
