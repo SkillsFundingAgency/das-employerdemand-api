@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return false;
         }
 
-        public async Task<Guid?> UpdateCourseDemand(CourseDemand updateEntity)
+        public async Task<CourseDemand> UpdateCourseDemand(CourseDemand updateEntity)
         {
             var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(updateEntity.Id);
             if (courseDemandEntity == null)
@@ -47,31 +47,24 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             {
                 courseDemandEntity.DateStopped = DateTime.UtcNow;
             }
+
+            if (updateEntity.EmailVerified && !courseDemandEntity.EmailVerified)
+            {
+                courseDemandEntity.DateEmailVerified = DateTime.UtcNow;
+            }
             
             courseDemandEntity.Stopped = updateEntity.Stopped;
+            courseDemandEntity.EmailVerified = updateEntity.EmailVerified;
             courseDemandEntity.OrganisationName = updateEntity.OrganisationName ?? courseDemandEntity.OrganisationName;
             courseDemandEntity.ContactEmailAddress = updateEntity.ContactEmailAddress ?? courseDemandEntity.ContactEmailAddress;
             _dataContext.SaveChanges();
-            return updateEntity.Id;
+
+            return courseDemandEntity;
         }
 
         public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
             return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
-        }
-
-        public async Task<Guid?> VerifyCourseDemandEmail(Guid id)
-        {
-            var courseDemandEntity = await _dataContext.CourseDemands.FindAsync(id);
-            if (courseDemandEntity == null)
-            {
-                return null;
-            }
-
-            courseDemandEntity.EmailVerified = true;
-            courseDemandEntity.DateEmailVerified = DateTime.UtcNow;
-            _dataContext.SaveChanges();
-            return id;
         }
 
         public async Task<CourseDemand> StopCourseDemand(Guid id)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerDemand.Api.ApiRequests;
@@ -12,8 +13,6 @@ using SFA.DAS.EmployerDemand.Api.ApiResponses;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.CreateCourseDemandNotificationAudit;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.PatchCourseDemand;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.StopCourseDemand;
-using SFA.DAS.EmployerDemand.Application.CourseDemand.Commands.VerifyCourseDemandEmail;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCourseDemandList;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemandByExpiredDemand;
@@ -106,25 +105,24 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] PatchCourseDemandRequest request)
+        public async Task<IActionResult> PatchDemand([FromRoute] Guid id, [FromBody] JsonPatchDocument<PatchCourseDemand> request)
         {
             try
             {
                 var result = await _mediator.Send(new PatchCourseDemandCommand
                 {
                     Id = id,
-                    Stopped = request.Stopped ?? false,
-                    OrganisationName = request.OrganisationName,
-                    ContactEmailAddress = request.ContactEmailAddress,
-
+                    Patch = request
                 });
 
-                if (result.Id == null)
+                if (result.CourseDemand == null)
                 {
                     return NotFound();
                 }
                 
-                return Accepted("", new {result.Id});
+                var model = (GetCourseDemandResponse) result.CourseDemand;
+
+                return Ok(model);
             }
             catch (Exception e)
             {
@@ -185,57 +183,6 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             };
             
             return Ok(response);
-        }
-
-        [HttpPost]
-        [Route("{id}/verify-email")]
-        public async Task<IActionResult> VerifyEmployerDemandEmail(Guid id)
-        {
-            try
-            {
-                var result = await _mediator.Send(new VerifyCourseDemandEmailCommand
-                {
-                    Id = id
-                });
-
-                if (result.Id == null)
-                {
-                    return NotFound();
-                }
-
-                return Accepted("", new {result.Id});
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,"Unable to verify course demand email");
-                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpPost]
-        [Route("{id}/stop")]
-        public async Task<IActionResult> StopEmployerDemand(Guid id)
-        {
-            try
-            {
-                var result = await _mediator.Send(new StopCourseDemandCommand
-                {
-                    Id = id
-                });
-
-                if (result.CourseDemand == null)
-                {
-                    return NotFound();
-                }
-
-                var model = (GetCourseDemandResponse) result.CourseDemand;
-                return Ok(model);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,"Unable to verify course demand email");
-                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-            }
         }
 
         [HttpGet]

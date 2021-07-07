@@ -13,11 +13,9 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<int> GetAggregatedDemandTotal(int ukprn);
         Task<IEnumerable<EmployerCourseDemand>> GetEmployerCourseDemand(int ukprn, int courseId, double? lat, double? lon, int? radius);
         Task<int> GetTotalEmployerCourseDemands(int ukprn, int courseId);
-        Task<Guid?> VerifyCourseDemandEmail(Guid id);
-        Task<Domain.Models.CourseDemand> StopCourseDemand(Guid id);
         Task<Domain.Models.CourseDemand> GetCourseDemand(Guid id);
         Task<IEnumerable<CourseDemand>> GetUnmetEmployerDemands(uint ageOfDemandInDays);
-        Task<Guid?> UpdateCourseDemand(CourseDemand demand);
+        Task<CourseDemand> UpdateCourseDemand(CourseDemand demand);
         Task<Domain.Models.CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId);
         Task<IEnumerable<CourseDemand>> GetDemandsOlderThan3Years();
     }
