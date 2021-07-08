@@ -159,6 +159,7 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
         {
             var courseDemands = await _dataContext.CourseDemands
                 .Where(demand => demand.DateCreated.Date < DateTime.Today.AddYears(-3))
+                .Where(demand => !string.IsNullOrEmpty(demand.ContactEmailAddress))
                 .ToListAsync();
 
             return courseDemands;
