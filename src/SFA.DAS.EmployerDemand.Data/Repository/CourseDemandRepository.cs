@@ -62,9 +62,9 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return courseDemandEntity;
         }
 
-        public async Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
+        public Task<bool> EmployerDemandsExist(IEnumerable<Guid> idsToCheck)
         {
-            return idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id));
+            return Task.FromResult(idsToCheck.All(id => _dataContext.CourseDemands.Any(c => c.Id == id)));
         }
 
         public async Task<CourseDemand> StopCourseDemand(Guid id)
