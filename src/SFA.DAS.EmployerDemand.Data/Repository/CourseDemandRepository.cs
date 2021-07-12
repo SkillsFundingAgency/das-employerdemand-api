@@ -155,6 +155,16 @@ namespace SFA.DAS.EmployerDemand.Data.Repository
             return courseDemands;
         }
 
+        public async Task<IEnumerable<CourseDemand>> GetDemandsOlderThan3Years()
+        {
+            var courseDemands = await _dataContext.CourseDemands
+                .Where(demand => demand.DateCreated.Date < DateTime.Today.AddYears(-3))
+                .Where(demand => !string.IsNullOrEmpty(demand.ContactEmailAddress))
+                .ToListAsync();
+
+            return courseDemands;
+        }
+
         private FormattableString ProviderCourseDemandQuery(int ukprn, double? lat, double? lon, int? radius, int? courseId)
         {
             return $@"select distinct

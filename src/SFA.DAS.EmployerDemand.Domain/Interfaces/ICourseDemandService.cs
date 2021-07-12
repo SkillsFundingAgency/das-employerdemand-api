@@ -17,5 +17,6 @@ namespace SFA.DAS.EmployerDemand.Domain.Interfaces
         Task<IEnumerable<CourseDemand>> GetUnmetEmployerDemands(uint ageOfDemandInDays);
         Task<CourseDemand> UpdateCourseDemand(CourseDemand demand);
         Task<Domain.Models.CourseDemand> GetCourseDemandByExpiredId(Guid expiredCourseDemandId);
+        Task<IEnumerable<CourseDemand>> GetDemandsOlderThan3Years();
     }
 }

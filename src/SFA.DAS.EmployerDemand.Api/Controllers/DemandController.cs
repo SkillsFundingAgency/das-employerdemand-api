@@ -17,6 +17,7 @@ using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetAggregatedCours
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetCourseDemandByExpiredDemand;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerCourseDemandList;
+using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetEmployerDemandsOlderThan3Years;
 using SFA.DAS.EmployerDemand.Application.CourseDemand.Queries.GetUnmetEmployerDemands;
 using SFA.DAS.EmployerDemand.Domain.Models;
 using Course = SFA.DAS.EmployerDemand.Domain.Models.Course;
@@ -259,6 +260,28 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError("Error getting unmet employer demands",e);
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("older-than-3-years")]
+        public async Task<IActionResult> GetDemandsOlderThan3Years()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetEmployerDemandsOlderThan3YearsQuery());
+
+                var model = new GetDemandsOlderThan3YearsResponse
+                {
+                    EmployerDemandIds = result.EmployerDemands.Select(demand => demand.Id)
+                };
+                
+                return Ok(model);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error getting employer demands older than 3 years",e);
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
