@@ -48,8 +48,7 @@
             "type": "string"
         },
         "backEndAccessRestrictions": {
-            "type": "array",
-            "defaultValue": []
+            "type": "array"
         },
         "sharedSqlServerName": {
             "type": "string"
