@@ -13,7 +13,7 @@ variables:
   value: any cpu
 
 pool:
-  name: DAS - Continuous Integration
+  name: DAS - Continuous Integration Agents
   workspace:
     clean: all
 
@@ -23,8 +23,8 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/0.3.29
-    endpoint: GitHub (SFA)
+    ref: refs/tags/0.4.10
+    endpoint: SkillsFundingAgency
 
 stages:
 - stage: Build
