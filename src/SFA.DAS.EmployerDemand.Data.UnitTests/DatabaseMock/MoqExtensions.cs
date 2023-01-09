@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.DatabaseMock
 			where TEntity : class
 		{
 			mock.Setup(m => m.AsQueryable()).Returns(mock.Object);
-			mock.Setup(m => m.AsAsyncEnumerable()).Returns(mock.Object);
+			//mock.Setup(m => m.AsAsyncEnumerable()).Returns(mock.Object);
 		}
 
 		private static void ConfigureQueryableCalls<TEntity>(
