@@ -33,17 +33,18 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.ProviderInterest
             mockMediator
                 .Setup(x => x.Send(
                     It.Is<CreateProviderInterestsCommand>(
-                        c=>c.ProviderInterests.Email.Equals(request.Email)
-                        && c.ProviderInterests.Phone.Equals(request.Phone)
-                        && c.ProviderInterests.Ukprn.Equals(request.Ukprn)
-                        && c.ProviderInterests.Website.Equals(request.Website)
-                        && c.ProviderInterests.EmployerDemandIds.Equals(request.EmployerDemandIds)
-                        && c.Id.Equals(id)
-                        ),
+                        c => c.ProviderInterests.Email.Equals(request.Email)
+                             && c.ProviderInterests.Phone.Equals(request.Phone)
+                             && c.ProviderInterests.Ukprn.Equals(request.Ukprn)
+                             && c.ProviderInterests.Website.Equals(request.Website)
+                             && c.ProviderInterests.EmployerDemandIds.Equals(request.EmployerDemandIds)
+                             && c.Id.Equals(id)
+                    ),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(resultFromMediator)
-                .Callback((CreateProviderInterestsCommand command, CancellationToken token) => model= command.ProviderInterests);
-            
+                .Callback((IRequest<CreateProviderInterestsCommandResult> command, CancellationToken token) =>
+                    model = ((CreateProviderInterestsCommand)command).ProviderInterests);
+
             //Act
             var actual = await controller.CreateProviderInterests(id, request) as CreatedResult;
             
