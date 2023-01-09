@@ -22,7 +22,7 @@ The Employer Demand API is a inner API consumed by [das-apim-endpoints](https://
 ### Pre-Requisites
 
 * A clone of this repository
-* A code editor that supports Azure functions and .NetCore 3.1
+* A code editor that supports Azure functions and .Net 6.0
 * Azure Storage Emulator if not running in DEV mode
 * SQL Database if not running DEV mode
 
@@ -84,7 +84,7 @@ Authentication is managed via Azure Managed Identity when not running locally.
 
 ## Technologies
 
-* .NetCore 3.1
+* .NetCore 6.0
 * EF Core
 * SQL Server
 * NLog
