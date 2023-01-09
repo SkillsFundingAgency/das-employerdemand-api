@@ -99,8 +99,8 @@ namespace SFA.DAS.EmployerDemand.Api
                     }
                     o.Conventions.Add(new ApiExplorerGroupPerVersionConvention());
                 })
-                .AddNewtonsoftJson()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddNewtonsoftJson();
+                //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddApplicationInsightsTelemetry();
 

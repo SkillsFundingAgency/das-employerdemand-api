@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerDemand.Application.UnitTests.CourseDemand.Commands
 
             //Assert
             service.Verify(x=>x.CreateDemand(It.IsAny<Domain.Models.CourseDemand>()), Times.Never);
-            act.Should().Throw<ValidationException>()
+            act.Should().ThrowAsync<ValidationException>()
                 .WithMessage($"*{propertyName}*");
         }
     }
