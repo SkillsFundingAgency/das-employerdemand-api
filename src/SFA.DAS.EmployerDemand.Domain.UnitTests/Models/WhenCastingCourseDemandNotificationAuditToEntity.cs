@@ -1,6 +1,7 @@
 using System;
 using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using NUnit.Framework;
 using SFA.DAS.EmployerDemand.Domain.Models;
 
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerDemand.Domain.UnitTests.Models
             //Assert
             actual.Id.Should().Be(source.Id);
             actual.CourseDemandId.Should().Be(source.CourseDemandId);
-            actual.DateCreated.Should().BeCloseTo(DateTime.UtcNow);
+            actual.DateCreated.Should().BeCloseTo(DateTime.UtcNow, 1.Seconds());
             actual.NotificationType.Should().Be((short) source.NotificationType);
         }
     }

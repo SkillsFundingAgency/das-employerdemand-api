@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerDemand.Domain.Entities;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 
 namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepository
 {
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerDemand.Data.UnitTests.Repository.CourseDemandRepositor
             mockDbContext.Verify(x => x.SaveChanges(), Times.Once);
             actual.Should().Be(courseDemandEntity);
             courseDemandEntity.Stopped.Should().BeTrue();
-            courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow);
+            courseDemandEntity.DateStopped.Should().BeCloseTo(DateTime.UtcNow, 1.Seconds());
         }
 
         [Test, RecursiveMoqAutoData]
