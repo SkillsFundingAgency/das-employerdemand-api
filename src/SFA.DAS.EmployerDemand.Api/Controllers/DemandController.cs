@@ -259,7 +259,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Error getting unmet employer demands",e);
+                _logger.LogError(e,"Error getting unmet employer demands");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
@@ -281,7 +281,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Error getting employer demands older than 3 years",e);
+                _logger.LogError(e,"Error getting employer demands older than 3 years");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
@@ -307,7 +307,7 @@ namespace SFA.DAS.EmployerDemand.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Error getting unmet employer demands",e);
+                _logger.LogError(e,"Error getting unmet employer demands");
                 return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
             }
         }
