@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.PatchDemand(id, request) as OkObjectResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
             actual.Value.Should().BeEquivalentTo((GetCourseDemandResponse) response.CourseDemand );
         }
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.PatchDemand(id, request) as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
         
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.PatchDemand(id, request) as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }

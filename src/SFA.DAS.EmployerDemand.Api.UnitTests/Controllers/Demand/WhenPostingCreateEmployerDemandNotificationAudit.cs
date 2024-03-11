@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.CreateDemandNotificationAudit(id, courseDemandId, notificationType) as CreatedResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.Created);
             actual.Value.Should().BeEquivalentTo(new {id});
 
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.CreateDemandNotificationAudit(id, courseDemandId, notificationType) as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }

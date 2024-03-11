@@ -1,4 +1,6 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -22,7 +24,8 @@ namespace SFA.DAS.EmployerDemand.Data
     {
         private const string AzureResource = "https://database.windows.net/";
         private readonly EmployerDemandConfiguration _configuration;
-        private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
+        private readonly ChainedTokenCredential _azureServiceTokenProvider;
+        private readonly EnvironmentConfiguration _environmentConfiguration;
 
         public DbSet<Domain.Entities.CourseDemand> CourseDemands { get; set; }
         public DbSet<Domain.Entities.ProviderInterest> ProviderInterests { get; set; }
@@ -37,16 +40,19 @@ namespace SFA.DAS.EmployerDemand.Data
         {
         }
         
-        public EmployerDemandDataContext(IOptions<EmployerDemandConfiguration> config, DbContextOptions<EmployerDemandDataContext> options, AzureServiceTokenProvider azureServiceTokenProvider) :base(options)
+        public EmployerDemandDataContext(IOptions<EmployerDemandConfiguration> config, DbContextOptions<EmployerDemandDataContext> options, ChainedTokenCredential azureServiceTokenProvider,EnvironmentConfiguration environmentConfiguration) :base(options)
         {
             _configuration = config.Value;
             _azureServiceTokenProvider = azureServiceTokenProvider;
+            _environmentConfiguration = environmentConfiguration;
         }
 
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (_configuration == null || _azureServiceTokenProvider == null)
+            if (_configuration == null 
+                || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
+                || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
             {
                 return;
             }
@@ -54,7 +60,7 @@ namespace SFA.DAS.EmployerDemand.Data
             var connection = new SqlConnection
             {
                 ConnectionString = _configuration.ConnectionString,
-                AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
             };
             optionsBuilder.UseSqlServer(connection);
         }

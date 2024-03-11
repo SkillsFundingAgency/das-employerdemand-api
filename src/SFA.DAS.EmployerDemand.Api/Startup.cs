@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,7 +83,7 @@ namespace SFA.DAS.EmployerDemand.Api
                     .AddDbContextCheck<EmployerDemandDataContext>();
             }
 
-            services.AddMediatR(typeof(CreateCourseDemandCommand).Assembly);
+            services.AddMediatR(options => options.RegisterServicesFromAssembly(typeof(CreateCourseDemandCommand).Assembly));
             services.AddServiceRegistration();
             services.AddMediatRValidation();
             services.AddDatabaseRegistration(employerDemandConfiguration, _configuration["Environment"]);

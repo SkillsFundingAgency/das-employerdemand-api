@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.GetEmployerCourseDemand(id) as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
 
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.GetEmployerCourseDemand(id) as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }

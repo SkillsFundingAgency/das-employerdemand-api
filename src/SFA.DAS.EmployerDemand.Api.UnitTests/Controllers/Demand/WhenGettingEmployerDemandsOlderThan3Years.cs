@@ -36,10 +36,10 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.GetDemandsOlderThan3Years() as OkObjectResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
             var actualModel = actual.Value as GetDemandsOlderThan3YearsResponse;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.EmployerDemandIds.Should()
                 .BeEquivalentTo(result.EmployerDemands.Select(c => c.Id));
         }
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerDemand.Api.UnitTests.Controllers.Demand
             var actual = await controller.GetDemandsOlderThan3Years() as StatusCodeResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }
